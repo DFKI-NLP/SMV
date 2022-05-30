@@ -7,6 +7,7 @@ if __name__ == "__main__":
         print("Text:")
         text = [word for word in texts[Tkey]["input_ids"]]
         print(*text)
+        print()
         for eKey in explanations:
             print("type '{}' explanation:".format(eKey))
             print(*explanations[eKey])

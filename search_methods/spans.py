@@ -58,7 +58,6 @@ def generate_spans(filter_length):
                         *[1]*num_ones,
                         *[0]*int(num_zeros/2)])
 
-    print(filters)
     filters = np.array(filters).astype("byte")
     return filters
 
