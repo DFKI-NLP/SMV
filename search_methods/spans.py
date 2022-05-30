@@ -48,6 +48,12 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5):
 
 
 def generate_spans(filter_length):
+    """
+    generates spans of size filter_length with varying amount of ones for filter_length=5:
+    [0,0,1,0,0],[0,1,1,1,0],[1,1,1,1,1]
+    :param filter_length: size of spans
+    :return: list of np-byte arrays with binary spans to be used in tools.filter_span_sample_sum()
+    """
     filters = []
     for i in range(1, filter_length+1):
         if i % 2 == 0:
