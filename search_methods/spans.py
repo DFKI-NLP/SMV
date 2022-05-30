@@ -55,7 +55,7 @@ def generate_spans(filter_length):
         num_zeros = filter_length - i
         num_ones = i
         filters.append([*[0]*(int(num_zeros/2)),
-                        *[1]*(num_ones),
+                        *[1]*num_ones,
                         *[0]*int(num_zeros/2)])
 
     print(filters)
