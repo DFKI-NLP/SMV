@@ -14,7 +14,7 @@ class Verbalizer:
         :param model_type: Which model is being explained? optional; will look by itself
         :param standard_samples: how many samples should be loaded if nothing specified
         """
-
+        
         self.models = {
             "bert": (r"BertTokenizer", r"bert-base-uncased"),
             "albert": (r"AlbertTokenizer", r"albert-base-v2"),

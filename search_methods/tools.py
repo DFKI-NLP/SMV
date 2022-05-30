@@ -106,3 +106,8 @@ def get_stdev(variances):
 
 
 # end of metrics #
+
+# TODO add customizer for loader
+class LoaderConfig:
+    def __init__(self):
+        pass
