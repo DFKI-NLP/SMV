@@ -1,9 +1,8 @@
 import json
 import transformers
-from warnings import warn
-import thermostat
-
-import search_algorithms as sa
+from search_methods import spans as span
+from search_methods import filters as fil
+from search_methods import tools as t
 
 
 class Verbalizer:
@@ -37,7 +36,7 @@ class Verbalizer:
             raise RuntimeError("Please specify model_type; Missing param model_type")
 
         self.standard_samples = standard_samples
-        self.modes = ["total_order", "filter search"]  # which search-algorithms to use
+        self.modes = ["total_order", "filter search", "span search"]  # which search-algorithms to use
         self.checkpoint = 0  # where did the Verbalizer stop loading examples
         self.len_filters = len_filters
         self.label_names = None
@@ -152,12 +151,12 @@ class Verbalizer:
 
     @staticmethod
     def span_search(_dict, len_filters):
-        explanations = sa.span_search(_dict, len_filters)
+        explanations = span.span_search(_dict, len_filters)
         return explanations
 
     @staticmethod
     def filter_search(_dict, len_filters):
-        explanations = sa.field_search(_dict, len_filters)
+        explanations = fil.field_search(_dict, len_filters)
         return explanations
 
 # spacy -> klassifikation von zeugs
