@@ -1,4 +1,5 @@
 import dataloader
+# dataset @ "https://cloud.dfki.de/owncloud/index.php/s/zjMddcqewEcwSPG/download",
 
 if __name__ == "__main__":
     loader = dataloader.Verbalizer("data/example_xlnet.jsonl", standard_samples=1)
