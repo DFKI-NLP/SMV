@@ -6,8 +6,8 @@ from search_methods import tools as t
 
 
 class Verbalizer:
-    def __init__(self, path: str, standard_samples: int = -1, model_type: str = [], len_filters: int = 5
-                 , *args, **kwargs):
+    def __init__(self, path: str, standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
+                 *args, **kwargs):
         """
         Verbalizer class
         :param path: Path to explained-dataset
@@ -113,11 +113,12 @@ class Verbalizer:
             self.label_names = dataset_snippet["dataset"]["label_names"]
         return cleaned_dict
 
-    def doit(self, modes: list = None, n_samples: int = None):
+    def doit(self, modes: list = None, n_samples: int = None, config= None):
         """
         verbalizes n_samples of self.path´s dataset
         :param modes: optional: which searches to do on dataset
         :param n_samples: optional: how many samples to verbalize
+        :param config: TODO class containing customizations to searches i.e. metrics etc.
         :return: n_samples * (verbalized version of heatmap; by total_order, ...) as array of strings (tuple/list)
         """
 
