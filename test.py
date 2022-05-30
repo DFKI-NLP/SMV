@@ -2,7 +2,7 @@ import dataloader
 # dataset @ "https://cloud.dfki.de/owncloud/index.php/s/zjMddcqewEcwSPG/download",
 
 if __name__ == "__main__":
-    loader = dataloader.Verbalizer("data/example_xlnet.jsonl", standard_samples=1)
+    loader = dataloader.Verbalizer("data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl", standard_samples=1)
     explanations, texts = loader()
     for Tkey in texts.keys():
         print("Text:")
