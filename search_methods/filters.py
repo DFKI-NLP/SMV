@@ -4,7 +4,7 @@ from itertools import permutations
 # start of filter-based search
 
 
-def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=None, mode: str = "mean: 10"):
+def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=None, mode: str = "mean: 1"):
     """
     perfoms coherency search amongst a sample loaded by dataloader.Verbalizer.read_samples()
     first generates binary-filters of length n (for example [1, 0, 1], [0, 1, 1] or [1, 1, 0]
@@ -28,7 +28,7 @@ def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=No
     verbalizations = []
     for key in samples.keys():
         sample = samples[key]
-        attribs = np.array(sample["attributions"]).astype("float32")
+        attribs = np.array(sample["attributions"]).astype("float32")/abs(np.max(sample["attributions"]))#normalized
         if "mean" in mode:
             metric = get_mean(get_metric_values(mode)[0:], attribs)
 
@@ -44,6 +44,7 @@ def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=No
             coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric, sgn)
 
         coherent_words_sum, coherent_values_sum = zip(*reversed(sorted(zip(coherent_words_sum, coherent_values_sum))))
+
         _words = []
         _values = []
         for i in range(len(coherent_words_sum)):

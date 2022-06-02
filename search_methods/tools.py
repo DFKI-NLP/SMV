@@ -2,7 +2,7 @@ import numpy as np
 from numba import jit
 
 
-@jit(nopython=True)
+#@jit(nopython=True)
 def filter_span_sample_sum(sorted_filters, sample_attribs, metric_value):
     """
     use binary filters on a 1 dimensional matrix
@@ -27,6 +27,7 @@ def filter_span_sample_sum(sorted_filters, sample_attribs, metric_value):
 
     coherency_values = np.array(coherency_values)
     coherent_snippets = []
+
     for index in range(len(coherency_values)):
         if coherency_values[index] > np.median(coherency_values):
             coherent_snippets.append(coherent_words[index])
@@ -35,7 +36,7 @@ def filter_span_sample_sum(sorted_filters, sample_attribs, metric_value):
 
 
 @jit(nopython=True)
-def filter_span_sample_sum_sgn(sorted_filters, sample_attribs, metric_value, sgn: str ="+"):
+def filter_span_sample_sum_sgn(sorted_filters, sample_attribs, metric_value, sgn: str = "+"):
     """
     use binary filters on a 1 dimensional matrix
     sum up the product of filter x snippet
@@ -48,12 +49,16 @@ def filter_span_sample_sum_sgn(sorted_filters, sample_attribs, metric_value, sgn
     :param sgn: which sign to look at; +-> vals => 0; - vals < 0
     :return: list of possibly coherent samples, corresponding values
     """
+
     index_offset = len(sorted_filters[0])
     coherent_words = []
     coherency_values = []
     for filter_ in sorted_filters:
         for index in range(len(sample_attribs) - index_offset):
             filter_result = filter_ * sample_attribs[index:index+index_offset]
+            for number in range(len(filter_result)):
+                if filter_result[number] == -.0:
+                    filter_result[number] = 0
             sgn_consistent = True
             if sgn == "+":
                 for val in filter_result:
@@ -123,15 +128,13 @@ def total_order(_dict: dict):
 # metrics #
 def get_mean(num_vals, attribs):
     """
-    returns mean of top-num_vals values of attribs
+    returns mean of top-%num_vals values of attribs
     :param num_vals: integer determining how many values to be used
     :param attribs: 1D array of any numbers
     :return: float- mean of top values
     """
-    attribs = attribs / abs(np.max(attribs))
-    mean = sorted(attribs)
-    mean = sum(mean[:num_vals[0]]) / num_vals[0]
-
+    mean = [*reversed(sorted(attribs))]
+    mean = sum(mean[:int(len(mean)*num_vals[0])]) / int(len(mean)*num_vals[0])
     return mean
 
 
@@ -177,7 +180,7 @@ def get_metric_values(mode: str):
     """
     _args = mode.split(":")
     modes = {
-        "mean": (1, int),
+        "mean": (1, float),
         "quantile": (1, float),
         "variance": (2, float),
         "foo": NotImplementedError,

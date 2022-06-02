@@ -7,7 +7,7 @@ if __name__ == "__main__":
     config = {
         "sgn": "+",
         "samples": 1,
-        "metric": "mean: 10"
+        "metric": "mean: 1"
     }
 
     loader = dataloader.Verbalizer("data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl", config=config)

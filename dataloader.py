@@ -171,7 +171,7 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
         """
 
         if "filter search" in modes:
-            if self.sgn:
+            if not self.sgn:
                 orders_and_searches["filter search"] = self.filter_search(sample_array, self.len_filters,
                                                                           metric=self.metric)
             else:
@@ -179,7 +179,7 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
                                                                           self.sgn, self.metric)
 
         if "span search" in modes:
-            if self.sgn:
+            if not self.sgn:
                 orders_and_searches["span search"] = self.span_search(sample_array, self.len_filters,
                                                                       metric=self.metric)
             else:
