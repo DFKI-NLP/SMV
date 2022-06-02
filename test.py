@@ -1,8 +1,16 @@
 import dataloader
-# dataset @ "https://cloud.dfki.de/owncloud/index.php/s/zjMddcqewEcwSPG/download",
+# dataset @ "https://cloud.dfki.de/owncloud/index.php/s/zjMddcqewEcwSPG/download", put into data folder
+
 
 if __name__ == "__main__":
-    loader = dataloader.Verbalizer("data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl", standard_samples=1)
+
+    config = {
+        "sgn": "+",
+        "samples": 1,
+        "metric": "mean: 10"
+    }
+
+    loader = dataloader.Verbalizer("data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl", config=config)
     explanations, texts = loader()
     for Tkey in texts.keys():
         print("Text:")

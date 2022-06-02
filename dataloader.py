@@ -7,14 +7,35 @@ from search_methods import tools as t
 
 class Verbalizer:
     def __init__(self, path: str, standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
+                 config=None,
                  *args, **kwargs):
         """
         Verbalizer class
         :param path: Path to explained-dataset
         :param model_type: Which model is being explained? optional; will look by itself
         :param standard_samples: how many samples should be loaded if nothing specified
+        :param config: config dictionary; optional -> how to will be included
+
+        TODO warning: object to change:
+        --> start of config example <--
+        cfg =
+        {
+        "sgn": "+",                     options: "+", "-", None
+        "samples": -1,                  options: {-1, n where n > 0}, n is integer
+        "len_filters": 5,               options: n where n > 0, n is integer
+        "metric": "mean_sum: 10"        options: see possible metrics
+        }
+
+        possible metrics:
+        : "mean_sum: n" where n is an integer ranging from 1 to len(sample);
+                                                      uses mean(sum(sorted(attribs[:n])) as metric
+TODO    : "quantile: n" where n is a float ranging from 0 to inf
+TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <= m
+
+        -->  end  of config example <--
+
         """
-        
+
         self.models = {
             "bert": (r"BertTokenizer", r"bert-base-uncased"),
             "albert": (r"AlbertTokenizer", r"albert-base-v2"),
@@ -39,9 +60,19 @@ class Verbalizer:
         self.modes = ["total_order", "filter search", "span search"]  # which search-algorithms to use
         self.checkpoint = 0  # where did the Verbalizer stop loading examples
         self.len_filters = len_filters
+        self.sgn = None
+        self.metric = None
         self.label_names = None
         self.tokenizer = eval("transformers.{}.from_pretrained('{}')".format(self.models[self.model_type][0],
                                                                              self.models[self.model_type][1]))
+
+        if config:
+            if config["samples"]:
+                self.standard_samples = config["samples"]
+            if config["sgn"]:
+                self.sgn = config["sgn"]
+            if config["metric"]:
+                self.metric = config["metric"]
 
     def read_samples(self, num_entries: int = None, recursion=0):
         """
@@ -113,7 +144,7 @@ class Verbalizer:
             self.label_names = dataset_snippet["dataset"]["label_names"]
         return cleaned_dict
 
-    def doit(self, modes: list = None, n_samples: int = None, config= None):
+    def doit(self, modes: list = None, n_samples: int = None):
         """
         verbalizes n_samples of self.path´s dataset
         :param modes: optional: which searches to do on dataset
@@ -140,10 +171,20 @@ class Verbalizer:
         """
 
         if "filter search" in modes:
-            orders_and_searches["filter search"] = self.filter_search(sample_array, self.len_filters)
+            if self.sgn:
+                orders_and_searches["filter search"] = self.filter_search(sample_array, self.len_filters,
+                                                                          metric=self.metric)
+            else:
+                orders_and_searches["filter search"] = self.filter_search(sample_array, self.len_filters,
+                                                                          self.sgn, self.metric)
 
         if "span search" in modes:
-            orders_and_searches["span search"] = self.span_search(sample_array, self.len_filters)
+            if self.sgn:
+                orders_and_searches["span search"] = self.span_search(sample_array, self.len_filters,
+                                                                      metric=self.metric)
+            else:
+                orders_and_searches["span search"] = self.span_search(sample_array, self.len_filters,
+                                                                      self.sgn, self.metric)
 
         return orders_and_searches, sample_array
 
@@ -151,13 +192,19 @@ class Verbalizer:
         return self.doit(modes, n_samples)
 
     @staticmethod
-    def span_search(_dict, len_filters):
-        explanations = span.span_search(_dict, len_filters)
+    def span_search(_dict, len_filters, sgn=None, metric=None):
+        if not sgn:
+            explanations = span.span_search(_dict, len_filters, mode=metric)
+        else:
+            explanations = span.span_search(_dict, len_filters, sgn, metric)
         return explanations
 
     @staticmethod
-    def filter_search(_dict, len_filters):
-        explanations = fil.field_search(_dict, len_filters)
+    def filter_search(_dict, len_filters, sgn=None, metric=None):
+        if not sgn:
+            explanations = fil.field_search(_dict, len_filters, mode=metric)
+        else:
+            explanations = fil.field_search(_dict, len_filters, sgn, metric)
         return explanations
 
 # spacy -> klassifikation von zeugs

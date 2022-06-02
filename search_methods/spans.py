@@ -4,13 +4,15 @@ import numpy as np
 # span based filter search
 
 
-def span_search(samples: dict, filter_length, top_n_coherences: int = 5):
+def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=None, mode: str = "mean: 10"):
     """
     generates spans to search for coherences amongst a sample loaded by dataloader.Verbalizer.read_samples()
     works like field_search(*args)
     :param samples: shape = dataloader.Verbalizer.read_samples() return shape
     :param filter_length: length of generated filters; computationally expensive, generates filter_length^2 filters
     :param top_n_coherences: how many coherences should be returned?
+    :param sgn: sign sensitive search?
+    :param mode: metric to use
     :return: verbalized search:string
     """
 
@@ -21,10 +23,19 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5):
     for key in samples.keys():
         sample = samples[key]
         attribs = np.array(sample["attributions"]).astype("float32")
-        attribs = attribs/abs(np.max(attribs))
-        metric = sorted(attribs)
-        metric = sum(metric[:10])/10
-        coherent_words_sum, coherent_values_sum = filter_span_sample_sum(sorted_filters, attribs, metric)
+        if "mean" in mode:
+            metric = get_mean(get_metric_values(mode)[0:], attribs)
+
+        elif "quantile" in mode:
+            metric = get_stdev(get_variance(attribs))
+
+        elif "variance" in mode:
+            metric = get_variance(attribs)
+
+        if not sgn:
+            coherent_words_sum, coherent_values_sum = filter_span_sample_sum(sorted_filters, attribs, metric)
+        else:
+            coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric, sgn)
 
         coherent_words_sum, coherent_values_sum = zip(*reversed(sorted(zip(coherent_words_sum, coherent_values_sum))))
         _words = []
@@ -60,9 +71,11 @@ def generate_spans(filter_length):
             continue
         num_zeros = filter_length - i
         num_ones = i
-        filters.append([*[0]*(int(num_zeros/2)),
-                        *[1]*num_ones,
-                        *[0]*int(num_zeros/2)])
+        span = [*[0]*(int(num_zeros/2)),
+                *[1]*num_ones,
+                *[0]*int(num_zeros/2)]
+        if sum(span) > 1:
+            filters.append(span)
 
     filters = np.array(filters).astype("byte")
     return filters
