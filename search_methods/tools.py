@@ -35,7 +35,7 @@ def filter_span_sample_sum(sorted_filters, sample_attribs, metric_value):
     return coherent_snippets, coherency_values
 
 
-#@jit(nopython=True)
+@jit(nopython=True)
 def filter_span_sample_sum_sgn(sorted_filters, sample_attribs, metric_value, sgn: str = "+"):
     """
     use binary filters on a 1 dimensional matrix

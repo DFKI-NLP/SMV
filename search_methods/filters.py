@@ -52,7 +52,9 @@ def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=No
                 _values.append(coherent_values_sum[i])
 
         coherent_words_sum = _words
-        coherent_values_sum_sum = _values
+        coherent_values_sum = _values
+
+
 
         verbalization = ""
         for filter_result in coherent_words_sum[:top_n_coherences]:

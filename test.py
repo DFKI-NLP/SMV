@@ -5,9 +5,9 @@ import dataloader
 if __name__ == "__main__":
 
     config = {
-        "sgn": "+",
-        "samples": 1,
-        "metric": "mean: .3"
+        "sgn": "+",  # Vorzeichenfehler bei "-"
+        "samples": 5,
+        "metric": "mean: .4"# {"name": "mean", "params": .2}
     }
 
     loader = dataloader.Verbalizer("data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl", config=config)
@@ -20,3 +20,5 @@ if __name__ == "__main__":
         for eKey in explanations:
             print("type '{}' explanation:".format(eKey))
             print(*explanations[eKey])
+
+# pruned span search?

@@ -29,6 +29,7 @@ class Verbalizer:
         possible metrics:
         : "mean_sum: n" where n is a float ranging from 0 to 1;
                                                    uses mean(sum(sorted(attribs[:len * n])) as metric
+
 TODO    : "quantile: n" where n is a float ranging from 0 to inf
 TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <= m
 
@@ -207,11 +208,4 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
             explanations = fil.field_search(_dict, len_filters, sgn=sgn, mode=metric)
         return explanations
 
-# spacy -> klassifikation von zeugs
-
-# filterbasierte suche
-
-
-# 1. wrapper
-# 2. filter
 # 3. spacy
