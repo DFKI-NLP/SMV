@@ -194,17 +194,17 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
     @staticmethod
     def span_search(_dict, len_filters, sgn=None, metric=None):
         if not sgn:
-            explanations = span.span_search(_dict, len_filters, mode=metric)
+            explanations = span.span_search(_dict, len_filters, sgn=None, mode=metric)
         else:
-            explanations = span.span_search(_dict, len_filters, sgn, metric)
+            explanations = span.span_search(_dict, len_filters, sgn=sgn, mode=metric)
         return explanations
 
     @staticmethod
     def filter_search(_dict, len_filters, sgn=None, metric=None):
         if not sgn:
-            explanations = fil.field_search(_dict, len_filters, mode=metric)
+            explanations = fil.field_search(_dict, len_filters, sgn=None, mode=metric)
         else:
-            explanations = fil.field_search(_dict, len_filters, sgn, metric)
+            explanations = fil.field_search(_dict, len_filters, sgn=sgn, mode=metric)
         return explanations
 
 # spacy -> klassifikation von zeugs

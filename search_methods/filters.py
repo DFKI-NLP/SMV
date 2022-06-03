@@ -44,7 +44,6 @@ def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=No
             coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric, sgn)
 
         coherent_words_sum, coherent_values_sum = zip(*reversed(sorted(zip(coherent_words_sum, coherent_values_sum))))
-
         _words = []
         _values = []
         for i in range(len(coherent_words_sum)):

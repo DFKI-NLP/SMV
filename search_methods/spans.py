@@ -31,7 +31,6 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=Non
 
         elif "variance" in mode:
             metric = get_variance(attribs)
-
         if not sgn:
             coherent_words_sum, coherent_values_sum = filter_span_sample_sum(sorted_filters, attribs, metric)
         else:
@@ -46,7 +45,7 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=Non
                 _values.append(coherent_values_sum[i])
 
         coherent_words_sum = _words
-        coherent_values_sum_sum = _values
+        coherent_values_sum = _values
 
         verbalization = ""
         for filter_result in coherent_words_sum[:top_n_coherences]:

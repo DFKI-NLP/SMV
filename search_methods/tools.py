@@ -2,7 +2,7 @@ import numpy as np
 from numba import jit
 
 
-#@jit(nopython=True)
+@jit(nopython=True)
 def filter_span_sample_sum(sorted_filters, sample_attribs, metric_value):
     """
     use binary filters on a 1 dimensional matrix
@@ -35,7 +35,7 @@ def filter_span_sample_sum(sorted_filters, sample_attribs, metric_value):
     return coherent_snippets, coherency_values
 
 
-@jit(nopython=True)
+#@jit(nopython=True)
 def filter_span_sample_sum_sgn(sorted_filters, sample_attribs, metric_value, sgn: str = "+"):
     """
     use binary filters on a 1 dimensional matrix
@@ -49,16 +49,12 @@ def filter_span_sample_sum_sgn(sorted_filters, sample_attribs, metric_value, sgn
     :param sgn: which sign to look at; +-> vals => 0; - vals < 0
     :return: list of possibly coherent samples, corresponding values
     """
-
     index_offset = len(sorted_filters[0])
     coherent_words = []
     coherency_values = []
     for filter_ in sorted_filters:
         for index in range(len(sample_attribs) - index_offset):
             filter_result = filter_ * sample_attribs[index:index+index_offset]
-            for number in range(len(filter_result)):
-                if filter_result[number] == -.0:
-                    filter_result[number] = 0
             sgn_consistent = True
             if sgn == "+":
                 for val in filter_result:
@@ -67,7 +63,7 @@ def filter_span_sample_sum_sgn(sorted_filters, sample_attribs, metric_value, sgn
                     else:
                         sgn_consistent = False
 
-            else:
+            elif sgn == "-":
                 for val in filter_result:
                     if val < 0:
                         pass
