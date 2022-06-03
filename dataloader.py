@@ -27,8 +27,8 @@ class Verbalizer:
         }
 
         possible metrics:
-        : "mean_sum: n" where n is an integer ranging from 1 to len(sample);
-                                                      uses mean(sum(sorted(attribs[:n])) as metric
+        : "mean_sum: n" where n is a float ranging from 0 to 1;
+                                                   uses mean(sum(sorted(attribs[:len * n])) as metric
 TODO    : "quantile: n" where n is a float ranging from 0 to inf
 TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <= m
 
