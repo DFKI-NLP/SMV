@@ -47,14 +47,9 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=Non
         coherent_words_sum = _words
         coherent_values_sum = _values
 
-        verbalization = ""
-        for filter_result in coherent_words_sum[:top_n_coherences]:
-            for input_id in filter_result:
-                verbalization += sample["input_ids"][input_id] + ", "
-            verbalization += "are related to each other \n"
-        verbalizations.append(verbalization)
+        return coherent_words_sum, coherent_values_sum
 
-    return verbalizations
+
 
 
 def generate_spans(filter_length):
@@ -78,5 +73,18 @@ def generate_spans(filter_length):
 
     filters = np.array(filters).astype("byte")
     return filters
+
+
+def verbalize_spansearch(coherent_words_sum, coherent_values_sum, samples):
+    verbalizations = []
+    verbalization = ""
+    for key in samples.keys():
+        for filter_result in coherent_words_sum:
+            for input_id in filter_result:
+                verbalization += samples[key]["input_ids"][input_id] + ", "
+            verbalization += "are related to each other \n"
+        verbalizations.append(verbalization)
+
+    return verbalizations
 
 # end of span based filter search

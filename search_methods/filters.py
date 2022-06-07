@@ -44,6 +44,7 @@ def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=No
             coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric, sgn)
 
         coherent_words_sum, coherent_values_sum = zip(*reversed(sorted(zip(coherent_words_sum, coherent_values_sum))))
+        # issue: how to keep track of samples
         _words = []
         _values = []
         for i in range(len(coherent_words_sum)):
@@ -54,82 +55,86 @@ def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=No
         coherent_words_sum = _words
         coherent_values_sum = _values
 
+    return coherent_words_sum, coherent_values_sum
 
 
-        verbalization = ""
-        for filter_result in coherent_words_sum[:top_n_coherences]:
+
+def generate_filters(filter_length):
+    """
+    generates binary-search filters
+    :param filter_length: max length of filter
+    :return: filter_length^2 filters with all permutations
+    """
+    filters = []
+    for i in range(filter_length):
+        if 1 < i < filter_length - 1:
+            filters.append([*[*[1] * i, *[0]*(filter_length-i)]])
+    filters = permute_filter_blueprints(filters)
+    return filters
+
+
+def permute_filter_blueprints(filters):
+    """
+    permutes a given filter to all possible combinations
+    :param filters: binary filter
+    :return: (sum(filter) over len(filter)) filters (binomial coefficient)
+             (all possible combinations of the 0s and 1s in filter)
+    """
+    permuted_filters = []
+    for i in filters:
+        permuted_filters.append(sorted(tuple(set(permutations(i)))))
+
+    filters = []
+    for i in permuted_filters:
+        for j in i:
+            filters.append(j)
+    filters = np.array(filters).astype("byte")
+    return filters
+
+
+def generate_filters(filter_length):
+    """
+    generates binary-search filters
+    :param filter_length: max length of filter
+    :return: filter_length^2 filters with all permutations
+    """
+    filters = []
+    for i in range(filter_length):
+        if 1 < i < filter_length - 1:
+            filters.append([*[*[1] * i, *[0]*(filter_length-i)]])
+    filters = permute_filter_blueprints(filters)
+    return filters
+
+
+def permute_filter_blueprints(filters):
+    """
+    permutes a given filter to all possible combinations
+    :param filters: binary filter
+    :return: (sum(filter) over len(filter)) filters (binomial coefficient)
+             (all possible combinations of the 0s and 1s in filter)
+    """
+    permuted_filters = []
+    for i in filters:
+        permuted_filters.append(sorted(tuple(set(permutations(i)))))
+
+    filters = []
+    for i in permuted_filters:
+        for j in i:
+            filters.append(j)
+    filters = np.array(filters).astype("byte")
+    return filters
+
+
+def verbalize_fieldsearch(coherent_words_sum, coherent_values_sum, samples):
+    verbalizations = []
+    verbalization = ""
+    for key in samples.keys():
+        for filter_result in coherent_words_sum:
             for input_id in filter_result:
-                verbalization += sample["input_ids"][input_id] + ", "
+                verbalization += samples[key]["input_ids"][input_id] + ", "
             verbalization += "are related to each other \n"
         verbalizations.append(verbalization)
 
     return verbalizations
-
-
-def generate_filters(filter_length):
-    """
-    generates binary-search filters
-    :param filter_length: max length of filter
-    :return: filter_length^2 filters with all permutations
-    """
-    filters = []
-    for i in range(filter_length):
-        if 1 < i < filter_length - 1:
-            filters.append([*[*[1] * i, *[0]*(filter_length-i)]])
-    filters = permute_filter_blueprints(filters)
-    return filters
-
-
-def permute_filter_blueprints(filters):
-    """
-    permutes a given filter to all possible combinations
-    :param filters: binary filter
-    :return: (sum(filter) over len(filter)) filters (binomial coefficient)
-             (all possible combinations of the 0s and 1s in filter)
-    """
-    permuted_filters = []
-    for i in filters:
-        permuted_filters.append(sorted(tuple(set(permutations(i)))))
-
-    filters = []
-    for i in permuted_filters:
-        for j in i:
-            filters.append(j)
-    filters = np.array(filters).astype("byte")
-    return filters
-
-
-def generate_filters(filter_length):
-    """
-    generates binary-search filters
-    :param filter_length: max length of filter
-    :return: filter_length^2 filters with all permutations
-    """
-    filters = []
-    for i in range(filter_length):
-        if 1 < i < filter_length - 1:
-            filters.append([*[*[1] * i, *[0]*(filter_length-i)]])
-    filters = permute_filter_blueprints(filters)
-    return filters
-
-
-def permute_filter_blueprints(filters):
-    """
-    permutes a given filter to all possible combinations
-    :param filters: binary filter
-    :return: (sum(filter) over len(filter)) filters (binomial coefficient)
-             (all possible combinations of the 0s and 1s in filter)
-    """
-    permuted_filters = []
-    for i in filters:
-        permuted_filters.append(sorted(tuple(set(permutations(i)))))
-
-    filters = []
-    for i in permuted_filters:
-        for j in i:
-            filters.append(j)
-    filters = np.array(filters).astype("byte")
-    return filters
-
 
 # end of filter based search

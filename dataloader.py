@@ -195,17 +195,21 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
     @staticmethod
     def span_search(_dict, len_filters, sgn=None, metric=None):
         if not sgn:
-            explanations = span.span_search(_dict, len_filters, sgn=None, mode=metric)
+            coh_words, coh_vals = span.span_search(_dict, len_filters, sgn=None, mode=metric)
+            explanations = span.verbalize_spansearch(coh_words, coh_vals, _dict)
         else:
-            explanations = span.span_search(_dict, len_filters, sgn=sgn, mode=metric)
+            coh_words, coh_vals = span.span_search(_dict, len_filters, sgn=sgn, mode=metric)
+            explanations = span.verbalize_spansearch(coh_words, coh_vals, _dict)
         return explanations
 
     @staticmethod
     def filter_search(_dict, len_filters, sgn=None, metric=None):
         if not sgn:
-            explanations = fil.field_search(_dict, len_filters, sgn=None, mode=metric)
+            coh_words, coh_vals = fil.field_search(_dict, len_filters, sgn=None, mode=metric)
+            explanations = fil.verbalize_fieldsearch(coh_words, coh_vals, _dict)
         else:
-            explanations = fil.field_search(_dict, len_filters, sgn=sgn, mode=metric)
+            coh_words, coh_vals = fil.field_search(_dict, len_filters, sgn=sgn, mode=metric)
+            explanations = fil.verbalize_fieldsearch(coh_words, coh_vals, _dict)
         return explanations
 
 # 3. spacy
