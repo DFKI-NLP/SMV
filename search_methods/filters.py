@@ -1,7 +1,9 @@
+import warnings
 from warnings import warn
 from search_methods.tools import *
 from itertools import permutations
 # start of filter-based search
+warnings.simplefilter("always")
 
 
 def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=None, mode: str = "mean: 1"):
@@ -25,6 +27,7 @@ def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=No
     # indices = np.arange(0, len(sample["attributions"])).astype("uint16")
 
     sorted_filters = generate_filters(filter_length)
+    words_and_vals = {}
     verbalizations = []
     for key in samples.keys():
         sample = samples[key]
@@ -51,12 +54,9 @@ def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=No
             if not coherent_words_sum[i] in _words:
                 _words.append(coherent_words_sum[i])
                 _values.append(coherent_values_sum[i])
+        words_and_vals[key] = [_words, _values]
 
-        coherent_words_sum = _words
-        coherent_values_sum = _values
-
-    return coherent_words_sum, coherent_values_sum
-
+    return words_and_vals  # return as dictionary_ [key] = tuple(word_indices, word/snippet_values)
 
 
 def generate_filters(filter_length):
@@ -123,18 +123,5 @@ def permute_filter_blueprints(filters):
             filters.append(j)
     filters = np.array(filters).astype("byte")
     return filters
-
-
-def verbalize_fieldsearch(coherent_words_sum, coherent_values_sum, samples):
-    verbalizations = []
-    verbalization = ""
-    for key in samples.keys():
-        for filter_result in coherent_words_sum:
-            for input_id in filter_result:
-                verbalization += samples[key]["input_ids"][input_id] + ", "
-            verbalization += "are related to each other \n"
-        verbalizations.append(verbalization)
-
-    return verbalizations
 
 # end of filter based search

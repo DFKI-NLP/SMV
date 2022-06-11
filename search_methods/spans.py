@@ -8,18 +8,17 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=Non
     """
     generates spans to search for coherences amongst a sample loaded by dataloader.Verbalizer.read_samples()
     works like field_search(*args)
+    only used for calculations; return is to be used for verbalization
     :param samples: shape = dataloader.Verbalizer.read_samples() return shape
     :param filter_length: length of generated filters; computationally expensive, generates filter_length^2 filters
     :param top_n_coherences: how many coherences should be returned?
     :param sgn: sign sensitive search?
     :param mode: metric to use
-    :return: verbalized search:string
+    :return: dictionary composed of: keys=keys of samples values: (sample_snippet_indices, sample_snippet_values)
     """
 
-    # indices = np.arange(0, len(sample["attributions"])).astype("uint16")
-
     sorted_filters = generate_spans(filter_length)
-    verbalizations = []
+    words_and_vals = {}
     for key in samples.keys():
         sample = samples[key]
         attribs = np.array(sample["attributions"]).astype("float32")/abs(np.max(sample["attributions"]))
@@ -36,20 +35,17 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=Non
         else:
             coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric, sgn)
 
-        coherent_words_sum, coherent_values_sum = zip(*reversed(sorted(zip(coherent_words_sum, coherent_values_sum))))
+        coherent_words_sum, coherent_values_sum = zip(*reversed(sorted(zip(coherent_words_sum,
+                                                                           coherent_values_sum))))
         _words = []
         _values = []
         for i in range(len(coherent_words_sum)):
             if not coherent_words_sum[i] in _words:
                 _words.append(coherent_words_sum[i])
                 _values.append(coherent_values_sum[i])
+        words_and_vals[key] = [_words, _values]
 
-        coherent_words_sum = _words
-        coherent_values_sum = _values
-
-        return coherent_words_sum, coherent_values_sum
-
-
+    return words_and_vals  # return as dictionary_ [key] = tuple(word_indices, word/snippet_values)
 
 
 def generate_spans(filter_length):
@@ -73,18 +69,5 @@ def generate_spans(filter_length):
 
     filters = np.array(filters).astype("byte")
     return filters
-
-
-def verbalize_spansearch(coherent_words_sum, coherent_values_sum, samples):
-    verbalizations = []
-    verbalization = ""
-    for key in samples.keys():
-        for filter_result in coherent_words_sum:
-            for input_id in filter_result:
-                verbalization += samples[key]["input_ids"][input_id] + ", "
-            verbalization += "are related to each other \n"
-        verbalizations.append(verbalization)
-
-    return verbalizations
 
 # end of span based filter search

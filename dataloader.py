@@ -195,21 +195,21 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
     @staticmethod
     def span_search(_dict, len_filters, sgn=None, metric=None):
         if not sgn:
-            coh_words, coh_vals = span.span_search(_dict, len_filters, sgn=None, mode=metric)
-            explanations = span.verbalize_spansearch(coh_words, coh_vals, _dict)
+            prepared_data = span.span_search(_dict, len_filters, sgn=None, mode=metric)
+            explanations = t.verbalize_field_span_search(prepared_data, _dict)
         else:
-            coh_words, coh_vals = span.span_search(_dict, len_filters, sgn=sgn, mode=metric)
-            explanations = span.verbalize_spansearch(coh_words, coh_vals, _dict)
+            prepared_data = span.span_search(_dict, len_filters, sgn=sgn, mode=metric)
+            explanations = t.verbalize_field_span_search(prepared_data, _dict)
         return explanations
 
     @staticmethod
     def filter_search(_dict, len_filters, sgn=None, metric=None):
         if not sgn:
-            coh_words, coh_vals = fil.field_search(_dict, len_filters, sgn=None, mode=metric)
-            explanations = fil.verbalize_fieldsearch(coh_words, coh_vals, _dict)
+            prepared_data = fil.field_search(_dict, len_filters, sgn=None, mode=metric)
+            explanations = t.verbalize_field_span_search(prepared_data, _dict)
         else:
-            coh_words, coh_vals = fil.field_search(_dict, len_filters, sgn=sgn, mode=metric)
-            explanations = fil.verbalize_fieldsearch(coh_words, coh_vals, _dict)
+            prepared_data = fil.field_search(_dict, len_filters, sgn=sgn, mode=metric)
+            explanations = t.verbalize_field_span_search(prepared_data, _dict)
         return explanations
 
 # 3. spacy

@@ -12,13 +12,6 @@ if __name__ == "__main__":
 
     loader = dataloader.Verbalizer("data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl", config=config)
     explanations, texts = loader()
-    for Tkey in texts.keys():
-        print("Text:")
-        text = [word for word in texts[Tkey]["input_ids"]]
-        print(*text)
-        print()
-        for eKey in explanations:
-            print("type '{}' explanation:".format(eKey))
-            print(*explanations[eKey])
+    print(explanations)
 
 # pruned span search?

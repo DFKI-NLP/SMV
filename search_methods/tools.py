@@ -185,3 +185,22 @@ def get_metric_values(mode: str):
     args = [selected_mode[1](_args[i]) for i in range(1, len(_args))]
     return args
 
+
+def verbalize_field_span_search(prepared_data, samples):
+    verbalizations = {}
+    for key in prepared_data:
+        q=0
+        for i in samples[key]["attributions"]:
+            if i > 0:
+                q+=i
+        full_values = sum(samples[key]["attributions"])
+        #print(full_values)
+        for snippet in prepared_data[key]:
+            try:
+                print(snippet[1])
+                rel_this_snippet_value = sum(snippet[1]) / q
+                print(rel_this_snippet_value)
+            except Exception:
+                print("Unknown error occured")
+
+    return verbalizations
