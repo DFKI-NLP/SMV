@@ -21,9 +21,9 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=Non
     words_and_vals = {}
     for key in samples.keys():
         sample = samples[key]
-        attribs = np.array(sample["attributions"]).astype("float32")/abs(np.max(sample["attributions"]))
+        attribs = np.array(sample["attributions"].copy()).astype("float32")/abs(np.max(sample["attributions"]))
         if "mean" in mode:
-            metric = get_mean(get_metric_values(mode)[0:], attribs.copy())
+            metric = get_mean(get_metric_values(mode)[0:], attribs)
 
         elif "quantile" in mode:
             metric = get_stdev(get_variance(attribs))

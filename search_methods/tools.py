@@ -184,14 +184,15 @@ def verbalize_field_span_search(prepared_data, samples, sgn="+"):
     for key in prepared_data.keys():
         sum_values = 0
         for i in samples[key]["attributions"]:
-            sum_values += abs(i)
+            sum_values += i if i > 0 else 0
 
         words = []
         values = []
         sorted_by_max_values = [i for i in reversed(sorted(prepared_data[key]["values"]))]
         for value in sorted_by_max_values:
             indexof = prepared_data[key]["values"].index(value)
-            values.append(value)
+            values.append(sum([samples[key]["attributions"][indexid]
+                               for indexid in prepared_data[key]["indices"][indexof]]))
             _ = []
             for entry in prepared_data[key]["indices"][indexof]:
                 _.append(samples[key]["input_ids"][entry].replace("▁", " "))
@@ -203,7 +204,7 @@ def verbalize_field_span_search(prepared_data, samples, sgn="+"):
             for word in words[snippet]:
                 verbalization += word + " "
             verbalization += "' contains {}% of prediction score"\
-                .format(str(round(sorted_by_max_values[snippet][0]*100, 2)))
+                .format(str(round((values[snippet] / sum_values) * 100, 2)))
 
             verbalizations.append(verbalization)
         verbalization_dict[key] = verbalizations
