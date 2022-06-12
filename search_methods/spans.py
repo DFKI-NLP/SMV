@@ -43,7 +43,8 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=Non
             if not coherent_words_sum[i] in _words:
                 _words.append(coherent_words_sum[i])
                 _values.append(coherent_values_sum[i])
-        words_and_vals[key] = [_words, _values]
+        words_and_vals[key] = {"indices": _words,
+                               "values": _values}
 
     return words_and_vals  # return as dictionary_ [key] = tuple(word_indices, word/snippet_values)
 

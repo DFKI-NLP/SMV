@@ -199,7 +199,7 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
             explanations = t.verbalize_field_span_search(prepared_data, _dict)
         else:
             prepared_data = span.span_search(_dict, len_filters, sgn=sgn, mode=metric)
-            explanations = t.verbalize_field_span_search(prepared_data, _dict)
+            explanations = t.verbalize_field_span_search(prepared_data, _dict, sgn=sgn)
         return explanations
 
     @staticmethod
@@ -209,7 +209,7 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
             explanations = t.verbalize_field_span_search(prepared_data, _dict)
         else:
             prepared_data = fil.field_search(_dict, len_filters, sgn=sgn, mode=metric)
-            explanations = t.verbalize_field_span_search(prepared_data, _dict)
+            explanations = t.verbalize_field_span_search(prepared_data, _dict, sgn=sgn)
         return explanations
 
 # 3. spacy
