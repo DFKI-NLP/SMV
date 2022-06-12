@@ -28,11 +28,7 @@ def filter_span_sample_sum(sorted_filters, sample_attribs, metric_value):
     coherency_values = np.array(coherency_values)
     coherent_snippets = []
 
-    for index in range(len(coherency_values)):
-        if coherency_values[index] > np.median(coherency_values):
-            coherent_snippets.append(coherent_words[index])
-
-    return coherent_snippets, coherency_values
+    return coherent_words, coherency_values
 
 
 @jit(nopython=True)
@@ -78,11 +74,8 @@ def filter_span_sample_sum_sgn(sorted_filters, sample_attribs, metric_value, sgn
 
     coherency_values = np.array(coherency_values)
     coherent_snippets = []
-    for index in range(len(coherency_values)):
-        if coherency_values[index] > np.median(coherency_values):
-            coherent_snippets.append(coherent_words[index])
 
-    return coherent_snippets, coherency_values
+    return coherent_words, coherency_values
 
 
 # order input sample using >= :
@@ -187,24 +180,31 @@ def get_metric_values(mode: str):
 
 
 def verbalize_field_span_search(prepared_data, samples, sgn="+"):
-    verbalizations = {}
+    verbalization_dict = {}
     for key in prepared_data.keys():
         sum_values = 0
         for i in samples[key]["attributions"]:
-            if sgn == "+":
-                if i > 0:
-                    sum_values += i
-            elif sgn == "-":
-                if i <= 0:
-                    sum_values += i
+            sum_values += abs(i)
 
         words = []
-        print(prepared_data[key]["values"])
-        for snippet in prepared_data[key]["indices"]:
+        values = []
+        sorted_by_max_values = [i for i in reversed(sorted(prepared_data[key]["values"]))]
+        for value in sorted_by_max_values:
+            indexof = prepared_data[key]["values"].index(value)
+            values.append(value)
             _ = []
-            for index in snippet:
-                _.append(samples[key]["input_ids"][index])
+            for entry in prepared_data[key]["indices"][indexof]:
+                _.append(samples[key]["input_ids"][entry].replace("▁", " "))
             words.append(_)
 
-        #print(words)
-    return verbalizations
+        verbalizations = []
+        for snippet in range(len(words)):
+            verbalization = "snippet: '"
+            for word in words[snippet]:
+                verbalization += word + " "
+            verbalization += "' contains {}% of prediction score"\
+                .format(str(round(sorted_by_max_values[snippet][0]*100, 2)))
+
+            verbalizations.append(verbalization)
+        verbalization_dict[key] = verbalizations
+    return verbalization_dict
