@@ -198,6 +198,13 @@ def verbalize_field_span_search(prepared_data, samples, sgn="+"):
                 if i <= 0:
                     sum_values += i
 
-        words = prepared_data[key]["indices"]
+        words = []
+        print(prepared_data[key]["values"])
+        for snippet in prepared_data[key]["indices"]:
+            _ = []
+            for index in snippet:
+                _.append(samples[key]["input_ids"][index])
+            words.append(_)
 
+        #print(words)
     return verbalizations

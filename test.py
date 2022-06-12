@@ -12,6 +12,5 @@ if __name__ == "__main__":
 
     loader = dataloader.Verbalizer("data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl", config=config)
     explanations, texts = loader()
-    print(explanations)
 
 # pruned span search?
