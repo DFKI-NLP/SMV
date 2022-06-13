@@ -58,7 +58,7 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
             raise RuntimeError("Please specify model_type; Missing param model_type")
 
         self.standard_samples = standard_samples
-        self.modes = ["total_order", "filter search", "span search"]  # which search-algorithms to use
+        self.modes = ["total_order", "filter search", "span search", "compare search"]  # which search-algorithms to use
         self.checkpoint = 0  # where did the Verbalizer stop loading examples
         self.len_filters = len_filters
         self.sgn = None
@@ -163,31 +163,37 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
 
         sample_array = self.read_samples(n_samples)
 
+        explanations = {}
         orders_and_searches = {}
-
         """
         example of how to use search algorithm
         if "total_order" in modes:
             orders_and_searches["total_order"] = self.total_order(sample_array)
         """
+        if "total order" in modes:
+            pass  # fill with total ordered search
 
         if "filter search" in modes:
             if not self.sgn:
-                orders_and_searches["filter search"] = self.filter_search(sample_array, self.len_filters,
-                                                                          metric=self.metric)
+                explanations["filter search"], orders_and_searches["filter search"] = self.filter_search(sample_array, self.len_filters,
+                                                                                                         metric=self.metric)
             else:
-                orders_and_searches["filter search"] = self.filter_search(sample_array, self.len_filters,
-                                                                          self.sgn, self.metric)
+                explanations["filter search"], orders_and_searches["filter search"] = self.filter_search(sample_array, self.len_filters,
+                                                                                                         self.sgn, self.metric)
 
         if "span search" in modes:
             if not self.sgn:
-                orders_and_searches["span search"] = self.span_search(sample_array, self.len_filters,
-                                                                      metric=self.metric)
+                explanations["span search"], orders_and_searches["span search"] = self.span_search(sample_array, self.len_filters,
+                                                                                                   metric=self.metric)
             else:
-                orders_and_searches["span search"] = self.span_search(sample_array, self.len_filters,
-                                                                      self.sgn, self.metric)
+                explanations["span search"], orders_and_searches["span search"] = self.span_search(sample_array, self.len_filters,
+                                                                                                   self.sgn, self.metric)
 
-        return orders_and_searches, sample_array
+        # SHOULD ALWAYS BE DONE AT THE END
+        if "compare search":
+            explanations["compare search"] = self.compare_search(orders_and_searches, sample_array)
+
+        return explanations, sample_array
 
     def __call__(self, modes: list = None, n_samples: int = None, *args, **kwargs):
         return self.doit(modes, n_samples)
@@ -211,5 +217,10 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
             prepared_data = fil.field_search(_dict, len_filters, sgn=sgn, mode=metric)
             explanations = t.verbalize_field_span_search(prepared_data, _dict, sgn=sgn)
         return explanations
+
+    @staticmethod
+    def compare_search(previous_searches, samples):
+        coincedences = t.compare_searches(previous_searches, samples)
+        return coincedences
 
 # 3. spacy

@@ -21,7 +21,10 @@ if __name__ == "__main__":
 
         for expl_subclass in explanations.keys():
             print("subclass '{}'".format(expl_subclass))
-            _ = explanations[expl_subclass][key][:5]
-            for __ in _:
-                print(__)
+            try:
+                _ = explanations[expl_subclass][key][:5]
+                for __ in _:
+                    print(__)
+            except:
+                pass
 # pruned span search?

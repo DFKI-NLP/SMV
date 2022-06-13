@@ -198,6 +198,7 @@ def verbalize_field_span_search(prepared_data, samples, sgn="+"):
                 _.append(samples[key]["input_ids"][entry].replace("▁", " "))
             words.append(_)
 
+
         verbalizations = []
         for snippet in range(len(words)):
             verbalization = "snippet: '"
@@ -208,4 +209,40 @@ def verbalize_field_span_search(prepared_data, samples, sgn="+"):
 
             verbalizations.append(verbalization)
         verbalization_dict[key] = verbalizations
-    return verbalization_dict
+    return verbalization_dict, prepared_data
+
+
+def compare_searches(searches: dict, samples):
+    search_types = searches.keys()
+
+    coincidences = {}
+    for subclass in search_types:
+        for subclass_2 in search_types:
+            if subclass == subclass_2:
+                pass
+            else:
+                for sample_key in searches[subclass].keys():
+                    sum_values = 0
+                    for i in samples[sample_key]["attributions"]:
+                        sum_values += i if i > 0 else 0
+
+                    _ = []
+                    for value_1 in searches[subclass][sample_key]["indices"]:
+                        for value_2 in searches[subclass_2][sample_key]["indices"]:
+                            if value_1 == value_2 and value_1 not in coincidences.items():
+                                _.append(value_1)
+
+                    verbalizations = []
+                    for snippet in _:
+                        verbalization = "snippet: '"
+                        for word_index in snippet:
+                            verbalization += samples[sample_key]["input_ids"][word_index].replace("▁", " ")
+                        verbalization += "' occurs in all searches and accounts for {}% of prediction score".format(
+                            str(round(
+                                (sum([samples[sample_key]["attributions"][i] for i in snippet])/sum_values)*100, 2
+                            )
+                        ))
+                        verbalizations.append(verbalization)
+                    coincidences[sample_key] = verbalizations
+
+    return coincidences
