@@ -6,8 +6,8 @@ if __name__ == "__main__":
 
     config = {
         "sgn": "+",  # Vorzeichenfehler bei "-"
-        "samples": 5,
-        "metric": "mean: .4"# {"name": "mean", "params": .2}
+        "samples": 10,
+        "metric": "mean: 1."# {"name": "mean", "params": .2}
     }
 
     loader = dataloader.Verbalizer("data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl", config=config)
