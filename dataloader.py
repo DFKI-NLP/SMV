@@ -57,7 +57,7 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
             raise RuntimeError("Please specify model_type; Missing param model_type")
 
         self.standard_samples = standard_samples
-        self.modes = ["total_order", "convolution search", "span search", "compare search"]  # which search-algorithms to use
+        self.modes = ["total order", "convolution search", "span search", "compare search"]  # which search-algorithms to use
         self.checkpoint = 0  # where did the Verbalizer stop loading examples
         self.len_filters = len_filters
         self.sgn = None
@@ -169,8 +169,6 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
         if "total_order" in modes:
             orders_and_searches["total_order"] = self.total_order(sample_array)
         """
-        if "total order" in modes:
-            pass  # fill with total ordered search
 
         if "convolution search" in modes:
             if not self.sgn:
@@ -188,9 +186,13 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
                 explanations["span search"], orders_and_searches["span search"] = self.span_search(sample_array, self.len_filters,
                                                                                                    self.sgn, self.metric)
 
-        # SHOULD ALWAYS BE DONE AT THE END
+
+        # SHOULD ALWAYS BE DONE AT THE END but before total search
         if "compare search":
             explanations["compare search"] = self.compare_search(orders_and_searches, sample_array)
+
+        if "total order" in modes:
+           explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
 
         return explanations, sample_array
 
