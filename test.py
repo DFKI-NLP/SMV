@@ -6,8 +6,8 @@ if __name__ == "__main__":
 
     config = {
         "sgn": "+",  # Vorzeichenfehler bei "-"
-        "samples": 100,
-        "metric": "mean: 0.1"# {"name": "mean", "params": .2},
+        "samples": 10,
+        "metric": "mean: 0.4"# {"name": "mean", "params": .2},
         # searches = {"span", "total"}; "all"
     }
 
