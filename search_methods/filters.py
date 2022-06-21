@@ -3,10 +3,10 @@ from warnings import warn
 from search_methods.tools import *
 from itertools import permutations
 # start of filter-based search
-warnings.simplefilter("always")
+#warnings.simplefilter("always")
 
 
-def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=None, mode: str = "mean: 1"):
+def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=None, mode: str = "mean: 1"):
     """
     perfoms coherency search amongst a sample loaded by dataloader.Verbalizer.read_samples()
     first generates binary-filters of length n (for example [1, 0, 1], [0, 1, 1] or [1, 1, 0]
@@ -18,7 +18,6 @@ def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=No
     :param mode: metric to use
     :return: verbalized search:string
     """
-
     if filter_length > 8:
         warn("Filter length of >8 is not recommended, as it is computationally very"
              " expensive and unlikely to give results",
@@ -28,10 +27,9 @@ def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=No
 
     sorted_filters = generate_filters(filter_length)
     words_and_vals = {}
-    verbalizations = []
     for key in samples.keys():
         sample = samples[key]
-        attribs = np.array(sample["attributions"]).astype("float32")/abs(np.max(sample["attributions"]))#normalized
+        attribs = np.array(sample["attributions"]).astype("float32")/abs(np.max(sample["attributions"]))  # normalized
         if "mean" in mode:
             metric = get_mean(get_metric_values(mode)[0:], attribs)
 
@@ -41,10 +39,13 @@ def field_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=No
         elif "variance" in mode:
             metric = get_variance(attribs)
 
-        if not sgn:
-            coherent_words_sum, coherent_values_sum = filter_span_sample_sum(sorted_filters, attribs, metric)
-        else:
-            coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric, sgn)
+        try:
+            if not sgn:
+                coherent_words_sum, coherent_values_sum = filter_span_sample_sum(sorted_filters, attribs, metric)
+            else:
+                coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric, sgn)
+        except Exception as e:
+            coherent_words_sum, coherent_values_sum = [[None]], [[None]]
 
         coherent_words_sum, coherent_values_sum = zip(*reversed(sorted(zip(coherent_words_sum, coherent_values_sum))))
         # issue: how to keep track of samples

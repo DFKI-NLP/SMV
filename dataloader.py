@@ -34,7 +34,6 @@ TODO    : "quantile: n" where n is a float ranging from 0 to inf
 TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <= m
 
         -->  end  of config example <--
-
         """
 
         self.models = {
@@ -58,7 +57,7 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
             raise RuntimeError("Please specify model_type; Missing param model_type")
 
         self.standard_samples = standard_samples
-        self.modes = ["total_order", "filter search", "span search", "compare search"]  # which search-algorithms to use
+        self.modes = ["total_order", "convolution search", "span search", "compare search"]  # which search-algorithms to use
         self.checkpoint = 0  # where did the Verbalizer stop loading examples
         self.len_filters = len_filters
         self.sgn = None
@@ -173,12 +172,12 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
         if "total order" in modes:
             pass  # fill with total ordered search
 
-        if "filter search" in modes:
+        if "convolution search" in modes:
             if not self.sgn:
-                explanations["filter search"], orders_and_searches["filter search"] = self.filter_search(sample_array, self.len_filters,
+                explanations["convolution search"], orders_and_searches["convolution search"] = self.convolution_search(sample_array, self.len_filters,
                                                                                                          metric=self.metric)
             else:
-                explanations["filter search"], orders_and_searches["filter search"] = self.filter_search(sample_array, self.len_filters,
+                explanations["convolution search"], orders_and_searches["convolution search"] = self.convolution_search(sample_array, self.len_filters,
                                                                                                          self.sgn, self.metric)
 
         if "span search" in modes:
@@ -209,12 +208,12 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
         return explanations
 
     @staticmethod
-    def filter_search(_dict, len_filters, sgn=None, metric=None):
+    def convolution_search(_dict, len_filters, sgn=None, metric=None):
         if not sgn:
-            prepared_data = fil.field_search(_dict, len_filters, sgn=None, mode=metric)
+            prepared_data = fil.convolution_search(_dict, len_filters, sgn=None, mode=metric)
             explanations = t.verbalize_field_span_search(prepared_data, _dict)
         else:
-            prepared_data = fil.field_search(_dict, len_filters, sgn=sgn, mode=metric)
+            prepared_data = fil.convolution_search(_dict, len_filters, sgn=sgn, mode=metric)
             explanations = t.verbalize_field_span_search(prepared_data, _dict, sgn=sgn)
         return explanations
 

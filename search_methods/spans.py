@@ -30,10 +30,15 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=Non
 
         elif "variance" in mode:
             metric = get_variance(attribs)
-        if not sgn:
-            coherent_words_sum, coherent_values_sum = filter_span_sample_sum(sorted_filters, attribs, metric)
-        else:
-            coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric, sgn)
+        try:
+            if not sgn:
+                coherent_words_sum, coherent_values_sum = filter_span_sample_sum(sorted_filters, attribs, metric)
+
+            else:
+                coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric, sgn)
+
+        except Exception as e:
+            coherent_words_sum, coherent_values_sum = [[None]], [[None]]
 
         coherent_words_sum, coherent_values_sum = zip(*reversed(sorted(zip(coherent_words_sum, coherent_values_sum))))
         _words = []

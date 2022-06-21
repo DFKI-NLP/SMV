@@ -6,11 +6,13 @@ if __name__ == "__main__":
 
     config = {
         "sgn": "+",  # Vorzeichenfehler bei "-"
-        "samples": 10,
-        "metric": "mean: 1."# {"name": "mean", "params": .2}
+        "samples": 100,
+        "metric": "mean: 0.05"# {"name": "mean", "params": .2},
+        # searches = {"span", "total"}; "all"
     }
 
     loader = dataloader.Verbalizer("data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl", config=config)
+    # loader = dataloader.Verbalizer.from_thermostat(config)
     explanations, texts = loader()
 
     for key in texts.keys():
@@ -21,10 +23,10 @@ if __name__ == "__main__":
 
         for expl_subclass in explanations.keys():
             print("subclass '{}'".format(expl_subclass))
-            try:
-                _ = explanations[expl_subclass][key][:5]
-                for __ in _:
-                    print(__)
-            except:
-                pass
+            _ = explanations[expl_subclass][key][:5]
+            for __ in _:
+                print(__)
+
 # pruned span search?
+
+

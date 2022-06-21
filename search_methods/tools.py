@@ -180,6 +180,13 @@ def get_metric_values(mode: str):
 
 
 def verbalize_field_span_search(prepared_data, samples, sgn="+"):
+    """
+    Verbalizes results of field_search or span_search
+    :param prepared_data: output of one of the searches
+    :param samples: input array -> see dataloader.read_samples
+    :param sgn: unused for now
+    :return: Dict[sample_key: verbalization_list->list ]
+    """
     verbalization_dict = {}
     for key in prepared_data.keys():
         sum_values = 0
@@ -191,21 +198,29 @@ def verbalize_field_span_search(prepared_data, samples, sgn="+"):
         sorted_by_max_values = [i for i in reversed(sorted(prepared_data[key]["values"]))]
         for value in sorted_by_max_values:
             indexof = prepared_data[key]["values"].index(value)
-            values.append(sum([samples[key]["attributions"][indexid]
-                               for indexid in prepared_data[key]["indices"][indexof]]))
-            _ = []
-            for entry in prepared_data[key]["indices"][indexof]:
-                _.append(samples[key]["input_ids"][entry].replace("▁", " "))
-            words.append(_)
+            try:
+                values.append(sum([samples[key]["attributions"][indexid]
+                                   for indexid in prepared_data[key]["indices"][indexof]]))
+                _ = []
+                for entry in prepared_data[key]["indices"][indexof]:
+                    _.append(samples[key]["input_ids"][entry].replace("▁", " "))
+                words.append(_)
+            except TypeError:
+                words.append([None])
 
 
         verbalizations = []
         for snippet in range(len(words)):
             verbalization = "snippet: '"
             for word in words[snippet]:
+                if not word:
+                    continue
                 verbalization += word + " "
-            verbalization += "' contains {}% of prediction score"\
-                .format(str(round((values[snippet] / sum_values) * 100, 2)))
+            try:
+                verbalization += "' contains {}% of prediction score"\
+                    .format(str(round((values[snippet] / sum_values) * 100, 2)))
+            except Exception as e:
+                verbalization = "No coherent values found"
 
             verbalizations.append(verbalization)
         verbalization_dict[key] = verbalizations
@@ -213,6 +228,12 @@ def verbalize_field_span_search(prepared_data, samples, sgn="+"):
 
 
 def compare_searches(searches: dict, samples):
+    """
+
+    :param searches:
+    :param samples:
+    :return:
+    """
     search_types = searches.keys()
 
     coincidences = {}
@@ -229,6 +250,8 @@ def compare_searches(searches: dict, samples):
                     _ = []
                     for value_1 in searches[subclass][sample_key]["indices"]:
                         for value_2 in searches[subclass_2][sample_key]["indices"]:
+                            if value_1 is None or value_2 is None:
+                                continue
                             if value_1 == value_2 and value_1 not in coincidences.items():
                                 _.append(value_1)
 
@@ -236,13 +259,20 @@ def compare_searches(searches: dict, samples):
                     for snippet in _:
                         verbalization = "snippet: '"
                         for word_index in snippet:
-                            verbalization += samples[sample_key]["input_ids"][word_index].replace("▁", " ")
-                        verbalization += "' occurs in all searches and accounts for {}% of prediction score".format(
-                            str(round(
-                                (sum([samples[sample_key]["attributions"][i] for i in snippet])/sum_values)*100, 2
-                            )
-                        ))
+                            if word_index is not None:
+                                verbalization += samples[sample_key]["input_ids"][word_index].replace("▁", " ")
+                        try:
+                            verbalization += "' occurs in all searches and accounts for {}% of prediction score".format(
+                                str(round(
+                                    (sum([samples[sample_key]["attributions"][i] for i in snippet])/sum_values)*100, 2
+                                )
+                            ))
+                        except Exception as e:
+                            pass
+
                         verbalizations.append(verbalization)
+                    if not verbalizations:
+                        verbalizations = ["No snippet occurs in all searches simultaneously"]
                     coincidences[sample_key] = verbalizations
 
     return coincidences
