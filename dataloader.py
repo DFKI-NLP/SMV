@@ -224,4 +224,13 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
         coincedences = t.compare_searches(previous_searches, samples)
         return coincedences
 
-# 3. spacy
+
+class ThermostatVerbalizer(Verbalizer):
+    def __init__(self, th_dataset, standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
+                 config=None,
+                 *args, **kwargs):
+        super(ThermostatVerbalizer, self).__init__(th_dataset.model_name, standard_samples, model_type, len_filters, config)
+        self.thermostat_dataset = th_dataset
+
+    def read_samples(self, num_entries: int = None, recursion=0):
+        pass
