@@ -1,23 +1,26 @@
+import os
 import thermostat
 
 import dataloader
-# dataset @ "https://cloud.dfki.de/owncloud/index.php/s/zjMddcqewEcwSPG/download", put into data folder
 
 
 if __name__ == "__main__":
     config = {
-        "sgn": "+",  # Vorzeichenfehler bei "-"
+        "source": "data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl",
+        "sgn": "+",  # TODO: "-"
         "samples": 10,
-        "metric": "mean: 0.4"# {"name": "mean", "params": .2},
+        "metric": "mean: 0.4",  # TODO: {"name": "mean", "params": .2},
         # searches = {"span", "total"}; "all"
     }
-    df = thermostat.load("imdb-bert-lig")
-    loader = dataloader.ThermostatVerbalizer(df, **config)
-    r = df[0]["attributions"]
-    print(r)
-"""
-    loader = dataloader.Verbalizer("data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl", config=config)
-    # loader = dataloader.Verbalizer.from_thermostat(config)
+
+    source = config["source"]
+    if os.path.isfile(source):
+        loader = dataloader.Verbalizer(source, config=config)
+    else:
+        df = thermostat.load("imdb-bert-lig")
+        # TODO
+        raise NotImplementedError
+
     explanations, texts = loader()
 
     for key in texts.keys():
@@ -32,6 +35,4 @@ if __name__ == "__main__":
             for __ in _:
                 print(__)
 
-# pruned span search?
-"""
-
+    # TODO: pruned span search?

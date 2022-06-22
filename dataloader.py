@@ -30,8 +30,8 @@ class Verbalizer:
         : "mean_sum: n" where n is a float ranging from 0 to 1;
                                                    uses mean(sum(sorted(attribs[:len * n])) as metric
 
-TODO    : "quantile: n" where n is a float ranging from 0 to inf
-TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <= m
+        TODO    : "quantile: n" where n is a float ranging from 0 to inf
+        TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <= m
 
         -->  end  of config example <--
         """
@@ -57,7 +57,8 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
             raise RuntimeError("Please specify model_type; Missing param model_type")
 
         self.standard_samples = standard_samples
-        self.modes = ["total order", "convolution search", "span search", "compare search"]  # which search-algorithms to use
+        self.modes = ["total order", "convolution search", "span search", "compare search"]
+        # which search-algorithms to use
         self.checkpoint = 0  # where did the Verbalizer stop loading examples
         self.len_filters = len_filters
         self.sgn = None
@@ -172,27 +173,26 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
 
         if "convolution search" in modes:
             if not self.sgn:
-                explanations["convolution search"], orders_and_searches["convolution search"] = self.convolution_search(sample_array, self.len_filters,
-                                                                                                         metric=self.metric)
+                explanations["convolution search"], orders_and_searches["convolution search"] = self.convolution_search(
+                    sample_array, self.len_filters, metric=self.metric)
             else:
-                explanations["convolution search"], orders_and_searches["convolution search"] = self.convolution_search(sample_array, self.len_filters,
-                                                                                                         self.sgn, self.metric)
+                explanations["convolution search"], orders_and_searches["convolution search"] = self.convolution_search(
+                    sample_array, self.len_filters, self.sgn, self.metric)
 
         if "span search" in modes:
             if not self.sgn:
-                explanations["span search"], orders_and_searches["span search"] = self.span_search(sample_array, self.len_filters,
-                                                                                                   metric=self.metric)
+                explanations["span search"], orders_and_searches["span search"] = self.span_search(
+                    sample_array, self.len_filters, metric=self.metric)
             else:
-                explanations["span search"], orders_and_searches["span search"] = self.span_search(sample_array, self.len_filters,
-                                                                                                   self.sgn, self.metric)
-
+                explanations["span search"], orders_and_searches["span search"] = self.span_search(
+                    sample_array, self.len_filters, self.sgn, self.metric)
 
         # SHOULD ALWAYS BE DONE AT THE END but before total search
         if "compare search":
             explanations["compare search"] = self.compare_search(orders_and_searches, sample_array)
 
         if "total order" in modes:
-           explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
+            explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
 
         return explanations, sample_array
 
@@ -226,10 +226,12 @@ TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <=
 
 
 class ThermostatVerbalizer(Verbalizer):
+    # FIXME: Deprecated
     def __init__(self, th_dataset, standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
                  config=None,
                  *args, **kwargs):
-        super(ThermostatVerbalizer, self).__init__(th_dataset.model_name, standard_samples, model_type, len_filters, config)
+        super(ThermostatVerbalizer, self).__init__(th_dataset.model_name, standard_samples, model_type, len_filters,
+                                                   config)
         self.thermostat_dataset = th_dataset
 
     def read_samples(self, num_entries: int = None, recursion=0):
