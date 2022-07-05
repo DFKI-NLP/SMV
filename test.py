@@ -6,28 +6,27 @@ import dataloader
 
 if __name__ == "__main__":
     config = {
-        "source": "data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl",
+        "source": "imdb-bert-lig",
+        #"source": "data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl",
         "sgn": "+",  # TODO: "-"
         "samples": 10,
         "metric": "mean: 0.4",  # TODO: {"name": "mean", "params": .2},
         # searches = {"span", "total"}; "all"
     }
 
-    source = config["source"]
-    if os.path.isfile(source):
-        loader = dataloader.Verbalizer(source, config=config)
+    if not os.path.isfile(config["source"]):
+        # Load source from Thermostat configuration
+        thermo_config = thermostat.load(config["source"], cache_dir='data')
+        # Convert to pandas DataFrame and then to JSON lines
+        source = thermo_config.to_pandas().to_json(orient='records', lines=True).splitlines()
     else:
-        df = thermostat.load("imdb-bert-lig")
-        # TODO
-        raise NotImplementedError
+        source = config["source"]
 
+    loader = dataloader.Verbalizer(source, config=config)
     explanations, texts = loader()
 
     for key in texts.keys():
-        txt = ""
-        for word in texts[key]["input_ids"]:
-            txt += word.replace("▁", " ")
-        print(txt)
+        print(" ".join(texts[key]["input_ids"]))
 
         for expl_subclass in explanations.keys():
             print("subclass '{}'".format(expl_subclass))

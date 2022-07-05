@@ -220,11 +220,10 @@ def verbalize_field_span_search(prepared_data, samples, sgn="+"):
                                    for indexid in prepared_data[key]["indices"][indexof]]))
                 _ = []
                 for entry in prepared_data[key]["indices"][indexof]:
-                    _.append(samples[key]["input_ids"][entry].replace("▁", " "))
+                    _.append(samples[key]["input_ids"][entry]) #.replace("▁", " "))
                 words.append(_)
             except TypeError:
                 words.append([None])
-
 
         verbalizations = []
         for snippet in range(len(words)):
@@ -275,15 +274,16 @@ def compare_searches(searches: dict, samples):
                     verbalizations = []
                     for snippet in _:
                         verbalization = "snippet: '"
+                        snippet_tokens = []
                         for word_index in snippet:
                             if word_index is not None:
-                                verbalization += samples[sample_key]["input_ids"][word_index].replace("▁", " ")
+                                snippet_tokens.append(samples[sample_key]["input_ids"][word_index]) #.replace("▁", " ")
+                        verbalization += ' '.join(snippet_tokens)
                         try:
                             verbalization += "' occurs in all searches and accounts for {}% of prediction score".format(
                                 str(round(
                                     (sum([samples[sample_key]["attributions"][i] for i in snippet])/sum_values)*100, 2
-                                )
-                            ))
+                                )))
                         except Exception as e:
                             pass
 

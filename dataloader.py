@@ -1,17 +1,20 @@
 import json
+import tokenizers
 import transformers
+from typing import List, Union
+
 from search_methods import spans as span
 from search_methods import filters as fil
 from search_methods import tools as t
 
 
 class Verbalizer:
-    def __init__(self, path: str, standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
+    def __init__(self, source: Union[str, List], standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
                  config=None,
                  *args, **kwargs):
         """
         Verbalizer class
-        :param path: Path to explained-dataset
+        :param source: List of JSON lines (Thermostat) or path to a local dataset of explanations
         :param model_type: Which model is being explained? optional; will look by itself
         :param standard_samples: how many samples should be loaded if nothing specified
         :param config: config dictionary; optional -> how to will be included
@@ -44,15 +47,16 @@ class Verbalizer:
             "electra": (r"ElectraTokenizer", r"google/electra-small-discriminator")
         }
 
-        self.path = path
+        if not source:
+            raise RuntimeError("Source cannot be empty.")
+        self.source = source
+
         self.model_type = model_type
         if not model_type:
             for model in self.models.keys():
-                if model in self.path:
+                if model in config['source'].split('-'):
                     self.model_type = model
 
-        if not self.path:
-            raise RuntimeError("Please add path parameter; Missing param path")
         if not self.model_type:
             raise RuntimeError("Please specify model_type; Missing param model_type")
 
@@ -64,8 +68,11 @@ class Verbalizer:
         self.sgn = None
         self.metric = None
         self.label_names = None
-        self.tokenizer = eval("transformers.{}.from_pretrained('{}')".format(self.models[self.model_type][0],
-                                                                             self.models[self.model_type][1]))
+        #self.tokenizer = eval("tokenizers.Tokenizer.from_pretrained('{}')"  # force_download=True,
+        #                      .format(self.models[self.model_type][1]))
+        self.tokenizer = eval("transformers.{}.from_pretrained('{}', cache_dir='data')"  # force_download=True,
+                              .format(self.models[self.model_type][0],
+                                      self.models[self.model_type][1]))
 
         if config:
             if config["samples"]:
@@ -75,9 +82,18 @@ class Verbalizer:
             if config["metric"]:
                 self.metric = config["metric"]
 
+    def add_explanations_to_dict(self, data, dct):
+        for counter in range(len(data)):
+            _ = json.loads(data[counter])
+            dct[counter] = {"input_ids":  self.tokenizer.convert_ids_to_tokens(_["input_ids"]),
+                            "attributions": _["attributions"],
+                            "label": _["label"],
+                            "predictions": _["predictions"]
+                            }
+
     def read_samples(self, num_entries: int = None, recursion=0):
         """
-        reads num_entries entries in self.path´s explained_dataset and converts to ordered dict
+        reads num_entries entries in dataset and converts to ordered dict
         saves checkpoint to continue from to save memory
         :param recursion: DEBUG DO NOT CHANGE, prevents too much recursion
         :param num_entries: how many samples should be loaded
@@ -86,34 +102,33 @@ class Verbalizer:
         if not num_entries:
             num_entries = self.standard_samples
         _dict = {}
+
         if num_entries <= 0:
             self.checkpoint = 0
-            with open(self.path, "r") as dataset:
-                dataset = list(dataset)
-            for counter in range(len(dataset)):
-                _ = json.loads(dataset[counter])
-                _dict[counter] = {"input_ids": self.tokenizer.convert_ids_to_tokens(_["input_ids"]),
-                                  "attributions": _["attributions"],
-                                  "label": _["label"],
-                                  "predictions": _["predictions"]
-                                  }  # why dict? dict fast
+            if type(self.source) == str:
+                with open(self.source, "r") as dataset:
+                    dataset = list(dataset)
+            else:
+                dataset = self.source
+            self.add_explanations_to_dict(dataset, _dict)
+
         else:
             self.checkpoint = 0
-            with open(self.path, "r") as dataset:
+            if type(self.source) == str:
+                with open(self.source, "r") as dataset:
+                    dataset_snippet = []
+                    for i in range(self.checkpoint):
+                        dataset.readline()
+
+                    for i in range(num_entries):
+                        dataset_snippet.append(dataset.readline())
+                        self.checkpoint += 1
+                    #add_explanations_to_dict(dataset_snippet, _dict)
+            else:
                 dataset_snippet = []
-                for i in range(self.checkpoint):
-                    dataset.readline()
-
                 for i in range(num_entries):
-                    dataset_snippet.append(dataset.readline())
-                    self.checkpoint += 1
-
-                for counter in range(len(dataset_snippet)):
-                    _ = json.loads(dataset_snippet[counter])
-                    _dict[counter] = {"input_ids": self.tokenizer.convert_ids_to_tokens(_["input_ids"]),
-                                      "attributions": _["attributions"],
-                                      "label": _["label"],
-                                      "predictions": _["predictions"]}  # why dict? dict fast
+                    dataset_snippet.append(self.source[i+self.checkpoint])
+            self.add_explanations_to_dict(dataset_snippet, _dict)
 
             if not dataset_snippet:  # TODO remove recursion ?
                 self.checkpoint = 0
@@ -139,15 +154,18 @@ class Verbalizer:
                                     "attributions": _cleaned_attributions,
                                     "label": _dict[sample]["label"],
                                     "predictions": _dict[sample]["predictions"]}
+        """
         if _:
             self.label_names = _["dataset"]["label_names"]
         else:
             self.label_names = dataset_snippet["dataset"]["label_names"]
+        """
+        #self.label_names = dataset_snippet["dataset"]["label_names"]
         return cleaned_dict
 
     def doit(self, modes: list = None, n_samples: int = None):
         """
-        verbalizes n_samples of self.path´s dataset
+        verbalizes n_samples of dataset
         :param modes: optional: which searches to do on dataset
         :param n_samples: optional: how many samples to verbalize
         :param config: TODO class containing customizations to searches i.e. metrics etc.
@@ -194,6 +212,7 @@ class Verbalizer:
         if "total order" in modes:
             explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
 
+        # TODO: Maybe detokenize input_ids using tokenizer from self?
         return explanations, sample_array
 
     def __call__(self, modes: list = None, n_samples: int = None, *args, **kwargs):

@@ -43,7 +43,8 @@ def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, 
             if not sgn:
                 coherent_words_sum, coherent_values_sum = filter_span_sample_sum(sorted_filters, attribs, metric)
             else:
-                coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric, sgn)
+                coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric,
+                                                                                     sgn)
         except Exception as e:
             coherent_words_sum, coherent_values_sum = [[None]], [[None]]
 
