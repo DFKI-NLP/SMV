@@ -21,6 +21,8 @@ if __name__ == "__main__":
         source = thermo_config.to_pandas().to_json(orient='records', lines=True).splitlines()
     else:
         source = config["source"]
+    #TODO: Change to NamedTemporaryFile, this is bad
+    #Also TODO: put into module
 
     loader = dataloader.Verbalizer(source, config=config)
     explanations, texts = loader()
