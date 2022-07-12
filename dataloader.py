@@ -196,18 +196,18 @@ class Verbalizer:
 
         if "convolution search" in modes:
             if not self.sgn:
-                explanations["convolution search"], orders_and_searches["convolution search"] = self.convolution_search(
+                (explanations["convolution search"], orders_and_searches["convolution search"]) = self.convolution_search(
                     sample_array, self.len_filters, metric=self.metric)
             else:
-                explanations["convolution search"], orders_and_searches["convolution search"] = self.convolution_search(
+                (explanations["convolution search"], orders_and_searches["convolution search"]) = self.convolution_search(
                     sample_array, self.len_filters, self.sgn, self.metric)
 
         if "span search" in modes:
             if not self.sgn:
-                explanations["span search"], orders_and_searches["span search"] = self.span_search(
+                (explanations["span search"], orders_and_searches["span search"]) = self.span_search(
                     sample_array, self.len_filters, metric=self.metric)
             else:
-                explanations["span search"], orders_and_searches["span search"] = self.span_search(
+                (explanations["span search"], orders_and_searches["span search"]) = self.span_search(
                     sample_array, self.len_filters, self.sgn, self.metric)
 
         # SHOULD ALWAYS BE DONE AT THE END but before total search
