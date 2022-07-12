@@ -9,8 +9,9 @@ if __name__ == "__main__":
         "source": "imdb-bert-lig",
         #"source": "data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl",
         "sgn": "+",  # TODO: "-"
-        "samples": 10,
+        "samples": 1,
         "metric": "mean: 0.4",  # TODO: {"name": "mean", "params": .2},
+        "dev": True
         # searches = {"span", "total"}; "all"
     }
 
@@ -25,15 +26,30 @@ if __name__ == "__main__":
     #Also TODO: put into module
 
     loader = dataloader.Verbalizer(source, config=config)
-    explanations, texts = loader()
-
+    explanations, texts, orders = loader()
+    print(explanations["convolution search"])
+    print(orders)
+    valid_keys = loader.filter_verbalizations(explanations, texts, orders, maxlen=120, mincoverage=.3)
     for key in texts.keys():
-        print(" ".join(texts[key]["input_ids"]))
+        if key in valid_keys:
+            txt = "SAMPLE:\n" + " ".join(texts[key]["input_ids"])
+            c = 0
+            txt_ = ""
+            for i in txt:
+                c += 1
+                txt_ += i
+                if c > 150:
+                    if i == " ":
+                        txt_ += "\n"
+                        c = 0
+                    else:
+                        pass
+            print(txt_)  # makeshift \n-ing
+            for expl_subclass in explanations.keys():
+                print("subclass '{}'".format(expl_subclass))
+                _ = explanations[expl_subclass][key][:5]
+                for __ in _:
+                    print(__)
 
-        for expl_subclass in explanations.keys():
-            print("subclass '{}'".format(expl_subclass))
-            _ = explanations[expl_subclass][key][:5]
-            for __ in _:
-                print(__)
-
+            txt = ""
     # TODO: pruned span search?

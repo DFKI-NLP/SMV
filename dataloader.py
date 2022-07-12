@@ -10,7 +10,7 @@ from search_methods import tools as t
 
 class Verbalizer:
     def __init__(self, source: Union[str, List], standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
-                 config=None,
+                 config=None, dev=False,
                  *args, **kwargs):
         """
         Verbalizer class
@@ -18,6 +18,7 @@ class Verbalizer:
         :param model_type: Which model is being explained? optional; will look by itself
         :param standard_samples: how many samples should be loaded if nothing specified
         :param config: config dictionary; optional -> how to will be included
+        :param dev: should numerical values for each explanation be returned too?
 
         TODO warning: object to change:
         --> start of config example <--
@@ -27,6 +28,7 @@ class Verbalizer:
         "samples": -1,                  options: {-1, n where n > 0}, n is integer
         "len_filters": 5,               options: n where n > 0, n is integer
         "metric": "mean_sum: 10"        options: see possible metrics
+        "dev": True
         }
 
         possible metrics:
@@ -61,13 +63,14 @@ class Verbalizer:
             raise RuntimeError("Please specify model_type; Missing param model_type")
 
         self.standard_samples = standard_samples
-        self.modes = ["total order", "convolution search", "span search", "compare search"]
+        self.modes = ["convolution search", "span search", "compare search", "total order"]
         # which search-algorithms to use
         self.checkpoint = 0  # where did the Verbalizer stop loading examples
         self.len_filters = len_filters
         self.sgn = None
         self.metric = None
         self.label_names = None
+        self.dev = dev
         #self.tokenizer = eval("tokenizers.Tokenizer.from_pretrained('{}')"  # force_download=True,
         #                      .format(self.models[self.model_type][1]))
         self.tokenizer = eval("transformers.{}.from_pretrained('{}', cache_dir='data')"  # force_download=True,
@@ -81,6 +84,8 @@ class Verbalizer:
                 self.sgn = config["sgn"]
             if config["metric"]:
                 self.metric = config["metric"]
+            if config["dev"]:
+                self.dev = config["dev"]
 
     def add_explanations_to_dict(self, data, dct):
         for counter in range(len(data)):
@@ -213,45 +218,58 @@ class Verbalizer:
             explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
 
         # TODO: Maybe detokenize input_ids using tokenizer from self?
-        return explanations, sample_array
+        if not self.dev:
+            return explanations, sample_array, None
+        else:
+            return explanations, sample_array, orders_and_searches
 
     def __call__(self, modes: list = None, n_samples: int = None, *args, **kwargs):
         return self.doit(modes, n_samples)
 
-    @staticmethod
-    def span_search(_dict, len_filters, sgn=None, metric=None):
+    def span_search(self, _dict, len_filters, sgn=None, metric=None):
         if not sgn:
             prepared_data = span.span_search(_dict, len_filters, sgn=None, mode=metric)
             explanations = t.verbalize_field_span_search(prepared_data, _dict)
         else:
             prepared_data = span.span_search(_dict, len_filters, sgn=sgn, mode=metric)
             explanations = t.verbalize_field_span_search(prepared_data, _dict, sgn=sgn)
-        return explanations
 
-    @staticmethod
-    def convolution_search(_dict, len_filters, sgn=None, metric=None):
+        if not self.dev:
+            return explanations, None
+        else:
+            return explanations, prepared_data
+
+    def convolution_search(self, _dict, len_filters, sgn=None, metric=None):
         if not sgn:
             prepared_data = fil.convolution_search(_dict, len_filters, sgn=None, mode=metric)
             explanations = t.verbalize_field_span_search(prepared_data, _dict)
         else:
             prepared_data = fil.convolution_search(_dict, len_filters, sgn=sgn, mode=metric)
             explanations = t.verbalize_field_span_search(prepared_data, _dict, sgn=sgn)
-        return explanations
 
-    @staticmethod
-    def compare_search(previous_searches, samples):
+        if not self.dev:
+            return explanations, None
+        else:
+            return explanations, prepared_data
+
+    def compare_search(self, previous_searches, samples):
         coincedences = t.compare_searches(previous_searches, samples)
         return coincedences
 
+    def filter_verbalizations(self, verbalizations, samples, orders_and_searches, maxlen=100, mincoverage=.1):
+        tofilter = self.modes[:len(self.modes)-2]
+        filter_len = lambda x: [len(i) < maxlen for i in x.items()]
+        filter_verbalizations = lambda x, n, searchtype: [i > mincoverage for i in x[searchtype][n]["values"]]
 
-class ThermostatVerbalizer(Verbalizer):
-    # FIXME: Deprecated
-    def __init__(self, th_dataset, standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
-                 config=None,
-                 *args, **kwargs):
-        super(ThermostatVerbalizer, self).__init__(th_dataset.model_name, standard_samples, model_type, len_filters,
-                                                   config)
-        self.thermostat_dataset = th_dataset
-
-    def read_samples(self, num_entries: int = None, recursion=0):
-        pass
+        valid_indices = filter_len(samples)
+        valid_indices_ = []
+        for sampleindex in samples.keys():
+            if valid_indices[sampleindex]:
+                for search_type in tofilter:
+                    try:
+                        if any(filter_verbalizations(orders_and_searches, sampleindex, search_type)):
+                            valid_indices_.append(sampleindex)
+                            break
+                    except TypeError:
+                        pass  # no valid snippet existed in the first place resulting in no value to check thus -> error
+        return valid_indices_
