@@ -1,19 +1,16 @@
 import os
 import thermostat
+import yaml
 
 import dataloader
 
 
 if __name__ == "__main__":
-    config = {
-        "source": "imdb-bert-lig",
-        #"source": "data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl",
-        "sgn": "+",  # TODO: "-"
-        "samples": 100,
-        "metric": "mean: 0.4",  # TODO: {"name": "mean", "params": .2},
-        "dev": True
-        # searches = {"span", "total"}; "all"
-    }
+    with open("configs/mean_dev.yml") as stream:
+        config = yaml.safe_load(stream)
+    # TODO: Add annotator rationale datasets
+    # https://huggingface.co/datasets/movie_rationales
+    # http://www.eraserbenchmark.com/ (BoolQ)
 
     if not os.path.isfile(config["source"]):
         # Load source from Thermostat configuration

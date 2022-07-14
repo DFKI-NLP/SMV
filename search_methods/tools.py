@@ -171,21 +171,21 @@ def get_stdev(variance):
 # end of metrics #
 
 # utitlity functions
-def get_metric_values(mode: str):
+def get_metric_values(mode: dict):
     """
     Turns config - mode for metric into processable format
-    :param mode: string from config
+    :param mode: dictionary containing name and value
     :return: params for actual metric
     """
-    _args = mode.split(":")
     modes = {
         "mean": (1, float),
         "quantile": (1, float),
         "variance": (2, float),
         "foo": NotImplementedError,
     }
-    selected_mode = modes[_args[0]]
-    args = [selected_mode[1](_args[i]) for i in range(1, len(_args))]
+    selected_mode = modes[mode["name"]]
+    args = [selected_mode[1](mode["value"])]  # FIXME: In which cases do we need multiple args?
+    #args = [selected_mode[1](_args[i]) for i in range(1, len(_args))]
     return args
 
 
