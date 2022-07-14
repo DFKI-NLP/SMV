@@ -27,8 +27,6 @@ if __name__ == "__main__":
 
     loader = dataloader.Verbalizer(source, config=config)
     explanations, texts, orders = loader()
-    print(explanations["convolution search"])
-    print(orders)
     valid_keys = loader.filter_verbalizations(explanations, texts, orders, maxlen=120, mincoverage=.3)
     for key in texts.keys():
         if key in valid_keys:

@@ -240,7 +240,7 @@ def verbalize_field_span_search(prepared_data, samples, sgn="+"):
 
             verbalizations.append(verbalization)
         verbalization_dict[key] = verbalizations
-    return verbalization_dict, prepared_data
+    return verbalization_dict
 
 
 def compare_searches(searches: dict, samples):
