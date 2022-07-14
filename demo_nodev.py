@@ -11,7 +11,7 @@ if __name__ == "__main__":
         "sgn": "+",  # TODO: "-"
         "samples": 100,
         "metric": "mean: 0.4",  # TODO: {"name": "mean", "params": .2},
-        "dev": True
+        "dev": False
         # searches = {"span", "total"}; "all"
     }
 
@@ -26,29 +26,27 @@ if __name__ == "__main__":
     #Also TODO: put into module
 
     loader = dataloader.Verbalizer(source, config=config)
-    explanations, texts, orders = loader()
-    valid_keys = loader.filter_verbalizations(explanations, texts, orders, maxwords=80, mincoverage=.15)
+    explanations, texts, _ = loader()
     for key in texts.keys():
-        if key in valid_keys:
-            txt = "SAMPLE:\n" + " ".join(texts[key]["input_ids"])
-            c = 0
-            txt_ = ""
-            for i in txt:
-                c += 1
-                txt_ += i
-                if c > 150:
-                    if i == " ":
-                        txt_ += "\n"
-                        c = 0
-                    else:
-                        pass
-            print(txt_)  # makeshift \n-ing
-            for expl_subclass in explanations.keys():
-                print("subclass '{}'".format(expl_subclass))
-                _ = explanations[expl_subclass][key][:5]
-                for __ in _:
-                    print(__)
+        txt = "SAMPLE:\n" + " ".join(texts[key]["input_ids"])
+        c = 0
+        txt_ = ""
+        for i in txt:
+            c += 1
+            txt_ += i
+            if c > 150:
+                if i == " ":
+                    txt_ += "\n"
+                    c = 0
+                else:
+                    pass
+        print(txt_)  # makeshift \n-ing
+        for expl_subclass in explanations.keys():
+            print("subclass '{}'".format(expl_subclass))
+            _ = explanations[expl_subclass][key][:5]
+            for __ in _:
+                print(__)
 
-            txt = ""
+        txt = ""
 
     # TODO: pruned span search?

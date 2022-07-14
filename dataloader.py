@@ -234,10 +234,7 @@ class Verbalizer:
             prepared_data = span.span_search(_dict, len_filters, sgn=sgn, mode=metric)
             explanations = t.verbalize_field_span_search(prepared_data, _dict, sgn=sgn)
 
-        if not self.dev:
-            return explanations, None
-        else:
-            return explanations, prepared_data
+        return explanations, prepared_data
 
     def convolution_search(self, _dict, len_filters, sgn=None, metric=None):
         if not sgn:
@@ -247,20 +244,25 @@ class Verbalizer:
             prepared_data = fil.convolution_search(_dict, len_filters, sgn=sgn, mode=metric)
             explanations = t.verbalize_field_span_search(prepared_data, _dict, sgn=sgn)
 
-        if not self.dev:
-            return explanations, None
-        else:
-            return explanations, prepared_data
+        return explanations, prepared_data
 
     def compare_search(self, previous_searches, samples):
         coincedences = t.compare_searches(previous_searches, samples)
         return coincedences
 
-    def filter_verbalizations(self, verbalizations, samples, orders_and_searches, maxlen=100, mincoverage=.1):
-        tofilter = self.modes[:len(self.modes)-2]
-        filter_len = lambda x: [len(i) < maxlen for i in x.items()]
-        filter_verbalizations = lambda x, n, searchtype: [i > mincoverage for i in x[searchtype][n]["values"]]
+    def filter_verbalizations(self, verbalizations, samples, orders_and_searches, maxwords=100, mincoverage=.1):
+        """
 
+        :param verbalizations: takes output[0] of self.doit()
+        :param samples: takes output[1] of self.doit()
+        :param orders_and_searches: requires self.dev enabled and output[2] of self.doit()
+        :param maxwords: maximum words in sample to be returned
+        :param mincoverage: minimum coverage needed for a sample to be returned (0.0 - 1.0)
+        :return: filtered verbalizations
+        """
+        tofilter = self.modes[:len(self.modes)-2]
+        filter_len = lambda x: [len(x[i]["input_ids"]) < maxwords for i in x.keys()]
+        filter_verbalizations = lambda x, n, searchtype: [sum(samples[n]["attributions"][min(i):max(i)])/sum(samples[n]["attributions"]) > mincoverage for i in x[searchtype][n]["indices"]]
         valid_indices = filter_len(samples)
         valid_indices_ = []
         for sampleindex in samples.keys():
