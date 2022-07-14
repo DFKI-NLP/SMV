@@ -250,7 +250,7 @@ class Verbalizer:
         coincedences = t.compare_searches(previous_searches, samples)
         return coincedences
 
-    def filter_verbalizations(self, verbalizations, samples, orders_and_searches, maxwords=100, mincoverage=.1):
+    def filter_verbalizations(self, verbalizations, samples, orders_and_searches, maxwords=100, mincoverage=.1, *args):
         """
 
         :param verbalizations: takes output[0] of self.doit()

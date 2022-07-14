@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     loader = dataloader.Verbalizer(source, config=config)
     explanations, texts, orders = loader()
-    valid_keys = loader.filter_verbalizations(explanations, texts, orders, maxwords=80, mincoverage=.01)
+    valid_keys = loader.filter_verbalizations(explanations, texts, orders, maxwords=80, mincoverage=.15)
     for key in texts.keys():
         if key in valid_keys:
             txt = "SAMPLE:\n" + " ".join(texts[key]["input_ids"])
