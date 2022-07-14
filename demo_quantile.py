@@ -10,7 +10,7 @@ if __name__ == "__main__":
         #"source": "data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl",
         "sgn": "+",  # TODO: "-"
         "samples": 100,
-        "metric": "quantile: 0.2",  # TODO: {"name": "mean", "params": .2},
+        "metric": "quantile: 2",  # using only values that are in the 2sigma (2.1%) percentile
         "dev": True
         # searches = {"span", "total"}; "all"
     }
