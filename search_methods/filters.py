@@ -34,10 +34,12 @@ def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, 
             metric = get_mean(get_metric_values(mode)[0:], attribs)
 
         elif "quantile" in mode:
-            metric = get_stdev(get_variance(attribs))
+            stdevval = get_stdev(get_variance(attribs))
+            metric = stdevval * get_metric_values(mode)[0]
 
         elif "variance" in mode:
-            metric = get_variance(attribs)
+            variance = get_variance(attribs)
+            metric = variance * get_metric_values(mode)[0]
 
         try:
             if not sgn:

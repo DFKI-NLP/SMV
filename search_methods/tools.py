@@ -152,25 +152,18 @@ def get_variance(attribs):
     :return: variances of each value in matrix
     """
     expected_value = np.mean(attribs)
-    variances = []
-
-    for value in attribs:
-        variances.append(((expected_value - value)**2))
-
-    return variances
+    variance = sum((-attribs + expected_value)**2)/len(attribs)
+    return variance
 
 
 @jit(nopython=True)
-def get_stdev(variances):
+def get_stdev(variance):
     """
     standard deviation
     :param variances: array of variances of a given 1D matrix
     :return: standard deviances of variances
     """
-    stdevs = []
-
-    for value in variances:
-        stdevs.append(value**.5)
+    stdevs = variance**.5
 
     return stdevs
 

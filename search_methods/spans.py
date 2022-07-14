@@ -26,10 +26,14 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=Non
             metric = get_mean(get_metric_values(mode)[0:], attribs)
 
         elif "quantile" in mode:
-            metric = get_stdev(get_variance(attribs))
+            stdevval = get_stdev(get_variance(attribs))
+            metric = stdevval * get_metric_values(mode)[0]
 
         elif "variance" in mode:
-            metric = get_variance(attribs)
+            variance = get_variance(attribs)
+            attribs = variance
+            metric = stdevval * get_metric_values(mode)[0]
+
         try:
             if not sgn:
                 coherent_words_sum, coherent_values_sum = filter_span_sample_sum(sorted_filters, attribs, metric)
