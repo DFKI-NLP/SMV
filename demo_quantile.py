@@ -4,6 +4,7 @@ import thermostat
 import dataloader
 
 #   W I P
+# This demo is with dev enabled
 if __name__ == "__main__":
     config = {
         "source": "imdb-bert-lig",
