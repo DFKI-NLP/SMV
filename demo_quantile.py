@@ -10,7 +10,7 @@ if __name__ == "__main__":
         #"source": "data/Thermostat_imdb-albert-LayerIntegratedGradients.jsonl",
         "sgn": "+",  # TODO: "-"
         "samples": 100,
-        "metric": "quantile: 0.0",  # TODO: {"name": "mean", "params": .2},
+        "metric": "quantile: 0.2",  # TODO: {"name": "mean", "params": .2},
         "dev": True
         # searches = {"span", "total"}; "all"
     }
