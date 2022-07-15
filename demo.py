@@ -4,6 +4,7 @@ import thermostat
 import yaml
 
 import dataloader
+from vis import Color, color_str
 
 
 if __name__ == "__main__":
@@ -37,7 +38,19 @@ if __name__ == "__main__":
     valid_keys = loader.filter_verbalizations(explanations, texts, orders, maxwords=80, mincoverage=.15)
     for key in texts.keys():
         if key in valid_keys:
-            txt = "\nSAMPLE:\n" + " ".join(texts[key]["input_ids"])
+            cutoff_top_k_single = 5
+
+            txt = "\nSAMPLE:\n"
+            fmtd_tokens = []
+            for i, token in enumerate(texts[key]["input_ids"]):
+                if texts[key]["attributions"][i] >= sorted(
+                        texts[key]["attributions"], reverse=True)[cutoff_top_k_single-1]:
+                    fmtd_tokens.append(color_str(color_str(token, Color.RED), Color.BOLD))
+                elif texts[key]["attributions"][i] > 0:
+                    fmtd_tokens.append(color_str(token, Color.BOLD))
+                else:
+                    fmtd_tokens.append(token)
+            txt += " ".join(fmtd_tokens)
             c = 0
             txt_ = ""
             for i in txt:
@@ -52,7 +65,7 @@ if __name__ == "__main__":
             print(txt_)  # makeshift \n-ing
             for expl_subclass in explanations.keys():
                 print("subclass '{}'".format(expl_subclass))
-                _ = explanations[expl_subclass][key][:5]
+                _ = explanations[expl_subclass][key][:cutoff_top_k_single]
                 for __ in _:
                     print(__)
 
