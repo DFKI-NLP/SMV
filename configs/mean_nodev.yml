@@ -1,4 +1,4 @@
-source: "imdb-bert-lig"
+source: "thermostat/imdb-bert-lig"
 sgn: "+"
 samples: 100
 metric:

@@ -1,3 +1,4 @@
+import datasets
 import os
 import thermostat
 import yaml
@@ -6,17 +7,26 @@ import dataloader
 
 
 if __name__ == "__main__":
-    with open("configs/mean_dev.yml") as stream:
+    with open("configs/quantile_dev.yml") as stream:
         config = yaml.safe_load(stream)
-    # TODO: Add annotator rationale datasets
-    # https://huggingface.co/datasets/movie_rationales
-    # http://www.eraserbenchmark.com/ (BoolQ)
 
     if not os.path.isfile(config["source"]):
-        # Load source from Thermostat configuration
-        thermo_config = thermostat.load(config["source"], cache_dir='data')
-        # Convert to pandas DataFrame and then to JSON lines
-        source = thermo_config.to_pandas().to_json(orient='records', lines=True).splitlines()
+        if "thermostat/" in config["source"]:
+            # Load source from Thermostat configuration
+            thermo_config_name = config["source"].replace("thermostat/", "")
+            thermo_config = thermostat.load(thermo_config_name, cache_dir="data")
+            # Convert to pandas DataFrame and then to JSON lines
+            source = thermo_config.to_pandas().to_json(orient="records", lines=True).splitlines()
+        elif "datasets/" in config["source"]:
+            # TODO: Add annotator rationale datasets
+            # https://huggingface.co/datasets/movie_rationales
+            # http://www.eraserbenchmark.com/ (BoolQ)
+            # Load source from Hugging Face datasets library
+            hf_dataset_name = config["source"].replace("datasets/", "")
+            hf_dataset = datasets.load_dataset(hf_dataset_name, cache_dir="data")
+            raise NotImplementedError("HF datasets not supported atm.")
+        else:
+            raise NotImplementedError("Invalid source!")
     else:
         source = config["source"]
     #TODO: Change to NamedTemporaryFile, this is bad
@@ -27,7 +37,7 @@ if __name__ == "__main__":
     valid_keys = loader.filter_verbalizations(explanations, texts, orders, maxwords=80, mincoverage=.15)
     for key in texts.keys():
         if key in valid_keys:
-            txt = "SAMPLE:\n" + " ".join(texts[key]["input_ids"])
+            txt = "\nSAMPLE:\n" + " ".join(texts[key]["input_ids"])
             c = 0
             txt_ = ""
             for i in txt:

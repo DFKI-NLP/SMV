@@ -1,5 +1,6 @@
 import numpy as np
 from numba import jit
+from typing import List
 
 
 @jit(nopython=True)
@@ -226,13 +227,15 @@ def verbalize_field_span_search(prepared_data, samples, sgn="+"):
                     continue
                 verbalization += word + " "
             try:
-                verbalization += "' contains {}% of prediction score"\
-                    .format(str(round((values[snippet] / sum_values) * 100, 2)))
+                coverage = round((values[snippet] / sum_values) * 100, 2)
+                verbalization += "' contains {}% of prediction score.".format(str(coverage))
+                verb_cov_tuple = (verbalization, coverage)
             except Exception as e:
-                verbalization = "No coherent values found"
+                verbalization = "No coherent values found."
+                verb_cov_tuple = (verbalization, 0.0)
 
-            verbalizations.append(verbalization)
-        verbalization_dict[key] = verbalizations
+            verbalizations.append(verb_cov_tuple)
+        verbalization_dict[key] = [v for v, c in sorted(verbalizations, key=lambda vc: vc[1], reverse=True)]
     return verbalization_dict
 
 
@@ -286,3 +289,11 @@ def compare_searches(searches: dict, samples):
                     coincidences[sample_key] = verbalizations
 
     return coincidences
+
+
+def get_binary_attributions_from_annotator_rationales(text: str, rationales: List[str]):
+    # TODO
+    """ Helper function to turn the text spans of annotator rationales (e.g. from the Movie Rationales dataset) into
+    binary attributions"""
+    binary_attributions = []
+

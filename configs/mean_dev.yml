@@ -1,4 +1,5 @@
-source: "imdb-bert-lig"
+source: "thermostat/imdb-bert-lig"
+# source: "datasets/movie_rationales"
 sgn: "+"
 samples: 100
 metric:
