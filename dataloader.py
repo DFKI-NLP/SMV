@@ -261,7 +261,7 @@ class Verbalizer:
         :return: filtered verbalizations
         """
         tofilter = self.modes[:len(self.modes)-2]
-        filter_len = lambda x: [len(x[i]["input_ids"]) > maxwords for i in x.keys()]
+        filter_len = lambda x: [len(x[i]["input_ids"]) < maxwords for i in x.keys()]
         filter_verbalizations = lambda x, n, searchtype: [sum(samples[n]["attributions"][min(i):max(i)])/sum(samples[n]["attributions"]) > mincoverage for i in x[searchtype][n]["indices"]]
         valid_indices = filter_len(samples)
         valid_indices_ = []
