@@ -12,7 +12,7 @@ def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, 
     first generates binary-filters of length n (for example [1, 0, 1], [0, 1, 1] or [1, 1, 0]
     then filters the sample with the generated filters
     :param samples: shape = dataloader.Verbalizer.read_samples() return shape
-    :param filter_length: length of generated filters; computationally expensive, generates filter_length^2 filters
+    :param filter_length: length of generated filters; computationally expensive    , generates filter_length^2 filters
     :param top_n_coherences: how many coherences should be returned?
     :param sgn: sign sensitive search?
     :param mode: metric to use
