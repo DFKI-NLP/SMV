@@ -1,4 +1,4 @@
-from search_methods.tools import *
+from src.search_methods.tools import *
 import numpy as np
 
 # span based filter search

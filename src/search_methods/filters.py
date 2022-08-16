@@ -1,6 +1,5 @@
-import warnings
 from warnings import warn
-from search_methods.tools import *
+from src.search_methods.tools import *
 from itertools import permutations
 # start of filter-based search
 #warnings.simplefilter("always")

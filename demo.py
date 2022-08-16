@@ -3,7 +3,7 @@ import os
 import thermostat
 import yaml
 
-import dataloader
+from src import dataloader
 from vis import Color, color_str
 
 
@@ -68,6 +68,7 @@ if __name__ == "__main__":
                 _ = explanations[expl_subclass][key][:cutoff_top_k_single]
                 for __ in _:
                     print(__)
+            print(texts[key]["was_correct"])
 
             txt = ""
 

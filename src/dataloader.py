@@ -1,11 +1,8 @@
 import json
-import tokenizers
 import transformers
 from typing import List, Union
 
-from search_methods import spans as span
-from search_methods import filters as fil
-from search_methods import tools as t
+from src.search_methods import tools as t, spans as span, filters as fil
 
 
 class Verbalizer:
@@ -158,7 +155,8 @@ class Verbalizer:
             cleaned_dict[sample] = {"input_ids": _cleaned_ids,
                                     "attributions": _cleaned_attributions,
                                     "label": _dict[sample]["label"],
-                                    "predictions": _dict[sample]["predictions"]}
+                                    "predictions": _dict[sample]["predictions"],
+                                    "was_correct": _dict[sample]["label"] == _dict[sample]["predictions"].index(max(_dict[sample]["predictions"]))}
         """
         if _:
             self.label_names = _["dataset"]["label_names"]
@@ -216,6 +214,8 @@ class Verbalizer:
 
         if "total order" in modes:
             explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
+
+
 
         # TODO: Maybe detokenize input_ids using tokenizer from self?
         if not self.dev:
