@@ -2,9 +2,12 @@ import datasets
 import os
 import thermostat
 import yaml
+import json
+from multiprocessing import Pool, Process
 
 from src import dataloader
 from vis import Color, color_str
+
 
 
 if __name__ == "__main__":
@@ -33,6 +36,10 @@ if __name__ == "__main__":
     #TODO: Change to NamedTemporaryFile, this is bad
     #Also TODO: put into module
 
+    key_verbalization_attribs = {}
+
+    modelname = config["source"].replace("thermostat/", "")
+
     loader = dataloader.Verbalizer(source, config=config)
     explanations, texts, orders = loader()
     valid_keys = loader.filter_verbalizations(explanations, texts, orders, maxwords=80, mincoverage=.15)
@@ -40,11 +47,11 @@ if __name__ == "__main__":
         if key in valid_keys:
             cutoff_top_k_single = 5
 
-            txt = "\nSAMPLE:\n"
+            txt = "\\nSAMPLE:\\n"
             fmtd_tokens = []
             for i, token in enumerate(texts[key]["input_ids"]):
                 if texts[key]["attributions"][i] >= sorted(
-                        texts[key]["attributions"], reverse=True)[cutoff_top_k_single - 1]:
+                        texts[key]["attributions"], reverse=True)[cutoff_top_k_single-1]:
                     fmtd_tokens.append(color_str(color_str(token, Color.RED), Color.BOLD))
                 elif texts[key]["attributions"][i] > 0:
                     fmtd_tokens.append(color_str(token, Color.BOLD))
@@ -52,7 +59,6 @@ if __name__ == "__main__":
                     fmtd_tokens.append(token)
             txt += " ".join(fmtd_tokens)
             c = 0
-            txt += ""
             for i in txt:
                 c += 1
                 txt += i
@@ -62,16 +68,31 @@ if __name__ == "__main__":
                         c = 0
                     else:
                         pass
-            # makeshift \n-ing
+            sample = txt
+            txt = ""
+              # makeshift \n-ing
             for expl_subclass in explanations.keys():
                 txt += "subclass '{}'".format(expl_subclass)
                 _ = explanations[expl_subclass][key][:cutoff_top_k_single]
                 for __ in _:
                     txt += "\n"+__
             txt += "\nPrediction was correct." if texts[key]["was_correct"] else "\nPredicton was incorrect"
-            print(txt)
+
+            key_verbalization_attribs[key] = {"modelname": modelname,
+                                              "sample": sample,
+                                              "verbalization": txt,
+                                              "attributions": texts[key]["attributions"]}
+
             txt = ""
 
-    # TODO: pruned span search?
+    key_verbalization_attribs["valid_keys"] = valid_keys
+    try:
+        f = open("./tmp/temp{}.json".format("_"+modelname), mode="w")
+    except FileNotFoundError:
+        os.mkdir("./tmp/")
+        f = open("./tmp/temp{}.json".format("_"+modelname), mode="w")
+    _ = json.dumps(key_verbalization_attribs)
+    f.write(_)
+    f.close()
 
     # TODO: pruned span search?
