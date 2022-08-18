@@ -3,15 +3,13 @@ import os
 import thermostat
 import yaml
 import json
-from multiprocessing import Pool, Process
 
 from src import dataloader
 from vis import Color, color_str
 
 
-
-if __name__ == "__main__":
-    with open("configs/quantile_dev.yml") as stream:
+def explain(config_path, to_json=False):
+    with open(config_path) as stream:
         config = yaml.safe_load(stream)
 
     if not os.path.isfile(config["source"]):
@@ -43,11 +41,14 @@ if __name__ == "__main__":
     loader = dataloader.Verbalizer(source, config=config)
     explanations, texts, orders = loader()
     valid_keys = loader.filter_verbalizations(explanations, texts, orders, maxwords=80, mincoverage=.15)
+    if not to_json:
+        returnstr = []
+
     for key in texts.keys():
         if key in valid_keys:
             cutoff_top_k_single = 5
 
-            txt = "\\nSAMPLE:\\n"
+            txt = "\nSAMPLE:\n"
             fmtd_tokens = []
             for i, token in enumerate(texts[key]["input_ids"]):
                 if texts[key]["attributions"][i] >= sorted(
@@ -77,22 +78,21 @@ if __name__ == "__main__":
                 for __ in _:
                     txt += "\n"+__
             txt += "\nPrediction was correct." if texts[key]["was_correct"] else "\nPredicton was incorrect"
+            if to_json:
+                key_verbalization_attribs[key] = {"modelname": modelname,
+                                                  "sample": sample,
+                                                  "verbalization": txt,
+                                                  "attributions": texts[key]["attributions"]}
+            else:
+                returnstr.append(sample + txt)
 
-            key_verbalization_attribs[key] = {"modelname": modelname,
-                                              "sample": sample,
-                                              "verbalization": txt,
-                                              "attributions": texts[key]["attributions"]}
+    if to_json:
+        res = json.dumps(key_verbalization_attribs)
+        return res
+    else:
+        return returnstr
 
-            txt = ""
 
-    key_verbalization_attribs["valid_keys"] = valid_keys
-    try:
-        f = open("./tmp/temp{}.json".format("_"+modelname), mode="w")
-    except FileNotFoundError:
-        os.mkdir("./tmp/")
-        f = open("./tmp/temp{}.json".format("_"+modelname), mode="w")
-    _ = json.dumps(key_verbalization_attribs)
-    f.write(_)
-    f.close()
+def explain_json(config_path):
+    return explain(config_path, True)
 
-    # TODO: pruned span search?
