@@ -159,14 +159,14 @@ def explain(config_path, to_json=False):
                         txt += "\n"+__
                 txt += "\nPrediction was correct." if texts[key]["was_correct"] else "\nPredicton was incorrect"
                 if to_json:
-                    key_verbalization_attribs[key] = {"modelname": modelname,
-                                                      "sample": sample,
+                    key_verbalization_attribs[key] = {"sample": sample,
                                                       "verbalization": txt,
                                                       "attributions": texts[key]["attributions"]}
                 else:
                     returnstr.append(sample + "\n" + txt)
 
         if to_json:
+            key_verbalization_attribs["modelname"] = modelname
             res = json.dumps(key_verbalization_attribs)
             return res
         else:
