@@ -5,7 +5,3 @@ if __name__ == "__main__":
     explanations = fe.explain("configs/mean_dev.yml")
     for i in explanations:
         print(i)
-
-    # TODO: pruned span search?
-
-    # TODO: pruned span search?
