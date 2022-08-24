@@ -37,7 +37,6 @@ def filter_span_sample_sum(sorted_filters, sample_attribs, metric_value):
 
     coherency_values = np.array(coherency_values)
     coherent_snippets = []
-
     return coherent_words, coherency_values
 
 

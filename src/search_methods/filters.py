@@ -29,14 +29,17 @@ def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, 
     for key in samples.keys():
         sample = samples[key]
         attribs = np.array(sample["attributions"]).astype("float32")/abs(np.max(sample["attributions"]))  # normalized
-        if "mean" in mode:
+        if "mean" in mode["name"]:
+            print("beep")
             metric = get_mean(get_metric_values(mode)[0:], attribs)
 
-        elif "quantile" in mode:
+        elif "quantile" in mode["name"]:
+            print("beep2")
             stdevval = get_stdev(get_variance(attribs))
             metric = stdevval * get_metric_values(mode)[0]
 
-        elif "variance" in mode:
+        elif "variance" in mode["name"]:
+            print("beep3")
             variance = get_variance(attribs)
             metric = variance * get_metric_values(mode)[0]
 
