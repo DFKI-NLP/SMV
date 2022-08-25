@@ -2,6 +2,7 @@ from tkinter import ttk
 import tkinter as tk
 from tkinter import simpledialog
 import json
+import re
 
 
 class MainMenu(tk.Frame):
@@ -76,8 +77,9 @@ class MainMenu(tk.Frame):
         self.hideall()
         self.root.geometry("1680x720")
         self.root.title("Reviewer")
-
-        self.Texts[0].insert("1.0", "sample text\n"*25 if not self.data else self.data[self.valid_keys[self.currentSID]]["sample"])
+        ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')  # https://stackoverflow.com/questions/14693701/how-can-i-remove-the-ansi-escape-sequences-from-a-string-in-python
+        self.Texts[0].insert("1.0",
+                             ansi_escape.sub('', "sample text\n"*25 if not self.data else self.data[self.valid_keys[self.currentSID]]["sample"]))
         self.Texts[0]["fg"] = "blue"
         self.Texts[0]["height"] = self.st_height*10
         self.Texts[0]["width"] = self.st_width*5
