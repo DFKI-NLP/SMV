@@ -3,7 +3,8 @@ import tkinter as tk
 from tkinter import simpledialog
 import json
 import re
-
+import webbrowser
+import tempfile
 
 class MainMenu(tk.Frame):
     st_height = 2
@@ -22,6 +23,7 @@ class MainMenu(tk.Frame):
     data = None
     valid_keys = []
     currentSID = -1
+    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
 
     def __init__(self):
         self.root = tk.Tk()
@@ -77,7 +79,7 @@ class MainMenu(tk.Frame):
         self.hideall()
         self.root.geometry("1680x720")
         self.root.title("Reviewer")
-        ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')  # https://stackoverflow.com/questions/14693701/how-can-i-remove-the-ansi-escape-sequences-from-a-string-in-python
+          # https://stackoverflow.com/questions/14693701/how-can-i-remove-the-ansi-escape-sequences-from-a-string-in-python
 
         self.Labels[0]["text"] = "Sample {}/{}".format(self.currentSID, len(self.valid_keys) - 1)
         self.Labels[0]["fg"] = "black"
@@ -85,7 +87,7 @@ class MainMenu(tk.Frame):
         self.Labels[0].grid(row=0, column=0)
 
         self.Texts[0].insert("1.0",
-                             ansi_escape.sub('', "sample text\n"*25 if not self.data else self.data[self.valid_keys[self.currentSID]]["sample"]))
+                             self.ansi_escape.sub('', "sample text\n"*25 if not self.data else self.data[self.valid_keys[self.currentSID]]["sample"]))
         self.Texts[0]["fg"] = "blue"
         self.Texts[0]["height"] = self.st_height*10
         self.Texts[0]["width"] = self.st_width*5
@@ -197,8 +199,30 @@ class MainMenu(tk.Frame):
             i["bg"] = '#f0f0f0'
         self.update()
 
+    def highlighter(self, wordindex):
+            colors = ["#1A5276", "#138D75", "#58D68D", "#F7DC6F", "#F5B041", "#BA4A00", "#6E2C00"]  # blue to red
+            mx = max(self.data[self.valid_keys[self.currentSID]]["attributions"])
+            # mn = min(self.data[self.valid_keys[self.currentSID]]["attributions"])
+            step = mx/len(colors)
+            attrib = self.data[self.valid_keys[self.currentSID]]["attributions"][wordindex]
+            color = (max(int(attrib / step) - 1, 1)) if attrib > 0 else 0
+            color = colors[color]
+            word = self.ansi_escape.sub("", self.data[self.valid_keys[self.currentSID]]["sample"]).split(" ")[wordindex]
+            word = '<span style="background-color:' + color + '"> ' + word + '</span>'
+            return word
+
     def show_hm(self):
-        pass
+        text = ""
+        for i in range(len(self.ansi_escape.sub("", self.data[self.valid_keys[self.currentSID]]["sample"]).split(" "))):
+            text += self.highlighter(i)
+        tmp = tempfile.NamedTemporaryFile(delete=False)
+        path = tmp.name + '.html'
+
+        f = open(path, 'w')
+        f.write(text)
+        f.close()
+        webbrowser.open('file://' + path)
+
 
     def loads(self):
         USER_INP = simpledialog.askstring(title="Loading",
@@ -339,7 +363,6 @@ class MainMenu(tk.Frame):
         try:
             f = open("review.json", mode="r")
             self.feedback = json.load(f)
-            print(self.feedback)
             f.close()
         except FileNotFoundError:
             pass
