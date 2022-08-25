@@ -78,57 +78,63 @@ class MainMenu(tk.Frame):
         self.root.geometry("1680x720")
         self.root.title("Reviewer")
         ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')  # https://stackoverflow.com/questions/14693701/how-can-i-remove-the-ansi-escape-sequences-from-a-string-in-python
+
+        self.Labels[0]["text"] = "Sample {}/{}".format(self.currentSID, len(self.valid_keys) - 1)
+        self.Labels[0]["fg"] = "black"
+        self.Labels[0]["bg"] = '#f0f0f0'
+        self.Labels[0].grid(row=0, column=0)
+
         self.Texts[0].insert("1.0",
                              ansi_escape.sub('', "sample text\n"*25 if not self.data else self.data[self.valid_keys[self.currentSID]]["sample"]))
         self.Texts[0]["fg"] = "blue"
         self.Texts[0]["height"] = self.st_height*10
         self.Texts[0]["width"] = self.st_width*5
-        self.Texts[0].grid(row=0, column=0)
+        self.Texts[0].grid(row=1, column=0)
 
         self.Texts[1].insert("1.0", "sample explanation\n"*25 if not self.data else self.data[self.valid_keys[self.currentSID]]["verbalization"])
         self.Texts[1]["fg"] = "blue"
         self.Texts[1]["height"] = self.st_height*10
         self.Texts[1]["width"] = self.st_width*4
-        self.Texts[1].grid(row=0, column=1)
+        self.Texts[1].grid(row=1, column=1)
 
         self.Buttons[0]["command"] = self.show_hm
         self.Buttons[0]["text"] = "show heatmap"
         self.Buttons[0]["fg"] = "black"
         self.Buttons[0]["width"] = self.st_width
         self.Buttons[0]["height"] = self.st_height
-        self.Buttons[0].grid(row=0, column=2)
+        self.Buttons[0].grid(row=1, column=2)
 
         self.Buttons[1]["command"] = self.rate
         self.Buttons[1]["text"] = "rate sample explanation"
         self.Buttons[1]["fg"] = "black"
         self.Buttons[1]["width"] = self.st_width
         self.Buttons[1]["height"] = self.st_height
-        self.Buttons[1].grid(row=1, column=2)
-
-        self.Buttons[2]["command"] = self.mainmenu
-        self.Buttons[2]["text"] = "Main menu"
-        self.Buttons[2]["fg"] = "black"
-        self.Buttons[2]["width"] = self.st_width
-        self.Buttons[2]["height"] = self.st_height
-        self.Buttons[2].grid(row=2, column=2)
-
-        self.Settings.grid(row=3, column=2)
+        self.Buttons[1].grid(row=2, column=2)
 
         self.Buttons[3]["command"] = self.next_s
         self.Buttons[3]["text"] = "Next"
         self.Buttons[3]["fg"] = "black"
         self.Buttons[3]["width"] = self.st_width
         self.Buttons[3]["height"] = self.st_height
-        self.Buttons[3].grid(row=4, column=2)
+        self.Buttons[3].grid(row=3, column=2)
+
+        self.Buttons[2]["command"] = self.mainmenu
+        self.Buttons[2]["text"] = "Main menu"
+        self.Buttons[2]["fg"] = "black"
+        self.Buttons[2]["width"] = self.st_width
+        self.Buttons[2]["height"] = self.st_height
+        self.Buttons[2].grid(row=4, column=2)
+
+        self.Settings.grid(row=5, column=2)
 
         self.Buttons[4]["command"] = self.loads
         self.Buttons[4]["text"] = "Load json"
         self.Buttons[4]["fg"] = "black"
         self.Buttons[4]["width"] = self.st_width
         self.Buttons[4]["height"] = self.st_height
-        self.Buttons[4].grid(row=5, column=2)
+        self.Buttons[4].grid(row=6, column=2)
 
-        self.Quit.grid(row=6, column=2)
+        self.Quit.grid(row=7, column=2)
 
     def foo(self):
         pass
@@ -203,7 +209,7 @@ class MainMenu(tk.Frame):
         for i in self.data.keys():
             if i != "modelname":
                 self.valid_keys.append(i)
-
+        self.review()
         print("File loaded")
 
     def rate(self):
@@ -288,34 +294,37 @@ class MainMenu(tk.Frame):
         self.Buttons[17]["bg"] = "gray"
         self.Buttons[17]["fg"] = "black"
         self.Buttons[17].grid(row=7, column=2)
+        try:
+            if self.feedback[self.valid_keys[self.currentSID]]["SentimentGuess"]:
+                self.Labels[1]["text"] = "Your choice: {}".format(
+                    "positive" if self.feedback[self.valid_keys[self.currentSID]]["SentimentGuess"] > 0 else "negative"
+                )
+                self.Labels[1]["bg"] = "green" if self.feedback[self.valid_keys[self.currentSID]]["SentimentGuess"] > 0 else "red"
+                self.Labels[1]["fg"] = "black"
+                self.Labels[1]["width"] = self.st_width
+                self.Labels[1]["height"] = self.st_height
+                self.Labels[1].grid(row=1, column=3)
 
-        if self.feedback[self.valid_keys[self.currentSID]]["SentimentGuess"]:
-            self.Labels[1]["text"] = "Your choice: {}".format(
-                "positive" if self.feedback[self.valid_keys[self.currentSID]]["SentimentGuess"] > 0 else "negative"
-            )
-            self.Labels[1]["bg"] = "green" if self.feedback[self.valid_keys[self.currentSID]]["SentimentGuess"] > 0 else "red"
-            self.Labels[1]["fg"] = "black"
-            self.Labels[1]["width"] = self.st_width
-            self.Labels[1]["height"] = self.st_height
-            self.Labels[1].grid(row=1, column=3)
+            if self.feedback[self.valid_keys[self.currentSID]]["Understandability"]:
+                self.Labels[3]["text"] = "Your choice: {}".format(
+                    self.feedback[self.valid_keys[self.currentSID]]["Understandability"])
+                self.Labels[3]["bg"] = self.colors[self.feedback[self.valid_keys[self.currentSID]]["Understandability"] - 1]
+                self.Labels[3]["fg"] = "black"
+                self.Labels[3]["width"] = self.st_width
+                self.Labels[3]["height"] = self.st_height
+                self.Labels[3].grid(row=3, column=8)
 
-        if self.feedback[self.valid_keys[self.currentSID]]["Understandability"]:
-            self.Labels[3]["text"] = "Your choice: {}".format(
-                self.feedback[self.valid_keys[self.currentSID]]["Understandability"])
-            self.Labels[3]["bg"] = self.colors[self.feedback[self.valid_keys[self.currentSID]]["Understandability"] - 1]
-            self.Labels[3]["fg"] = "black"
-            self.Labels[3]["width"] = self.st_width
-            self.Labels[3]["height"] = self.st_height
-            self.Labels[3].grid(row=3, column=8)
+            if self.feedback[self.valid_keys[self.currentSID]]["Helpfulness"]:
+                self.Labels[5]["text"] = "Your choice: {}".format(
+                    self.feedback[self.valid_keys[self.currentSID]]["Helpfulness"])
+                self.Labels[5]["bg"] = self.colors[self.feedback[self.valid_keys[self.currentSID]]["Helpfulness"] - 1]
+                self.Labels[5]["fg"] = "black"
+                self.Labels[5]["width"] = self.st_width
+                self.Labels[5]["height"] = self.st_height
+                self.Labels[5].grid(row=5, column=8)
+        except Exception as e:
+            pass
 
-        if self.feedback[self.valid_keys[self.currentSID]]["Helpfulness"]:
-            self.Labels[5]["text"] = "Your choice: {}".format(
-                self.feedback[self.valid_keys[self.currentSID]]["Helpfulness"])
-            self.Labels[5]["bg"] = self.colors[self.feedback[self.valid_keys[self.currentSID]]["Helpfulness"] - 1]
-            self.Labels[5]["fg"] = "black"
-            self.Labels[5]["width"] = self.st_width
-            self.Labels[5]["height"] = self.st_height
-            self.Labels[5].grid(row=5, column=8)
         self.update()
 
     def _quit(self):
