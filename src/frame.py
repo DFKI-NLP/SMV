@@ -38,7 +38,7 @@ class MainMenu(tk.Frame):
         self.Settings = tk.Button(self, fg="red", text="Settings", command=self.foo,
                                   width=self.st_width, height=self.st_height)
 
-        self.Quit = tk.Button(self, fg="black", text="Quit", command=self.quit,
+        self.Quit = tk.Button(self, fg="black", text="Quit", command=self._quit,
                               width=self.st_width, height=self.st_height)
 
         self.Labels = [tk.Label(self, fg="black", height=self.st_height, width=self.st_width) for i in range(10)]
@@ -147,7 +147,7 @@ class MainMenu(tk.Frame):
         self.Labels[1]["text"] = "Your choice: {}".format(
             "positive" if self.feedback[self.valid_keys[self.currentSID]]["SentimentGuess"] > 0 else "negative"
         )
-        self.Labels[1]["bg"] = "green" if guess > 0 else "red"
+        self.Labels[1]["bg"] = "green" if self.feedback[self.valid_keys[self.currentSID]]["SentimentGuess"] > 0 else "red"
         self.Labels[1]["fg"] = "black"
         self.Labels[1]["width"] = self.st_width
         self.Labels[1]["height"] = self.st_height
@@ -202,11 +202,14 @@ class MainMenu(tk.Frame):
             if i != "modelname":
                 self.valid_keys.append(i)
 
-
         print("File loaded")
 
     def rate(self):
-        self.feedback[self.valid_keys[self.currentSID]] = {}
+        try:
+            self.feedback[self.valid_keys[self.currentSID]]
+        except KeyError:
+            self.feedback[self.valid_keys[self.currentSID]] = {}
+
         self.hideall()
         self.root.geometry("1600x720")
 
@@ -283,9 +286,52 @@ class MainMenu(tk.Frame):
         self.Buttons[17]["bg"] = "gray"
         self.Buttons[17]["fg"] = "black"
         self.Buttons[17].grid(row=7, column=2)
+
+        if self.feedback[self.valid_keys[self.currentSID]]["SentimentGuess"]:
+            self.Labels[1]["text"] = "Your choice: {}".format(
+                "positive" if self.feedback[self.valid_keys[self.currentSID]]["SentimentGuess"] > 0 else "negative"
+            )
+            self.Labels[1]["bg"] = "green" if self.feedback[self.valid_keys[self.currentSID]]["SentimentGuess"] > 0 else "red"
+            self.Labels[1]["fg"] = "black"
+            self.Labels[1]["width"] = self.st_width
+            self.Labels[1]["height"] = self.st_height
+            self.Labels[1].grid(row=1, column=3)
+
+        if self.feedback[self.valid_keys[self.currentSID]]["Understandability"]:
+            self.Labels[3]["text"] = "Your choice: {}".format(
+                self.feedback[self.valid_keys[self.currentSID]]["Understandability"])
+            self.Labels[3]["bg"] = self.colors[self.feedback[self.valid_keys[self.currentSID]]["Understandability"] - 1]
+            self.Labels[3]["fg"] = "black"
+            self.Labels[3]["width"] = self.st_width
+            self.Labels[3]["height"] = self.st_height
+            self.Labels[3].grid(row=3, column=8)
+
+        if self.feedback[self.valid_keys[self.currentSID]]["Helpfulness"]:
+            self.Labels[5]["text"] = "Your choice: {}".format(
+                self.feedback[self.valid_keys[self.currentSID]]["Helpfulness"])
+            self.Labels[5]["bg"] = self.colors[self.feedback[self.valid_keys[self.currentSID]]["Helpfulness"] - 1]
+            self.Labels[5]["fg"] = "black"
+            self.Labels[5]["width"] = self.st_width
+            self.Labels[5]["height"] = self.st_height
+            self.Labels[5].grid(row=5, column=8)
         self.update()
 
+    def _quit(self):
+        if self.data:
+            f = open("review.json", mode="w")
+            _ = json.dumps(self.feedback)
+            f.write(_)
+            f.close()
+        self.quit()
+
     def show(self):
+        try:
+            f = open("review.json", mode="r")
+            self.feedback = json.load(f)
+            print(self.feedback)
+            f.close()
+        except FileNotFoundError:
+            pass
         self.mainloop()
 
 
