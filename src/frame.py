@@ -171,7 +171,7 @@ class MainMenu(tk.Frame):
         self.Labels[3]["fg"] = "black"
         self.Labels[3]["width"] = self.st_width
         self.Labels[3]["height"] = self.st_height
-        self.Labels[3].grid(row=3, column=8)
+        self.Labels[3].grid(row=2, column=8)
         self.update()
 
     def set_helpfulness(self, choice):
@@ -181,7 +181,7 @@ class MainMenu(tk.Frame):
         self.Labels[5]["fg"] = "black"
         self.Labels[5]["width"] = self.st_width
         self.Labels[5]["height"] = self.st_height
-        self.Labels[5].grid(row=5, column=8)
+        self.Labels[5].grid(row=4, column=8)
         self.update()
 
     def hideall(self):
@@ -283,7 +283,7 @@ class MainMenu(tk.Frame):
             self.Buttons[2 + i]["text"] = str(i + 1)
             self.Buttons[2 + i]["fg"] = "black"
             self.Buttons[2 + i]["bg"] = self.colors[i]
-            self.Buttons[2 + i]["width"] = self.st_width
+            self.Buttons[2 + i]["width"] = int(self.st_width / 2)
             self.Buttons[2 + i]["height"] = self.st_height
             self.Buttons[2 + i]["command"] = lambda i=i: self.set_understandability(i+1)
             self.Buttons[2 + i].grid(row=3, column=1+i, sticky=tk.E + tk.W)
@@ -307,17 +307,13 @@ class MainMenu(tk.Frame):
             self.Buttons[9 + i]["command"] = lambda i=i: self.set_helpfulness(i+1)
             self.Buttons[9 + i].grid(row=5, column=1+i, sticky=tk.E + tk.W)
 
-        self.Labels[5]["text"] = ""
-        self.Labels[6]["text"] = ""
-        self.Labels[6].grid(row=6, column=0)
-
-        self.Quit.grid(row=7, column=1)
+        self.Quit.grid(row=6, column=1)
 
         self.Buttons[17]["command"] = self.review
         self.Buttons[17]["text"] = "Back"
         self.Buttons[17]["bg"] = "gray"
         self.Buttons[17]["fg"] = "black"
-        self.Buttons[17].grid(row=7, column=2)
+        self.Buttons[17].grid(row=6, column=2)
         try:
             if self.feedback[self.valid_keys[self.currentSID]]["SentimentGuess"]:
                 self.Labels[1]["text"] = "Your choice: {}".format(
@@ -336,7 +332,7 @@ class MainMenu(tk.Frame):
                 self.Labels[3]["fg"] = "black"
                 self.Labels[3]["width"] = self.st_width
                 self.Labels[3]["height"] = self.st_height
-                self.Labels[3].grid(row=3, column=8)
+                self.Labels[3].grid(row=2, column=8)
 
             if self.feedback[self.valid_keys[self.currentSID]]["Helpfulness"]:
                 self.Labels[5]["text"] = "Your choice: {}".format(
@@ -345,7 +341,7 @@ class MainMenu(tk.Frame):
                 self.Labels[5]["fg"] = "black"
                 self.Labels[5]["width"] = self.st_width
                 self.Labels[5]["height"] = self.st_height
-                self.Labels[5].grid(row=5, column=8)
+                self.Labels[5].grid(row=4, column=8)
         except Exception as e:
             pass
 
