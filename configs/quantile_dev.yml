@@ -1,7 +1,7 @@
-source: "thermostat/imdb-bert-lig"
+source: "thermostat/ag_news-roberta-occlusion"
 sgn: "+"
-samples: 100
+samples: 7600
 metric:
   name: "quantile"
-  value: 2
+  value: 3
 dev: True

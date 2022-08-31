@@ -5,7 +5,8 @@ from itertools import permutations
 #warnings.simplefilter("always")
 
 
-def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=None, mode: str = "mean: 1"):
+def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=None, mode: str = "mean: 1",
+                       randomize_attribs=False):
     """
     perfoms coherency search amongst a sample loaded by dataloader.Verbalizer.read_samples()
     first generates binary-filters of length n (for example [1, 0, 1], [0, 1, 1] or [1, 1, 0]
@@ -15,6 +16,7 @@ def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, 
     :param top_n_coherences: how many coherences should be returned?
     :param sgn: sign sensitive search?
     :param mode: metric to use
+    :param randomize_attribs: Fill attributions with random values for baseline in human evaluation
     :return: verbalized search:string
     """
     if filter_length > 8:
@@ -29,6 +31,10 @@ def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, 
     for key in samples.keys():
         sample = samples[key]
         attribs = np.array(sample["attributions"]).astype("float32")/abs(np.max(sample["attributions"]))  # normalized
+
+        if randomize_attribs:
+            attribs = np.random.rand(*attribs.shape)
+
         if "mean" in mode["name"]:
             metric = get_mean(get_metric_values(mode)[0:], attribs)
 

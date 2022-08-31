@@ -4,7 +4,8 @@ import numpy as np
 # span based filter search
 
 
-def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=None, mode: dict = None):
+def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=None, mode: dict = None,
+                randomize_attribs=False):
     """
     generates spans to search for coherences amongst a sample loaded by dataloader.Verbalizer.read_samples()
     works like field_search(*args)
@@ -22,6 +23,10 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=Non
     for key in samples.keys():
         sample = samples[key]
         attribs = np.array(sample["attributions"].copy()).astype("float32")/abs(np.max(sample["attributions"]))
+
+        if randomize_attribs:
+            attribs = np.random.rand(*attribs.shape)
+
         if "quantile" in mode["name"]:
             stdevval = get_stdev(get_variance(attribs))
             metric = stdevval * get_metric_values(mode)[0]

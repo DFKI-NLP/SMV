@@ -1,7 +1,6 @@
 source: "thermostat/imdb-bert-lig"
-# source: "datasets/movie_rationales"
 sgn: "+"
-samples: 100
+samples: 25000
 metric:
   name: "mean"
   value: 0.4

@@ -1,11 +1,12 @@
 import datasets
 import os
+import pandas as pd
 import thermostat
 import yaml
 import json
 
 from src import dataloader
-from vis import Color, color_str
+from vis import Color, color_str, save_heatmap_as_image
 
 def explain_nodev(config, to_json=False):
     if not os.path.isfile(config["source"]):
@@ -87,6 +88,7 @@ def explain_nodev(config, to_json=False):
     else:
         return returnstr
 
+
 def explain(config_path, to_json=False):
     with open(config_path) as stream:
         config = yaml.safe_load(stream)
@@ -110,6 +112,7 @@ def explain(config_path, to_json=False):
                 raise NotImplementedError("Invalid source!")
         else:
             source = config["source"]
+            thermo_config = None
         #TODO: Change to NamedTemporaryFile, this is bad
         #Also TODO: put into module
 
@@ -125,6 +128,16 @@ def explain(config_path, to_json=False):
 
         for key in texts.keys():
             if key in valid_keys:
+                if thermo_config:
+                    thermounit = thermo_config[key]
+                    """ Only execute the code once! """
+                    save_heatmap_as_image(thermounit.heatmap, filename=f"{thermo_config_name}/{key}.png")
+
+                sample = " ".join(texts[key]["input_ids"])
+                if key not in explanations["compare search"]:
+                    continue
+                smv = explanations["compare search"][key]
+                """
                 cutoff_top_k_single = 5
 
                 txt = "\nSAMPLE:\n"
@@ -158,15 +171,21 @@ def explain(config_path, to_json=False):
                     for __ in _:
                         txt += "\n"+__
                 txt += "\nPrediction was correct." if texts[key]["was_correct"] else "\nPredicton was incorrect"
+                """
                 if to_json:
                     key_verbalization_attribs[key] = {"sample": sample,
-                                                      "verbalization": txt,
+                                                      "verbalization": smv,
                                                       "attributions": texts[key]["attributions"]}
                 else:
-                    returnstr.append(sample + "\n" + txt)
+                    returnstr.append(sample + "\n" + smv)
 
         if to_json:
+            pd.DataFrame.from_dict(key_verbalization_attribs, orient="index").to_csv(
+                f"verbalizations/SMV_{modelname}.csv")
+
+            """
             key_verbalization_attribs["modelname"] = modelname
+            """
             res = json.dumps(key_verbalization_attribs)
             return res
         else:

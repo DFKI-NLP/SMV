@@ -157,7 +157,8 @@ class Verbalizer:
                                     "attributions": _cleaned_attributions,
                                     "label": _dict[sample]["label"],
                                     "predictions": _dict[sample]["predictions"],
-                                    "was_correct": _dict[sample]["label"] == _dict[sample]["predictions"].index(max(_dict[sample]["predictions"]))}
+                                    "was_correct": _dict[sample]["label"] == _dict[sample]["predictions"].index(
+                                        max(_dict[sample]["predictions"]))}
         """
         if _:
             self.label_names = _["dataset"]["label_names"]
@@ -216,8 +217,6 @@ class Verbalizer:
         if "total order" in modes:
             explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
 
-
-
         # TODO: Maybe detokenize input_ids using tokenizer from self?
         if not self.dev:
             return explanations, sample_array, None
@@ -263,7 +262,9 @@ class Verbalizer:
         """
         tofilter = self.modes[:len(self.modes)-2]
         filter_len = lambda x: [len(x[i]["input_ids"]) < maxwords for i in x.keys()]
-        filter_verbalizations = lambda x, n, searchtype: [sum(samples[n]["attributions"][min(i):max(i)])/sum(samples[n]["attributions"]) > mincoverage for i in x[searchtype][n]["indices"]]
+        filter_verbalizations = lambda x, n, searchtype: [sum(samples[n]["attributions"][min(i):max(i)]) /
+                                                          sum(samples[n]["attributions"]) > mincoverage
+                                                          for i in x[searchtype][n]["indices"]]
         valid_indices = filter_len(samples)
         valid_indices_ = []
         for sampleindex in samples.keys():
