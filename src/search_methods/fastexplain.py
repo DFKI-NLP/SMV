@@ -42,7 +42,7 @@ def explain_nodev(config, to_json=False):
 
     for key in texts.keys():
         cutoff_top_k_single = 5
-        txt, sample_text = txt = to_string(explanations, texts, key, cutoff_top_k_single)
+        txt, sample_text = to_string(explanations, texts, key, cutoff_top_k_single)
         if to_json:
             key_verbalization_attribs[key] = {"sample": texts[key]["input_ids"],
                                               "verbalization": txt,
