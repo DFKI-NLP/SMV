@@ -85,6 +85,8 @@ class Verbalizer:
                 self.metric = config["metric"]
             if config["dev"]:
                 self.dev = config["dev"]
+                self.maxwords = config["maxwords"]
+                self.mincoverage = config["mincoverage"]
 
     def add_explanations_to_dict(self, data, dct):
         for counter in range(len(data)):

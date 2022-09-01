@@ -1,6 +1,6 @@
 source: "thermostat/imdb-bert-lig"
 sgn: "+"
-samples: 25000
+samples: -1
 metric:
   name: "mean"
   value: 0.4

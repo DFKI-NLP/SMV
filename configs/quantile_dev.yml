@@ -1,7 +1,9 @@
 source: "thermostat/ag_news-roberta-occlusion"
 sgn: "+"
-samples: 7600
+samples: -1
 metric:
   name: "quantile"
   value: 3
 dev: True
+maxwords: 100
+mincoverage: .1

@@ -58,7 +58,7 @@ def explain_nodev(config, to_json=False):
         return returnstr
 
 
-def explain(config_path, to_json=False):
+def explain(config_path, to_json=False, maxwords=None, mincoverage=None):
     with open(config_path) as stream:
         config = yaml.safe_load(stream)
     if config["dev"]:
@@ -91,7 +91,12 @@ def explain(config_path, to_json=False):
 
         loader = dataloader.Verbalizer(source, config=config)
         explanations, texts, orders = loader()
-        valid_keys = loader.filter_verbalizations(explanations, texts, orders, maxwords=80, mincoverage=.15)
+        if not maxwords:
+            maxwords = loader.maxwords
+        if not mincoverage:
+            mincoverage = loader.mincoverage
+        valid_keys = loader.filter_verbalizations(explanations, texts, orders,
+                                                  maxwords=maxwords, mincoverage=mincoverage)
         if not to_json:
             returnstr = []
 
