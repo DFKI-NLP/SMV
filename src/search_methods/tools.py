@@ -367,8 +367,8 @@ def compare_searches(searches: dict, samples):
                 token = input_ids[fs[0]].replace('Ġ', '')
                 verbalization = f"The word » {token} «"
             else:
-                span = " ".join([input_ids[t] for t in fs]).replace(' ', '').replace('Ġ', ' ').replace(
-                    '<s>', '').replace('</s>', '').replace('<pad>', '')
+                span = " ".join([input_ids[t] for t in fs]).replace(' ', ' ').replace('Ġ', ' ').replace(
+                    '<s>', ' ').replace('</s>', '').replace('<pad>', ' ')
                 if "." in span:
                     verbalization = f"The span » {span} «"
                 else:
