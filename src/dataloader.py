@@ -217,6 +217,9 @@ class Verbalizer:
         if "total order" in modes:
             explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
 
+        if "compare_searches" in modes:
+            explanations["compare searches"] = t.compare_searches(orders_and_searches, sample_array)
+
         # TODO: Maybe detokenize input_ids using tokenizer from self?
         if not self.dev:
             return explanations, sample_array, None
@@ -247,8 +250,13 @@ class Verbalizer:
         return explanations, prepared_data
 
     def compare_search(self, previous_searches, samples):
-        coincedences = t.compare_searches(previous_searches, samples)
+        coincedences = t.compare_search(previous_searches, samples)
         return coincedences
+
+
+    def compare_searches(self, previous_searches, samples):
+        v = t.compare_searches(previous_searches, samples)
+        return v
 
     def filter_verbalizations(self, verbalizations, samples, orders_and_searches, maxwords=100, mincoverage=.1, *args):
         """

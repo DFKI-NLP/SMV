@@ -256,6 +256,57 @@ def verbalize_field_span_search(prepared_data, samples, sgn="+"):
     return verbalization_dict
 
 
+def compare_search(searches: dict, samples):
+    """
+
+    :param searches:
+    :param samples:
+    :return:
+    """
+    search_types = searches.keys()
+    coincidences = {}    
+    for subclass in search_types:
+        for subclass_2 in search_types:
+            if subclass == subclass_2:
+                pass
+            else:
+                for sample_key in searches[subclass].keys():
+                    sum_values = 0
+                    for i in samples[sample_key]["attributions"]:
+                        sum_values += i if i > 0 else 0
+
+                    _ = []
+                    for value_1 in searches[subclass][sample_key]["indices"]:
+                        for value_2 in searches[subclass_2][sample_key]["indices"]:
+                            if value_1 is None or value_2 is None:
+                                continue
+                            if value_1 == value_2 and value_1 not in coincidences.items():
+                                _.append(value_1)
+
+                    verbalizations = []
+                    for snippet in _:
+                        verbalization = "snippet: '"
+                        snippet_tokens = []
+                        for word_index in snippet:
+                            if word_index is not None:
+                                snippet_tokens.append(samples[sample_key]["input_ids"][word_index]) #.replace("▁", " ")
+                        verbalization += ' '.join(snippet_tokens)
+                        try:
+                            verbalization += "' occurs in all searches and accounts for {}% of prediction score".format(
+                                str(round(
+                                    (sum([samples[sample_key]["attributions"][i] for i in snippet])/sum_values)*100, 2
+                                )))
+                        except Exception as e:
+                            pass
+
+                        verbalizations.append(verbalization)
+                    if not verbalizations:
+                        verbalizations = ["No snippet occurs in all searches simultaneously"]
+                    coincidences[sample_key] = verbalizations
+
+    return coincidences
+
+
 def compare_searches(searches: dict, samples):
     """
 
@@ -263,29 +314,18 @@ def compare_searches(searches: dict, samples):
     :param samples:
     :return:
     """
-    #search_types = searches.keys()
 
-    def coverage(span, attributions):
-        if span[0]:
-            pos_att_sum = sum([float(a) if a > 0 else 0 for a in attributions])
-            if pos_att_sum > 0:
-                return sum([attributions[w] for w in span]) / pos_att_sum
-        return 0
+    # search_types = searches.keys() ##UNUSED##
 
-    sample_info = []
+    # sample_info = []  ##UNUSED##
     verbalized_explanations = {}
     for sample_key in tqdm(searches[list(searches.keys())[0]].keys()):
         sample_atts = samples[sample_key]["attributions"]
         input_ids = samples[sample_key]["input_ids"]
         candidates = defaultdict(dict)
 
-        def explore_search(search_type):
-            candidates[search_type] = {}
-            for indices in searches[search_type][sample_key]["indices"]:
-                candidates[search_type][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
-
         for stype in list(searches.keys()):
-            explore_search(stype)
+            explore_search(candidates, stype, searches, sample_key, sample_atts)
 
         for i, attr in enumerate(sample_atts):
             candidates['total search'][str(i)] = coverage([i], sample_atts)
@@ -296,20 +336,9 @@ def compare_searches(searches: dict, samples):
 
         combined_candidate_indices = []
 
-        def combine_results(result_dict):
-            for idx_cov_tuple in result_dict:
-                if ',' in idx_cov_tuple[0]:
-                    indices = idx_cov_tuple[0].split(',')
-                else:
-                    indices = [idx_cov_tuple[0]]
-                for idx in indices:
-                    if idx == 'None':
-                        continue
-                    if int(idx) not in combined_candidate_indices:
-                        combined_candidate_indices.append(int(idx))
-        combine_results(conv_top5)
-        combine_results(span_top5)
-        combine_results(total_top5)
+        combine_results(conv_top5, combined_candidate_indices)
+        combine_results(span_top5, combined_candidate_indices)
+        combine_results(total_top5, combined_candidate_indices)
 
         final_spans = []
         for i in sorted(combined_candidate_indices):
@@ -363,54 +392,43 @@ def compare_searches(searches: dict, samples):
 
         # TODO: The span.replace(...) has to be different for other models/tokenizers
         # BERT
-        #verbalized_explanations[sample_key] = " ".join([span.replace(' ##', '') for i, span in ranked_spans])
+        # verbalized_explanations[sample_key] = " ".join([span.replace(' ##', '') for i, span in ranked_spans])
 
         # RoBERTa
         verbalized_explanations[sample_key] = " ".join([span for i, span in ranked_spans])
-        #sample_info.append(samples[sample_key])
+        # sample_info.append(samples[sample_key])
+        return verbalized_explanations
 
-    """
-    coincidences = {}    
-    for subclass in search_types:
-        for subclass_2 in search_types:
-            if subclass == subclass_2:
-                pass
-            else:
-                for sample_key in searches[subclass].keys():
-                    sum_values = 0
-                    for i in samples[sample_key]["attributions"]:
-                        sum_values += i if i > 0 else 0
 
-                    _ = []
-                    for value_1 in searches[subclass][sample_key]["indices"]:
-                        for value_2 in searches[subclass_2][sample_key]["indices"]:
-                            if value_1 is None or value_2 is None:
-                                continue
-                            if value_1 == value_2 and value_1 not in coincidences.items():
-                                _.append(value_1)
+@jit(nopython=True)
+def explore_search(candidates, search_type, searches, sample_key, sample_atts):
+    candidates[search_type] = {}
+    for indices in searches[search_type][sample_key]["indices"]:
+        candidates[search_type][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
+    return candidates
 
-                    verbalizations = []
-                    for snippet in _:
-                        verbalization = "snippet: '"
-                        snippet_tokens = []
-                        for word_index in snippet:
-                            if word_index is not None:
-                                snippet_tokens.append(samples[sample_key]["input_ids"][word_index]) #.replace("▁", " ")
-                        verbalization += ' '.join(snippet_tokens)
-                        try:
-                            verbalization += "' occurs in all searches and accounts for {}% of prediction score".format(
-                                str(round(
-                                    (sum([samples[sample_key]["attributions"][i] for i in snippet])/sum_values)*100, 2
-                                )))
-                        except Exception as e:
-                            pass
 
-                        verbalizations.append(verbalization)
-                    if not verbalizations:
-                        verbalizations = ["No snippet occurs in all searches simultaneously"]
-                    coincidences[sample_key] = verbalizations
-    """
-    return verbalized_explanations
+@jit(nopython=True)
+def coverage(span, attributions):
+    if span[0]:
+        pos_att_sum = sum([float(a) if a > 0 else 0 for a in attributions])
+        if pos_att_sum > 0:
+            return sum([attributions[w] for w in span]) / pos_att_sum
+    return 0
+
+
+@jit(nopython=True)
+def combine_results(result_dict, combined_candidate_indices):
+    for idx_cov_tuple in result_dict:
+        if ',' in idx_cov_tuple[0]:
+            indices = idx_cov_tuple[0].split(',')
+        else:
+            indices = [idx_cov_tuple[0]]
+        for idx in indices:
+            if idx == 'None':
+                continue
+            if int(idx) not in combined_candidate_indices:
+                combined_candidate_indices.append(int(idx))
 
 
 def get_binary_attributions_from_annotator_rationales(text: str, rationales: List[str]):

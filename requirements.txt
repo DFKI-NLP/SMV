@@ -2,3 +2,4 @@ numpy
 numba
 transformers
 thermostat-datasets
+imgkit
