@@ -3,3 +3,4 @@ numba
 transformers
 thermostat-datasets
 imgkit
+tqdm

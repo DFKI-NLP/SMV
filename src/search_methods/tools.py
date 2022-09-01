@@ -319,7 +319,7 @@ def compare_searches(searches: dict, samples):
 
     # sample_info = []  ##UNUSED##
     verbalized_explanations = {}
-    for sample_key in tqdm(searches[list(searches.keys())[0]].keys()):
+    for sample_key in searches[list(searches.keys())[0]].keys():
         sample_atts = samples[sample_key]["attributions"]
         input_ids = samples[sample_key]["input_ids"]
         candidates = defaultdict(dict)
@@ -397,10 +397,10 @@ def compare_searches(searches: dict, samples):
         # RoBERTa
         verbalized_explanations[sample_key] = " ".join([span for i, span in ranked_spans])
         # sample_info.append(samples[sample_key])
-        return verbalized_explanations
+    return verbalized_explanations
 
 
-@jit(nopython=True)
+
 def explore_search(candidates, search_type, searches, sample_key, sample_atts):
     candidates[search_type] = {}
     for indices in searches[search_type][sample_key]["indices"]:
@@ -408,7 +408,7 @@ def explore_search(candidates, search_type, searches, sample_key, sample_atts):
     return candidates
 
 
-@jit(nopython=True)
+
 def coverage(span, attributions):
     if span[0]:
         pos_att_sum = sum([float(a) if a > 0 else 0 for a in attributions])
@@ -417,7 +417,7 @@ def coverage(span, attributions):
     return 0
 
 
-@jit(nopython=True)
+
 def combine_results(result_dict, combined_candidate_indices):
     for idx_cov_tuple in result_dict:
         if ',' in idx_cov_tuple[0]:

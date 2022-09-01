@@ -1,5 +1,6 @@
 import json
 import transformers
+from tqdm import tqdm
 from typing import List, Union
 from multiprocessing import Process, Pool
 
@@ -61,7 +62,7 @@ class Verbalizer:
             raise RuntimeError("Please specify model_type; Missing param model_type")
 
         self.standard_samples = standard_samples
-        self.modes = ["convolution search", "span search", "compare search", "total order"]
+        self.modes = ["convolution search", "span search", "compare search", "total order", "compare searches"]
         # which search-algorithms to use
         self.checkpoint = 0  # where did the Verbalizer stop loading examples
         self.len_filters = len_filters
@@ -193,33 +194,33 @@ class Verbalizer:
         if "total_order" in modes:
             orders_and_searches["total_order"] = self.total_order(sample_array)
         """
-
-        if "convolution search" in modes:
-            if not self.sgn:
-                (explanations["convolution search"], orders_and_searches["convolution search"]) = self.convolution_search(
-                    sample_array, self.len_filters, metric=self.metric)
-            else:
-                (explanations["convolution search"], orders_and_searches["convolution search"]) = self.convolution_search(
-                    sample_array, self.len_filters, self.sgn, self.metric)
-
-        if "span search" in modes:
-            if not self.sgn:
-                (explanations["span search"], orders_and_searches["span search"]) = self.span_search(
-                    sample_array, self.len_filters, metric=self.metric)
-            else:
-                (explanations["span search"], orders_and_searches["span search"]) = self.span_search(
-                    sample_array, self.len_filters, self.sgn, self.metric)
-
-        # SHOULD ALWAYS BE DONE AT THE END but before total search
-        if "compare search":
-            explanations["compare search"] = self.compare_search(orders_and_searches, sample_array)
-
-        if "total order" in modes:
-            explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
-
-        if "compare_searches" in modes:
-            explanations["compare searches"] = t.compare_searches(orders_and_searches, sample_array)
-
+        with tqdm(total=len(modes)) as pbar:
+            if "convolution search" in modes:
+                if not self.sgn:
+                    (explanations["convolution search"], orders_and_searches["convolution search"]) = self.convolution_search(
+                        sample_array, self.len_filters, metric=self.metric)
+                else:
+                    (explanations["convolution search"], orders_and_searches["convolution search"]) = self.convolution_search(
+                        sample_array, self.len_filters, self.sgn, self.metric)
+            pbar.update(1)
+            if "span search" in modes:
+                if not self.sgn:
+                    (explanations["span search"], orders_and_searches["span search"]) = self.span_search(
+                        sample_array, self.len_filters, metric=self.metric)
+                else:
+                    (explanations["span search"], orders_and_searches["span search"]) = self.span_search(
+                        sample_array, self.len_filters, self.sgn, self.metric)
+            pbar.update(1)
+            # SHOULD ALWAYS BE DONE AT THE END but before total search
+            if "compare search":
+                explanations["compare search"] = self.compare_search(orders_and_searches, sample_array)
+            pbar.update(1)
+            if "total order" in modes:
+                explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
+            pbar.update(1)
+            if "compare searches" in modes:
+                explanations["compare searches"] = t.compare_searches(orders_and_searches, sample_array)
+            pbar.update(1)
         # TODO: Maybe detokenize input_ids using tokenizer from self?
         if not self.dev:
             return explanations, sample_array, None
@@ -268,7 +269,7 @@ class Verbalizer:
         :param mincoverage: minimum coverage needed for a sample to be returned (0.0 - 1.0)
         :return: filtered verbalizations
         """
-        tofilter = self.modes[:len(self.modes)-2]
+        tofilter = self.modes[:len(self.modes)-3]  # MANUAL NEEDS TO BE CHANGED WITH EVERY ADDED SEARCHTYPE
         filter_len = lambda x: [len(x[i]["input_ids"]) < maxwords for i in x.keys()]
         filter_verbalizations = lambda x, n, searchtype: [sum(samples[n]["attributions"][min(i):max(i)]) /
                                                           sum(samples[n]["attributions"]) > mincoverage

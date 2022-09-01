@@ -133,7 +133,6 @@ def to_string(explanations, texts, key, cutoff_top_k_single):
         else:
             fmtd_tokens.append(token)
     txt += " ".join(fmtd_tokens)
-    sample_text = txt
     c = 0
     txt_ = ""
     for i in txt:
@@ -145,11 +144,14 @@ def to_string(explanations, texts, key, cutoff_top_k_single):
                 c = 0
             else:
                 pass
-    sample = txt_
+    sample_text = txt_
     txt = ""
     for expl_subclass in explanations.keys():
         txt += "\nsubclass '{}'".format(expl_subclass)
-        _ = explanations[expl_subclass][key][:cutoff_top_k_single]
+        if expl_subclass == "compare searches":
+            _ = [explanations[expl_subclass][key]]
+        else:
+            _ = explanations[expl_subclass][key][:cutoff_top_k_single]
         for __ in _:
             txt += "\n" + __
     txt += "\nPrediction was correct." if texts[key]["was_correct"] else "\nPredicton was incorrect"
