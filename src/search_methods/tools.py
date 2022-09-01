@@ -400,13 +400,11 @@ def compare_searches(searches: dict, samples):
     return verbalized_explanations
 
 
-
 def explore_search(candidates, search_type, searches, sample_key, sample_atts):
     candidates[search_type] = {}
     for indices in searches[search_type][sample_key]["indices"]:
         candidates[search_type][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
     return candidates
-
 
 
 def coverage(span, attributions):
@@ -415,7 +413,6 @@ def coverage(span, attributions):
         if pos_att_sum > 0:
             return sum([attributions[w] for w in span]) / pos_att_sum
     return 0
-
 
 
 def combine_results(result_dict, combined_candidate_indices):
