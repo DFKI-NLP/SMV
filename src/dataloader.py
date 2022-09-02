@@ -1,15 +1,21 @@
 import json
+import multiprocessing
+import time
+
 import transformers
 from tqdm import tqdm
 from typing import List, Union
+import psutil
 from multiprocessing import Process, Pool
 
-from src.search_methods import tools as t, spans as span, filters as fil
+import src.search_methods.tools as t
+import src.processing.shared_methods as sm
+import src.processing.shared_value_searches as svs
 
 
 class Verbalizer:
     def __init__(self, source: Union[str, List], standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
-                 config=None, dev=False,
+                 config=None, dev=False, multiprocess=True,
                  *args, **kwargs):
         """
         Verbalizer class
@@ -70,6 +76,7 @@ class Verbalizer:
         self.metric = None
         self.label_names = None
         self.dev = dev
+        self.multiprocess = multiprocess
         #self.tokenizer = eval("tokenizers.Tokenizer.from_pretrained('{}')"  # force_download=True,
         #                      .format(self.models[self.model_type][1]))
         self.tokenizer = eval("transformers.{}.from_pretrained('{}', cache_dir='data')"  # force_download=True,
@@ -196,34 +203,113 @@ class Verbalizer:
         if "total_order" in modes:
             orders_and_searches["total_order"] = self.total_order(sample_array)
         """
-        with tqdm(total=len(modes)) as pbar:
-            if "convolution search" in modes:
-                if not self.sgn:
-                    (explanations["convolution search"], orders_and_searches["convolution search"]) = self.convolution_search(
-                        sample_array, self.len_filters, metric=self.metric)
-                else:
-                    (explanations["convolution search"], orders_and_searches["convolution search"]) = self.convolution_search(
-                        sample_array, self.len_filters, self.sgn, self.metric)
-            pbar.update(1)
-            if "span search" in modes:
-                if not self.sgn:
-                    (explanations["span search"], orders_and_searches["span search"]) = self.span_search(
-                        sample_array, self.len_filters, metric=self.metric)
-                else:
-                    (explanations["span search"], orders_and_searches["span search"]) = self.span_search(
-                        sample_array, self.len_filters, self.sgn, self.metric)
-            pbar.update(1)
-            # SHOULD ALWAYS BE DONE AT THE END but before total search
-            if "compare search":
-                explanations["compare search"] = self.compare_search(orders_and_searches, sample_array)
-            pbar.update(1)
-            if "total order" in modes:
-                explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
-            pbar.update(1)
-            if "compare searches" in modes:
-                explanations["compare searches"] = t.compare_searches(orders_and_searches, sample_array)
-            pbar.update(1)
-        # TODO: Maybe detokenize input_ids using tokenizer from self?
+        if self.multiprocess:
+            to_calculate = []
+            manager = multiprocessing.Manager()
+            shared_obj = manager.dict()
+
+            processes = []
+            with tqdm(total=len(modes)) as pbar:
+                if "convolution search" in modes:
+                    conv_proc = multiprocessing.Process(target=svs.shared_memory_convsearch, args=(self.sgn,
+                                                                                                   sample_array,
+                                                                                                   self.len_filters,
+                                                                                                   self.metric,
+                                                                                                   shared_obj))
+                    processes.append(conv_proc)
+                    conv_proc.start()
+                    while psutil.virtual_memory().available / (1024**3) < 3:
+                        time.sleep(1)
+
+                if "span search" in modes:
+                    span_proc = multiprocessing.Process(target=svs.shared_memory_spansearch, args=(self.sgn,
+                                                                                                   sample_array,
+                                                                                                   self.len_filters,
+                                                                                                   self.metric,
+                                                                                                   shared_obj))
+                    processes.append(span_proc)
+                    span_proc.start()
+                    while psutil.virtual_memory().available / (1024**3) < 3:
+                        time.sleep(1)
+
+                for i in processes:
+                    i.join()
+
+                if "convolution search" in modes:
+                    explanations["convolution search"] = shared_obj["convolution search"][0]
+                    orders_and_searches["convolution search"] = shared_obj["convolution search"][1]
+                    pbar.update(1)
+
+                if "span search" in modes:
+                    explanations["span search"] = shared_obj["span search"][0]
+                    orders_and_searches["span search"] = shared_obj["span search"][1]
+                    pbar.update(1)
+
+                processes = []
+
+
+                if "compare search" in modes:
+                    explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)
+                    pbar.update(1)
+
+                if "total order" in modes:  # NO PROCESS because fast
+                    explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
+                    pbar.update(1)
+
+                if "compare searches" in modes:
+                    memory = psutil.virtual_memory().available / (1024**3)
+                    spareable_mem = memory * 0.66
+                    amount_procs = min(int(spareable_mem/3), int(psutil.cpu_count()))
+
+                    chunkssize = int(len(sample_array.keys())/amount_procs)
+                    sample_keys = list(sample_array.keys())
+                    sample_keys_chunks_points = []
+                    for i in range(0, amount_procs):
+                        sample_keys_chunks_points.append((i+1)*chunkssize+1)
+                    #TODO add mp support for compare_searches
+                    explanations["compare searches"] = t.compare_searches(orders_and_searches, sample_array)
+                    pbar.update(1)
+
+
+            if not self.dev:
+                return explanations, sample_array, None
+            else:
+                return explanations, sample_array, orders_and_searches
+
+
+        #
+        #
+        #
+        #
+        else:
+            with tqdm(total=len(modes)) as pbar:
+                if "convolution search" in modes:
+                    if not self.sgn:
+                        (explanations["convolution search"], orders_and_searches["convolution search"]) = sm.convolution_search(
+                            sample_array, self.len_filters, metric=self.metric)
+                    else:
+                        (explanations["convolution search"], orders_and_searches["convolution search"]) = sm.convolution_search(
+                            sample_array, self.len_filters, self.sgn, self.metric)
+                pbar.update(1)
+                if "span search" in modes:
+                    if not self.sgn:
+                        (explanations["span search"], orders_and_searches["span search"]) = sm.span_search(
+                            sample_array, self.len_filters, metric=self.metric)
+                    else:
+                        (explanations["span search"], orders_and_searches["span search"]) = sm.span_search(
+                            sample_array, self.len_filters, self.sgn, self.metric)
+                pbar.update(1)
+                # SHOULD ALWAYS BE DONE AT THE END but before total search
+                if "compare search":
+                    explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)
+                pbar.update(1)
+                if "total order" in modes:
+                    explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
+                pbar.update(1)
+                if "compare searches" in modes:
+                    explanations["compare searches"] = t.compare_searches(orders_and_searches, sample_array)
+                pbar.update(1)
+            # TODO: Maybe detokenize input_ids using tokenizer from self?
         if not self.dev:
             return explanations, sample_array, None
         else:
@@ -231,35 +317,6 @@ class Verbalizer:
 
     def __call__(self, modes: list = None, n_samples: int = None, *args, **kwargs):
         return self.doit(modes, n_samples)
-
-    def span_search(self, _dict, len_filters, sgn=None, metric=None):
-        if not sgn:
-            prepared_data = span.span_search(_dict, len_filters, sgn=None, mode=metric)
-            explanations = t.verbalize_field_span_search(prepared_data, _dict)
-        else:
-            prepared_data = span.span_search(_dict, len_filters, sgn=sgn, mode=metric)
-            explanations = t.verbalize_field_span_search(prepared_data, _dict, sgn=sgn)
-
-        return explanations, prepared_data
-
-    def convolution_search(self, _dict, len_filters, sgn=None, metric=None):
-        if not sgn:
-            prepared_data = fil.convolution_search(_dict, len_filters, sgn=None, mode=metric)
-            explanations = t.verbalize_field_span_search(prepared_data, _dict)
-        else:
-            prepared_data = fil.convolution_search(_dict, len_filters, sgn=sgn, mode=metric)
-            explanations = t.verbalize_field_span_search(prepared_data, _dict, sgn=sgn)
-
-        return explanations, prepared_data
-
-    def compare_search(self, previous_searches, samples):
-        coincedences = t.compare_search(previous_searches, samples)
-        return coincedences
-
-
-    def compare_searches(self, previous_searches, samples):
-        v = t.compare_searches(previous_searches, samples)
-        return v
 
     def filter_verbalizations(self, verbalizations, samples, orders_and_searches, maxwords=100, mincoverage=.1, *args):
         """

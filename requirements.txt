@@ -4,3 +4,4 @@ transformers
 thermostat-datasets
 imgkit
 tqdm
+psutil

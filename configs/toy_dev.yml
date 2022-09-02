@@ -1,0 +1,9 @@
+source: "thermostat/imdb-bert-lig"
+sgn: "+"
+samples: 100
+metric:
+  name: "mean"
+  value: 0.4
+dev: True
+maxwords: 100
+mincoverage: .1
