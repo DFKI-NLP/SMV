@@ -5,6 +5,17 @@ import src.search_methods.tools as t
 import src.processing.shared_methods as sm
 
 
+def process_map_convsearch(sgn, sample_array, len_filters, metric):
+    if not sgn:
+        (search, orders) = sm.convolution_search(
+            sample_array, len_filters, metric=metric)
+    else:
+        (search, orders) = sm.convolution_search(
+            sample_array, len_filters, sgn, metric=metric)
+
+    return search, orders
+
+
 def shared_memory_convsearch(sgn, sample_array, len_filters, metric, shared_search, shared_order):
     if not sgn:
         (search, orders) = sm.convolution_search(
