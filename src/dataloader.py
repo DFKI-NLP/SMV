@@ -15,7 +15,7 @@ import src.processing.shared_value_searches as svs
 
 class Verbalizer:
     def __init__(self, source: Union[str, List], standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
-                 config=None, dev=False, multiprocess=True,
+                 config=None, dev=False, multiprocess=False,
                  *args, **kwargs):
         """
         Verbalizer class
