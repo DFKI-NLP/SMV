@@ -215,25 +215,31 @@ class Verbalizer:
                                                                                                    sample_array,
                                                                                                    self.len_filters,
                                                                                                    self.metric,
-                                                                                                   shared_obj))
+                                                                                                   shared_obj),
+                                                        name="convsearch")
                     processes.append(conv_proc)
                     conv_proc.start()
                     while psutil.virtual_memory().available / (1024**3) < 3:
                         time.sleep(1)
+                        print("waiting for memory")
 
                 if "span search" in modes:
                     span_proc = multiprocessing.Process(target=svs.shared_memory_spansearch, args=(self.sgn,
                                                                                                    sample_array,
                                                                                                    self.len_filters,
                                                                                                    self.metric,
-                                                                                                   shared_obj))
+                                                                                                   shared_obj),
+                                                        name="spansearch")
                     processes.append(span_proc)
                     span_proc.start()
                     while psutil.virtual_memory().available / (1024**3) < 3:
                         time.sleep(1)
+                        print("waiting for memory")
 
                 for i in processes:
+                    print("\nwaiting for", i.name)
                     i.join()
+                print("calculations done\nwaiting for data collection")
 
                 if "convolution search" in modes:
                     explanations["convolution search"] = shared_obj["convolution search"][0]
@@ -246,16 +252,17 @@ class Verbalizer:
                     pbar.update(1)
 
                 processes = []
-
+                print("collection done\nwaiting for compare search")
 
                 if "compare search" in modes:
                     explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)
                     pbar.update(1)
-
+                print("compare search done\nwaiting for ordering")
                 if "total order" in modes:  # NO PROCESS because fast
                     explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
                     pbar.update(1)
 
+                print("ordering done\nwaiting for search concatenation")
                 if "compare searches" in modes:
                     memory = psutil.virtual_memory().available / (1024**3)
                     spareable_mem = memory * 0.66
@@ -269,7 +276,7 @@ class Verbalizer:
                     #TODO add mp support for compare_searches
                     explanations["compare searches"] = t.compare_searches(orders_and_searches, sample_array)
                     pbar.update(1)
-
+                    print("search concatenation done\nnow verbalizing")
 
             if not self.dev:
                 return explanations, sample_array, None
@@ -286,10 +293,10 @@ class Verbalizer:
                 if "convolution search" in modes:
                     if not self.sgn:
                         (explanations["convolution search"], orders_and_searches["convolution search"]) = sm.convolution_search(
-                            sample_array, self.len_filters, metric=self.metric)
+                            sample_array.copy(), self.len_filters, metric=self.metric)
                     else:
                         (explanations["convolution search"], orders_and_searches["convolution search"]) = sm.convolution_search(
-                            sample_array, self.len_filters, self.sgn, self.metric)
+                            sample_array.copy(), self.len_filters, self.sgn, self.metric)
                 pbar.update(1)
                 if "span search" in modes:
                     if not self.sgn:
