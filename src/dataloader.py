@@ -15,7 +15,7 @@ import src.processing.shared_value_searches as svs
 
 class Verbalizer:
     def __init__(self, source: Union[str, List], standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
-                 config=None, dev=False, multiprocess=False,
+                 config=None, dev=False, multiprocess=True,
                  *args, **kwargs):
         """
         Verbalizer class
@@ -206,7 +206,9 @@ class Verbalizer:
         if self.multiprocess:
             to_calculate = []
             manager = multiprocessing.Manager()
-            shared_obj = manager.dict()
+            shared_explanations = manager.dict()
+            shared_orders = manager.dict()
+
 
             processes = []
             with tqdm(total=len(modes)) as pbar:
@@ -215,7 +217,8 @@ class Verbalizer:
                                                                                                    sample_array,
                                                                                                    self.len_filters,
                                                                                                    self.metric,
-                                                                                                   shared_obj),
+                                                                                                   shared_explanations,
+                                                                                                   shared_orders),
                                                         name="convsearch")
                     processes.append(conv_proc)
                     conv_proc.start()
@@ -228,7 +231,8 @@ class Verbalizer:
                                                                                                    sample_array,
                                                                                                    self.len_filters,
                                                                                                    self.metric,
-                                                                                                   shared_obj),
+                                                                                                   shared_explanations,
+                                                                                                   shared_orders),
                                                         name="spansearch")
                     processes.append(span_proc)
                     span_proc.start()
@@ -236,23 +240,31 @@ class Verbalizer:
                         time.sleep(1)
                         print("waiting for memory")
 
-                for i in processes:
-                    print("\nwaiting for", i.name)
-                    i.join()
-                print("calculations done\nwaiting for data collection")
+                q = [True, True]
+                copied = [False, False]
+                while any(q):
+                    q = svs.check_processes(processes)
+                    if not q[0] and not copied[0]:
+                        print("\ncopying convsearch results")
+                        explanations["convolution search"] = shared_explanations["convolution search"]
+                        orders_and_searches["convolution search"] = shared_orders["convolution search"]
+                        copied[0] = True
+                        print("\nconvsearch copy done")
+                        pbar.update(1)
 
-                if "convolution search" in modes:
-                    explanations["convolution search"] = shared_obj["convolution search"][0]
-                    orders_and_searches["convolution search"] = shared_obj["convolution search"][1]
-                    pbar.update(1)
+                    if not q[1] and not copied[1]:
+                        print("\ncopying spansearch results")
+                        explanations["span search"] = shared_explanations["span search"]
+                        orders_and_searches["span search"] = shared_orders["span search"]
+                        copied[1] = True
+                        print("\n spansearch copy done")
+                        pbar.update(1)
 
-                if "span search" in modes:
-                    explanations["span search"] = shared_obj["span search"][0]
-                    orders_and_searches["span search"] = shared_obj["span search"][1]
-                    pbar.update(1)
+                    time.sleep(1)
+
 
                 processes = []
-                print("collection done\nwaiting for compare search")
+                print("\ndata collection done\nwaiting for compare search")
 
                 if "compare search" in modes:
                     explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)
