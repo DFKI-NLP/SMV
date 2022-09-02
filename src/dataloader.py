@@ -264,6 +264,7 @@ class Verbalizer:
 
 
                 processes = []
+
                 print("\ndata collection done\nwaiting for compare search")
 
                 if "compare search" in modes:
