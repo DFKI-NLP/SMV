@@ -286,8 +286,8 @@ class Verbalizer:
                     sample_keys_chunks_points = []
                     for i in range(0, amount_procs):
                         sample_keys_chunks_points.append((i+1)*chunkssize+1)
-                    #TODO add mp support for compare_searches
-                    explanations["compare searches"] = t.compare_searches(orders_and_searches, sample_array)
+                    #TODO add mp support for concatenation_search
+                    explanations["compare searches"] = t.concatenation_search(orders_and_searches, sample_array)
                     pbar.update(1)
                     print("search concatenation done\nnow verbalizing")
 
@@ -327,7 +327,7 @@ class Verbalizer:
                     explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
                 pbar.update(1)
                 if "compare searches" in modes:
-                    explanations["compare searches"] = t.compare_searches(orders_and_searches, sample_array)
+                    explanations["compare searches"] = t.concatenation_search(orders_and_searches, sample_array)
                 pbar.update(1)
             # TODO: Maybe detokenize input_ids using tokenizer from self?
         if not self.dev:

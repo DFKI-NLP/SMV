@@ -1,3 +1,5 @@
+import multiprocessing
+
 import src.search_methods.spans as s
 import src.search_methods.filters as f
 import src.search_methods.tools as t
@@ -5,10 +7,11 @@ import src.search_methods.tools as t
 import src.processing.shared_methods as sm
 
 
-def process_map_convsearch(sgn, sample_array, len_filters, metric):
+def process_map_convsearch(sgn, sample_array, len_filters, metric, num_procs):
     if not sgn:
         (search, orders) = sm.convolution_search(
             sample_array, len_filters, metric=metric)
+
     else:
         (search, orders) = sm.convolution_search(
             sample_array, len_filters, sgn, metric=metric)
@@ -47,7 +50,7 @@ def shared_memory_total_search(shared_explanations, sample_array):
 
 
 def shared_memory_compare_searches(shared_explanations, shared_orders, sample_array):
-    shared_explanations["compare searches"] = t.compare_searches(shared_orders, sample_array)
+    shared_explanations["compare searches"] = t.concatenation_search(shared_orders, sample_array)
 
 
 def check_processes(processes):

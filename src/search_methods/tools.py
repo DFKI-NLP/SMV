@@ -307,7 +307,7 @@ def compare_search(searches: dict, samples):
     return coincidences
 
 
-def compare_searches(searches: dict, samples, **kwargs):
+def concatenation_search(searches: dict, samples, **kwargs):
     """
 
     :param searches:

@@ -28,6 +28,6 @@ def compare_search(previous_searches, samples):
     return coincedences
 
 
-def compare_searches(self, previous_searches, samples):
-    v = t.compare_searches(previous_searches, samples)
+def concatenation_search(self, previous_searches, samples):
+    v = t.concatenation_search(previous_searches, samples)
     return v
