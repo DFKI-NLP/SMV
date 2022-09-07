@@ -80,20 +80,20 @@ class ProcessHandler:
 
     def get_args(self, task: TaskBase):
         if task.TaskName == "ConvSearch":
-            return {"sgn":self.root.sgn,
+            return {"sgn": self.root.sgn,
                     "sample_array": self.samples,
                     "len_filters": self.root.len_filters,
                     "metric": self.root.metric,
-                    "shared_search": self.manager.dict(),
-                    "shared_order": self.manager.dict()}
+                    "shared_search": None,
+                    "shared_order": None}
 
-        if task.TaskName == "SpanTask":
-            return {"sgn":self.root.sgn,
+        if task.TaskName == "SpanSearch":
+            return {"sgn": self.root.sgn,
                     "sample_array": self.samples,
                     "len_filters": self.root.len_filters,
                     "metric": self.root.metric,
-                    "shared_search": self.manager.dict(),
-                    "shared_order": self.manager.dict()}
+                    "shared_search": None,
+                    "shared_order": None}
 
         if task.TaskName == "ConcatSearch":
             return [self.orders_and_searches, self.samples]
