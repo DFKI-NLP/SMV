@@ -1,5 +1,6 @@
 import multiprocessing as mp
 import multiprocessing.shared_memory as smm
+import sys
 
 import numpy as np
 from dataclasses import dataclass
@@ -53,15 +54,15 @@ def concat_task() -> TaskBase:
 class ProcessHandler:
     def __init__(self, loader: Verbalizer,
                  tasks: List[TaskBase],
-                 samples: np.array):
+                 samples: dict):
 
         self.root = loader
         self.manager = mp.Manager()
         self.tasks = self.order_tasks(tasks)
         self.samples = samples
-        self.samples_smm = smm.SharedMemory(create=True, size=samples.size)
-        self.samples_smm[:] = self.samples[:]
-        print(self.samples_smm)
+        self.samples_smm = smm.SharedMemory(create=True, size=sys.getsizeof(samples))
+        self.samples_buf = self.samples_smm.buf
+        # continue working here 1
         self.fulfilled_tasks = []
         self.orders_and_searches = None
 
@@ -115,12 +116,13 @@ class ProcessHandler:
         pass
 
     def start_task(self, task: TaskBase) -> List[mp.Process]:
+        processes = []
         if self.get_available_ram() > task.RequiredRamPerProcess:
             if self.check_requirements(task):
                 num_procs = int(min(self.get_available_ram()/task.RequiredRamPerProcess, task.DesiredProcesses))
-                processes = []
 
                 for i in range(num_procs):
+                    # continue working here 2
                     pass
 
         return processes
