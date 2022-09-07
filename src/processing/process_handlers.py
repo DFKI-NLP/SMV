@@ -1,4 +1,6 @@
 import multiprocessing as mp
+import multiprocessing.shared_memory as smm
+
 import numpy as np
 from dataclasses import dataclass
 from typing import Union, List
@@ -20,26 +22,26 @@ class TaskBase:
     RequiredRamPerProcess:  int  # in GBytes f.e. 1 = 1024*1024*1024 bytes
     DesiredProcesses: int
     TaskIndex: int
-    Task: staticmethod
+    Task: object  # preferably a method
     done = False
     associated_processes = []
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.TaskName
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Task {self.TaskName}"
 
 
-def conv_task():
-    return TaskBase("ConvSearch", None, 3, 4, 0, sm.convolution_search)
+def conv_task() -> TaskBase:
+    return TaskBase("ConvSearch", [], 3, 4, 0, sm.convolution_search)
 
 
-def span_task():
-    return TaskBase("SpanSearch", None, 3, 1, 1, sm.span_search)
+def span_task() -> TaskBase:
+    return TaskBase("SpanSearch", [], 3, 1, 1, sm.span_search)
 
 
-def concat_task():
+def concat_task() -> TaskBase:
     return TaskBase("ConcatSearch", ["ConvSearch", "SpanSearch"], 3, 2, 2, sm.concatenation_search)
 
 
@@ -57,11 +59,14 @@ class ProcessHandler:
         self.manager = mp.Manager()
         self.tasks = self.order_tasks(tasks)
         self.samples = samples
+        self.samples_smm = smm.SharedMemory(create=True, size=samples.size)
+        self.samples_smm[:] = self.samples[:]
+        print(self.samples_smm)
         self.fulfilled_tasks = []
         self.orders_and_searches = None
 
     @staticmethod
-    def order_tasks(tasks: List[TaskBase]):  # simple bubble sort as task length is very small
+    def order_tasks(tasks: List[TaskBase]) -> List[TaskBase]:  # simple bubble sort as task length is very small
         for _ in range(len(tasks)-1):
             for i in range(len(tasks)-1):
                 if tasks[i].TaskIndex > tasks[i+1].TaskIndex:
@@ -69,16 +74,16 @@ class ProcessHandler:
         return tasks
 
     @staticmethod
-    def get_available_ram():
+    def get_available_ram() -> float:
         return psutil.virtual_memory().available / (1024**3)
 
     @staticmethod
-    def equalsplit_data(data, pieces):  # https://stackoverflow.com/questions/312443/how-do-i-split-a-list-into-equally-sized-chunks
+    def equalsplit_data(data: np.array, pieces: int) -> list:  # https://stackoverflow.com/questions/312443/how-do-i-split-a-list-into-equally-sized-chunks
         """Yield successive pieces-sized chunks from data."""
         for i in range(0, len(data), pieces):
             yield data[i:i + pieces]
 
-    def get_args(self, task: TaskBase):
+    def get_args(self, task: TaskBase) -> dict:
         if task.TaskName == "ConvSearch":
             return {"sgn": self.root.sgn,
                     "sample_array": self.samples,
@@ -96,9 +101,9 @@ class ProcessHandler:
                     "shared_order": None}
 
         if task.TaskName == "ConcatSearch":
-            return [self.orders_and_searches, self.samples]
+            return {}
 
-    def check_requirements(self, task:TaskBase):
+    def check_requirements(self, task: TaskBase) -> bool:
         req = True
         if task.RequiredTasks:
             for i in task.RequiredTasks:
@@ -109,7 +114,7 @@ class ProcessHandler:
     def mainloop(self):
         pass
 
-    def start_task(self, task: TaskBase):
+    def start_task(self, task: TaskBase) -> List[mp.Process]:
         if self.get_available_ram() > task.RequiredRamPerProcess:
             if self.check_requirements(task):
                 num_procs = int(min(self.get_available_ram()/task.RequiredRamPerProcess, task.DesiredProcesses))
@@ -117,6 +122,8 @@ class ProcessHandler:
 
                 for i in range(num_procs):
                     pass
+
+        return processes
 
 
 
