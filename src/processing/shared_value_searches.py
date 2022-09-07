@@ -7,7 +7,7 @@ import src.search_methods.tools as t
 import src.processing.shared_methods as sm
 
 
-def process_map_convsearch(sgn, sample_array, len_filters, metric, num_procs):
+def process_map_convsearch(sgn, sample_array, len_filters, metric, **kwargs):
     if not sgn:
         (search, orders) = sm.convolution_search(
             sample_array, len_filters, metric=metric)
@@ -19,7 +19,7 @@ def process_map_convsearch(sgn, sample_array, len_filters, metric, num_procs):
     return search, orders
 
 
-def shared_memory_convsearch(sgn, sample_array, len_filters, metric, shared_search, shared_order):
+def shared_memory_convsearch(sgn, sample_array, len_filters, metric, shared_search, shared_order, **kwargs):
     if not sgn:
         (search, orders) = sm.convolution_search(
             sample_array, len_filters, metric=metric)
@@ -30,7 +30,7 @@ def shared_memory_convsearch(sgn, sample_array, len_filters, metric, shared_sear
     shared_search["convolution search"], shared_order["convolution search"] = search, orders
 
 
-def shared_memory_spansearch(sgn, sample_array, len_filters, metric, shared_search, shared_order):
+def shared_memory_spansearch(sgn, sample_array, len_filters, metric, shared_search, shared_order, **kwargs):
     if not sgn:
         (search, orders) = sm.span_search(
             sample_array, len_filters, metric=metric)

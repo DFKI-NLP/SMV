@@ -1,4 +1,5 @@
-import multiprocessing
+import multiprocessing as mp
+import numpy as np
 from dataclasses import dataclass
 from typing import Union, List
 
@@ -26,6 +27,9 @@ class TaskBase:
     def __str__(self):
         return self.TaskName
 
+    def __repr__(self):
+        return f"Task {self.TaskName}"
+
 
 def conv_task():
     return TaskBase("ConvSearch", None, 3, 4, 0, sm.convolution_search)
@@ -45,11 +49,16 @@ def concat_task():
 
 
 class ProcessHandler:
-    def __init__(self, loader: Verbalizer, tasks: List[TaskBase]):
+    def __init__(self, loader: Verbalizer,
+                 tasks: List[TaskBase],
+                 samples: np.array):
 
         self.root = loader
+        self.manager = mp.Manager()
         self.tasks = self.order_tasks(tasks)
+        self.samples = samples
         self.fulfilled_tasks = []
+        self.orders_and_searches = None
 
     @staticmethod
     def order_tasks(tasks: List[TaskBase]):  # simple bubble sort as task length is very small
@@ -62,6 +71,32 @@ class ProcessHandler:
     @staticmethod
     def get_available_ram():
         return psutil.virtual_memory().available / (1024**3)
+
+    @staticmethod
+    def equalsplit_data(data, pieces):  # https://stackoverflow.com/questions/312443/how-do-i-split-a-list-into-equally-sized-chunks
+        """Yield successive pieces-sized chunks from data."""
+        for i in range(0, len(data), pieces):
+            yield data[i:i + pieces]
+
+    def get_args(self, task: TaskBase):
+        if task.TaskName == "ConvSearch":
+            return {"sgn":self.root.sgn,
+                    "sample_array": self.samples,
+                    "len_filters": self.root.len_filters,
+                    "metric": self.root.metric,
+                    "shared_search": self.manager.dict(),
+                    "shared_order": self.manager.dict()}
+
+        if task.TaskName == "SpanTask":
+            return {"sgn":self.root.sgn,
+                    "sample_array": self.samples,
+                    "len_filters": self.root.len_filters,
+                    "metric": self.root.metric,
+                    "shared_search": self.manager.dict(),
+                    "shared_order": self.manager.dict()}
+
+        if task.TaskName == "ConcatSearch":
+            return [self.orders_and_searches, self.samples]
 
     def check_requirements(self, task:TaskBase):
         req = True
@@ -77,7 +112,12 @@ class ProcessHandler:
     def start_task(self, task: TaskBase):
         if self.get_available_ram() > task.RequiredRamPerProcess:
             if self.check_requirements(task):
-                pass
+                num_procs = int(min(self.get_available_ram()/task.RequiredRamPerProcess, task.DesiredProcesses))
+                processes = []
+
+                for i in range(num_procs):
+                    pass
+
 
 
 
