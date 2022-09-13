@@ -7,7 +7,8 @@ import thermostat
 import datasets
 import src.dataloader as dataloader
 if __name__ == "__main__":
-    config_path = "configs/mean_dev.yml"
+    multiprocessing.freeze_support()
+    config_path = "configs/toy_dev.yml"
 
     with open(config_path) as stream:
         config = yaml.safe_load(stream)
