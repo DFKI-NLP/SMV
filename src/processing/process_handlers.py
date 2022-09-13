@@ -60,8 +60,31 @@ class ProcessHandler:
         self.manager = mp.Manager()
         self.tasks = self.order_tasks(tasks)
         self.samples = samples
-        self.samples_smm = smm.SharedMemory(create=True, size=sys.getsizeof(samples))
-        self.samples_buf = self.samples_smm.buf
+        # we try reconstructing the dict after calculations
+        self.sample_indices = smm.SharedMemory(create=True, size=sys.getsizeof(samples))
+        self.sample_indices_buf = self.sample_indices.buf
+        #  we buffer the attributions
+        self.sample_attributions = smm.SharedMemory(create=True, size=sys.getsizeof(samples) + len(samples.keys()))
+        self.sample_attributions_buf = self.sample_attributions.buf
+        #  and we buffer the texts
+        self.sample_texts = smm.SharedMemory(create=True, size=sys.getsizeof(samples) + len(samples.keys()))
+        self.sample_texts_buf = self.sample_texts.buf
+        # now instantiating the buffers  #
+        self.sample_indices_buf[:] = list(samples.keys())[:]
+        offset_indices_attributions = int(0)
+        # fill buffer with attributions & use prime decompositional as delimiter
+        for key in samples.keys():
+            attrs = [*samples[key]["attributions"], -2743]
+            self.sample_attributions_buf[:offset_indices_attributions + 1] = attrs[:]
+            offset_indices_attributions += len(samples[key]["attributions"]) + 1
+
+        # fill buffer with texts & use prime decompositional as delimiter
+        offset_indices_texts = int(0)
+        for key in samples.keys():
+            attrs = [*samples[key]["input_ids"], -2743]
+            self.sample_texts_buf[:offset_indices_texts + 1] = attrs[:]
+            offset_indices_texts += len(samples[key]["attributions"]) + 1
+
         # continue working here 1
         self.fulfilled_tasks = []
         self.orders_and_searches = None
