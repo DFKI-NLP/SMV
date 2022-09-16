@@ -1,7 +1,6 @@
 import multiprocessing as mp
-import multiprocessing.shared_memory as smm
 import sys
-from array import array
+from numba import jit
 
 import numpy as np
 from dataclasses import dataclass
@@ -13,22 +12,32 @@ from src.dataloader import Verbalizer
 import src.search_methods.searches as f
 import src.search_methods.tools as t
 
-import src.processing.shared_methods as sm
-
+import src.processing.shared_value_searches as sh
 
 @dataclass(init=True)
-class TaskBase:
+class Worker:
+    process: mp.Process
+    pipe: mp.connection
+    needs_update: bool
+
+@dataclass(init=True)
+class WorkerManager:
     TaskName: str
     RequiredTasks: List[str]
     RequiredRamPerProcess:  int  # in GBytes f.e. 1 = 1024*1024*1024 bytes
     DesiredProcesses: int
     TaskIndex: int
     Task: any  # preferably a method but anything callable works
+    TaskID = None
     started = False
+    active = True
     done = False
-    associated_processes = []  # maybe idk
-    associated_pipes = []
+    workers: []  # List[Worker]
     dones = []
+    data = {}
+
+    processes_with_work = []
+    iterator = None  # generator object
 
     def __str__(self) -> str:
         return self.TaskName
@@ -36,16 +45,37 @@ class TaskBase:
     def __repr__(self) -> str:
         return f"Task {self.TaskName}"
 
-def conv_task() -> TaskBase:
-    return TaskBase("convolution search", [], 3, 4, 0, sm.convolution_search)
+    def start(self) -> None:
+        for i in self.workers:
+            Worker.process.start()
+        self.started = True
+
+    def get(self) -> Tuple[List[Tuple[dict, list, bool]], List[int]]:
+        result = []
+        workers_without_work = []
+        for worker in range(len(self.workers)):
+            if self.workers[worker].pipe.poll:
+                result.append(self.workers[worker].pipe.recv())
+            else:
+                workers_without_work.append(worker)
+        return result, workers_without_work
+
+    def set(self, index: int, data: any) -> None:
+        self.workers[index].pipe.send(data)
+
+    def kill(self, index):
+        self.workers[index].process.kill()
+
+def conv_task() -> WorkerManager:
+    return WorkerManager("convolution search", [], 2, 4, 0, sh.shared_memory_convsearch)
 
 
-def span_task() -> TaskBase:
-    return TaskBase("span search", [], 3, 1, 1, sm.span_search)
+def span_task() -> WorkerManager:
+    return WorkerManager("span search", [], 2, 1, 1, sh.shared_memory_spansearch)
 
 
-def concat_task() -> TaskBase:
-    return TaskBase("concatenation search", ["convolution search", "span search"], 3, 2, 2, sm.concatenation_search)
+def concat_task() -> WorkerManager:
+    return WorkerManager("concatenation search", ["convolution search", "span search"], 3, 2, 2, sh.shared_memory_compare_searches)
 
 
 ########################################################################################################################
@@ -57,106 +87,92 @@ class ProcessHandler:
     # constants
 
     def __init__(self, loader: Verbalizer,
-                 tasks: List[TaskBase],
+                 tasks: List[WorkerManager],
                  samples: dict,
                  maxram: float = -1):
 
         self.root = loader
-        self.tasks = self.order_tasks(tasks)
+        self.worker_managers = self.order_tasks(tasks)
         self.samples = samples
+        self.sample_keys = list(samples.keys())
         self.maxram = maxram
 
-        self.fulfilled_tasks = []
-        self.orders_and_searches = None
+        self.working_managers = []
+        self.fulfilled_tasks = [False for i in range(len(tasks))]
+        self.orders_and_searches = {}
+        self.explanations = {}
 
     @staticmethod
-    def order_tasks(tasks: List[TaskBase]) -> List[TaskBase]:  # simple bubble sort as task length is very small
-        for _ in range(len(tasks)-1):
-            for i in range(len(tasks)-1):
-                if tasks[i].TaskIndex > tasks[i+1].TaskIndex:
-                    tasks[i], tasks[i+1] = tasks[i+1], tasks[i]
-        return tasks
+    def order_tasks(managers: List[WorkerManager]) -> List[WorkerManager]:  # simple bubble sort as task length is very small
+        for _ in range(len(managers) - 1):
+            for i in range(len(managers) - 1):
+                if managers[i].TaskIndex > managers[i + 1].TaskIndex:
+                    managers[i], managers[i + 1] = managers[i + 1], managers[i]
 
-    @staticmethod
-    def equalsplit_data(data: np.array, pieces: int) -> list:  # https://stackoverflow.com/questions/312443/how-do-i-split-a-list-into-equally-sized-chunks
-        """Yield successive pieces-sized chunks from data."""
-        for i in range(0, len(data), pieces):
-            yield data[i:i + pieces]
+        for i in range(len(managers)):
+            managers[i].TaskID = i
+
+        return managers
 
     def get_available_ram(self) -> float:
         return min(psutil.virtual_memory().available / (1024**3), self.maxram if self.maxram >= 0 else sys.maxsize)
 
-    def get_args(self, task: TaskBase) -> dict:
-        if task.TaskName == "ConvSearch":
-            return {"sgn": self.root.sgn,
-                    "sample_array": self.samples,
-                    "len_filters": self.root.len_filters,
-                    "metric": self.root.metric,
-                    "shared_search": None,
-                    "shared_order": None}
+    def get_args(self, task: WorkerManager) -> dict:
+        return {}
 
-        if task.TaskName == "SpanSearch":
-            return {"sgn": self.root.sgn,
-                    "sample_array": self.samples,
-                    "len_filters": self.root.len_filters,
-                    "metric": self.root.metric,
-                    "shared_search": None,
-                    "shared_order": None}
+    @staticmethod
+    def iterator(listlike):
+        for i in range(len(listlike)):
+            yield listlike[i]
 
-        if task.TaskName == "ConcatSearch":
-            return {}
-
-    def check_requirements(self, task: TaskBase) -> bool:
+    def check_requirements(self, manager: WorkerManager) -> bool:
         req = True
-        if task.RequiredTasks:
-            for i in task.RequiredTasks:
+        if manager.RequiredTasks:
+            for i in manager.RequiredTasks:
                 if i not in self.fulfilled_tasks:
                     req = False
         return req
 
     def __call__(self, *args, **kwargs) -> dict:
-        orders_and_searches = {}
-        for task in self.tasks:
-            if not task.done:
-                for process in range(len(task.associated_processes)):
-                    task.associated_processes[process].join(timeout=0.010)  # 10ms
-                    if task.associated_processes[process].is_alive:
-                        continue
-                    else:
-                        _ = task.associated_pipes[process].recv()
+        prepared_data = {}
+        return prepared_data
 
+    def generate_worker(self, manager: WorkerManager):
+        parent, child = mp.Pipe()
+        process = mp.Process(target=manager.Task, args=(self.root.sgn,
+                                                        self.root.len_filters,
+                                                        self.root.metric,
+                                                        child))
+        return Worker(process, parent, True)
 
-        return orders_and_searches
+    def check_manager(self, manager: WorkerManager):
+        result, workers_without_work = manager.get()
+        for entry in result:
+            self.orders_and_searches[manager.TaskName] = {entry[2]: entry[0]}
+            self.explanations[manager.TaskName] = {entry[2]: entry[0]}
+        for worker in workers_without_work:
+            try:
+                if manager.requests:
+                    manager.set(worker, self.samples[next(manager.iterator)])
+                else:
+                    manager.kill(worker)
+            except StopIteration:
+                manager.requests = False
 
-    def start_task(self, task: TaskBase) -> None:
-        processes = []
-        pipes = []
-        if self.get_available_ram() > task.RequiredRamPerProcess:
-            if self.check_requirements(task):
-                num_procs = int(min(self.get_available_ram()/task.RequiredRamPerProcess, task.DesiredProcesses))
-                ind_slicer = self.equalsplit_data(list(self.samples.keys()), num_procs)
-                for i in range(num_procs):
-                    par, child = mp.Pipe()
-                    data = {}
-                    for keys in next(ind_slicer):
-                        for key in keys:
-                            data[key] = {"input_ids": self.samples[key]["input_ids"],
-                                         "attributions": self.samples[key]["attributions"]}
-                    processes.append(mp.Process(target=task.Task, args=(self.root.sgn,
-                                                                        data,
-                                                                        self.root.len_filters,
-                                                                        self.root.metric,
-                                                                        child),
-                                                daemon=True)
-                                     )
-                    pipes.append(par)
-
-        task.associated_processes = processes
-        task.associated_pipes = pipes
-        for i in processes:
-            i.start()
-        task.started = True
-
+    def start_manager(self, manager: WorkerManager) -> None:
+        worker_objects = []
+        if self.check_requirements(manager):
+            available_ram = self.get_available_ram()
+            if available_ram > manager.RequiredRamPerProcess:
+                num_workers = min(int(available_ram/manager.RequiredRamPerProcess), manager.DesiredProcesses)
+                for i in range(num_workers):
+                    worker_objects.append(self.generate_worker(manager))
+                manager.workers = worker_objects
+                manager.iterator = self.iterator(self.sample_keys)
+                manager.start()
+                self.working_managers.append(manager)
+            else:
+                raise MemoryError("Not enough memory to start at least 1 process")
 
 
 

@@ -7,35 +7,33 @@ import src.processing.shared_methods as sm
 
 
 def shared_memory_convsearch(sgn: str,
-                             sample_array: dict,
                              len_filters: int,
                              metric,
                              child_pipe) -> None:  # rename
-    if not sgn:
-        (search, orders) = sm.convolution_search(
-            sample_array, len_filters, metric=metric)
-    else:
-        (search, orders) = sm.convolution_search(
-            sample_array, len_filters, sgn, metric=metric)
 
-    child_pipe.send(search, orders)
-    child_pipe.close()
+    sorted_filters = f.generate_filters(len_filters)
+    while True:
+        data, key = child_pipe.recv()
+        coherent_words_sum, coherent_values_sum = f.single_convolution_search(data, sgn, metric, sorted_filters, False)
+        _words, _vals = f.result_filtering(coherent_values_sum, coherent_words_sum)
+        prepared_data_snippet = {{"indices": _words, "values": _vals}}
+        verbalization = t.single_verbalize_field_span_search(prepared_data_snippet, data, sgn)
+        child_pipe.send((prepared_data_snippet, verbalization, key))
 
 
 def shared_memory_spansearch(sgn: str,
-                             sample_array: dict,
                              len_filters: int,
                              metric,
                              child_pipe) -> None:  # rename
-    if not sgn:
-        (search, orders) = sm.span_search(
-            sample_array, len_filters, metric=metric)
-    else:
-        (search, orders) = sm.span_search(
-            sample_array, len_filters, sgn, metric=metric)
 
-    child_pipe.send(search, orders)
-    child_pipe.close()
+    sorted_filters = f.generate_spans(len_filters)
+    while True:
+        data, key = child_pipe.recv()
+        coherent_words_sum, coherent_values_sum = f.single_convolution_search(data, sgn, metric, sorted_filters, False)
+        _words, _vals = f.result_filtering(coherent_values_sum, coherent_words_sum)
+        prepared_data_snippet = {{"indices": _words, "values": _vals}}
+        verbalization = t.single_verbalize_field_span_search(prepared_data_snippet, data, sgn)
+        child_pipe.send((prepared_data_snippet, verbalization, key))
 
 
 def shared_memory_compare_search(shared_explanations, shared_orders, sample_array):

@@ -206,6 +206,52 @@ def get_metric_values(mode: dict):
     #args = [selected_mode[1](_args[i]) for i in range(1, len(_args))]
     return args
 
+def single_verbalize_field_span_search(prepared_data, samples, sgn="+"):
+    """
+    Verbalizes results of field_search or span_search
+    :param prepared_data: output of one of the searches
+    :param samples: input array -> see dataloader.read_samples
+    :param sgn: unused for now
+    :return: Dict[sample_key: verbalization_list->list ]
+    """
+    verbalization_dict = {}
+
+    sum_values = 0
+    for i in samples["attributions"]:
+        sum_values += i if i > 0 else 0
+
+    words = []
+    values = []
+    sorted_by_max_values = [i for i in reversed(sorted(prepared_data["values"]))]
+    for value in sorted_by_max_values:
+        indexof = prepared_data["values"].index(value)
+        try:
+            values.append(sum([samples["attributions"][indexid]
+                               for indexid in prepared_data["indices"][indexof]]))
+            _ = []
+            for entry in prepared_data["indices"][indexof]:
+                _.append(samples["input_ids"][entry]) #.replace("▁", " "))
+            words.append(_)
+        except TypeError:
+            words.append([None])
+
+    verbalizations = []
+    for snippet in range(len(words)):
+        verbalization = "snippet: '"
+        for word in words[snippet]:
+            if not word:
+                continue
+            verbalization += word + " "
+        try:
+            coverage = round((values[snippet] / sum_values) * 100, 2)
+            verbalization += "' contains {}% of prediction score.".format(str(coverage))
+            verb_cov_tuple = (verbalization, coverage)
+        except Exception as e:
+            verbalization = "No coherent values found."
+            verb_cov_tuple = (verbalization, 0.0)
+
+        verbalizations.append(verb_cov_tuple)
+    return verbalizations
 
 def verbalize_field_span_search(prepared_data, samples, sgn="+"):
     """
@@ -217,41 +263,7 @@ def verbalize_field_span_search(prepared_data, samples, sgn="+"):
     """
     verbalization_dict = {}
     for key in prepared_data.keys():
-        sum_values = 0
-        for i in samples[key]["attributions"]:
-            sum_values += i if i > 0 else 0
-
-        words = []
-        values = []
-        sorted_by_max_values = [i for i in reversed(sorted(prepared_data[key]["values"]))]
-        for value in sorted_by_max_values:
-            indexof = prepared_data[key]["values"].index(value)
-            try:
-                values.append(sum([samples[key]["attributions"][indexid]
-                                   for indexid in prepared_data[key]["indices"][indexof]]))
-                _ = []
-                for entry in prepared_data[key]["indices"][indexof]:
-                    _.append(samples[key]["input_ids"][entry]) #.replace("▁", " "))
-                words.append(_)
-            except TypeError:
-                words.append([None])
-
-        verbalizations = []
-        for snippet in range(len(words)):
-            verbalization = "snippet: '"
-            for word in words[snippet]:
-                if not word:
-                    continue
-                verbalization += word + " "
-            try:
-                coverage = round((values[snippet] / sum_values) * 100, 2)
-                verbalization += "' contains {}% of prediction score.".format(str(coverage))
-                verb_cov_tuple = (verbalization, coverage)
-            except Exception as e:
-                verbalization = "No coherent values found."
-                verb_cov_tuple = (verbalization, 0.0)
-
-            verbalizations.append(verb_cov_tuple)
+        verbalizations = single_verbalize_field_span_search(prepared_data[key], samples[key], sgn=sgn)
         verbalization_dict[key] = [v for v, c in sorted(verbalizations, key=lambda vc: vc[1], reverse=True)]
     return verbalization_dict
 

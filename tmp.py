@@ -44,3 +44,4 @@ if __name__ == "__main__":
     tasks = [ph.span_task(), ph.conv_task()]
     multiprocessing.freeze_support()
     Handler = ph.ProcessHandler(loader, tasks, loader.read_samples())
+    Handler()
