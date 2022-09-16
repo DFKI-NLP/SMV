@@ -1,13 +1,16 @@
 import multiprocessing
 
-import src.search_methods.spans as s
-import src.search_methods.filters as f
+import src.search_methods.searches as f
 import src.search_methods.tools as t
 
 import src.processing.shared_methods as sm
 
 
-def shared_memory_convsearch(sgn: str, sample_array: dict, len_filters: int, metric, child_pipe, evt) -> None:  # rename
+def shared_memory_convsearch(sgn: str,
+                             sample_array: dict,
+                             len_filters: int,
+                             metric,
+                             child_pipe) -> None:  # rename
     if not sgn:
         (search, orders) = sm.convolution_search(
             sample_array, len_filters, metric=metric)
@@ -19,7 +22,11 @@ def shared_memory_convsearch(sgn: str, sample_array: dict, len_filters: int, met
     child_pipe.close()
 
 
-def shared_memory_spansearch(sgn: str, sample_array: dict, len_filters: int, metric, child_pipe, evt) -> None:  # rename
+def shared_memory_spansearch(sgn: str,
+                             sample_array: dict,
+                             len_filters: int,
+                             metric,
+                             child_pipe) -> None:  # rename
     if not sgn:
         (search, orders) = sm.span_search(
             sample_array, len_filters, metric=metric)

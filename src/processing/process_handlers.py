@@ -10,8 +10,7 @@ from typing import Union, List, Tuple
 import psutil
 
 from src.dataloader import Verbalizer
-import src.search_methods.spans as s
-import src.search_methods.filters as f
+import src.search_methods.searches as f
 import src.search_methods.tools as t
 
 import src.processing.shared_methods as sm

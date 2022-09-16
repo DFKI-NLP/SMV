@@ -6,7 +6,6 @@ import transformers
 from tqdm import tqdm
 from typing import List, Union
 import psutil
-from multiprocessing import Process, Pool
 
 import src.search_methods.tools as t
 import src.processing.shared_methods as sm
