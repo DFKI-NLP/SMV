@@ -209,7 +209,6 @@ class Verbalizer:
             shared_explanations = manager.dict()
             shared_orders = manager.dict()
 
-
             processes = []
             with tqdm(total=len(modes)) as pbar:
                 if "convolution search" in modes:

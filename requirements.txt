@@ -1,9 +1,9 @@
 numpy
 numba
 transformers
-thermostat
-
+datasets
 thermostat-datasets
 imgkit
 tqdm
 psutil
+pandas

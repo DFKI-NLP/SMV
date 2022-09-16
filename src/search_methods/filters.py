@@ -1,12 +1,14 @@
 from warnings import warn
 from src.search_methods.tools import *
 from itertools import permutations
+from typing import Tuple, List, Dict
 # start of filter-based search
 #warnings.simplefilter("always")
 
 
 def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=None, mode: str = "mean: 1",
-                       randomize_attribs=False):
+                       randomize_attribs=False) -> dict:
+    # split for multiple processes -> per instance calculation
     """
     perfoms coherency search amongst a sample loaded by dataloader.Verbalizer.read_samples()
     first generates binary-filters of length n (for example [1, 0, 1], [0, 1, 1] or [1, 1, 0]
@@ -30,39 +32,10 @@ def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, 
     words_and_vals = {}
     for key in samples.keys():
         sample = samples[key]
-        attribs = np.array(sample["attributions"]).astype("float32")/abs(np.max(sample["attributions"]))  # normalized
-
-        if randomize_attribs:
-            attribs = np.random.rand(*attribs.shape)
-
-        if "mean" in mode["name"]:
-            metric = get_mean(get_metric_values(mode)[0:], attribs)
-
-        elif "quantile" in mode["name"]:
-            stdevval = get_stdev(get_variance(attribs))
-            metric = stdevval * get_metric_values(mode)[0]
-
-        elif "variance" in mode["name"]:
-            variance = get_variance(attribs)
-            metric = variance * get_metric_values(mode)[0]
-
-        try:
-            if not sgn:
-                coherent_words_sum, coherent_values_sum = filter_span_sample_sum(sorted_filters, attribs, metric)
-            else:
-                coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric,
-                                                                                     sgn)
-        except Exception as e:
-            coherent_words_sum, coherent_values_sum = [[None]], [[None]]
-
-        coherent_words_sum, coherent_values_sum = zip(*reversed(sorted(zip(coherent_words_sum, coherent_values_sum))))
+        coherent_words_sum, coherent_values_sum = single_convolution_search(sample, sgn, mode,
+                                                                            sorted_filters, randomize_attribs)
         # issue: how to keep track of samples
-        _words = []
-        _values = []
-        for i in range(len(coherent_words_sum)):
-            if not coherent_words_sum[i] in _words:
-                _words.append(coherent_words_sum[i])
-                _values.append(coherent_values_sum[i])
+        _words, _values = result_filtering(coherent_words_sum, coherent_values_sum)
         words_and_vals[key] = {"indices": _words,
                                "values": _values}
 
@@ -81,6 +54,41 @@ def generate_filters(filter_length):
             filters.append([*[*[1] * i, *[0]*(filter_length-i)]])
     filters = permute_filter_blueprints(filters)
     return filters
+
+
+def single_convolution_search(sample: dict, sgn: str,
+                              mode: any,
+                              sorted_filters: np.ndarray,
+                              randomize_attribs: bool = False) -> Tuple[List, List]:
+    attribs = np.array(sample["attributions"]).astype("float32")/abs(np.max(sample["attributions"]))  # normalized
+
+    if randomize_attribs:
+        attribs = np.random.rand(*attribs.shape)
+
+    if "mean" in mode["name"]:
+        metric = get_mean(get_metric_values(mode)[0:], attribs)
+
+    elif "quantile" in mode["name"]:
+        stdevval = get_stdev(get_variance(attribs))
+        metric = stdevval * get_metric_values(mode)[0]
+
+    elif "variance" in mode["name"]:
+        variance = get_variance(attribs)
+        metric = variance * get_metric_values(mode)[0]
+    else:
+        raise RuntimeError("no metric specified")
+
+    try:
+        if not sgn:
+            coherent_words_sum, coherent_values_sum = filter_span_sample_sum(sorted_filters, attribs, metric)
+        else:
+            coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric,
+                                                                                 sgn)
+    except Exception as e:
+        coherent_words_sum, coherent_values_sum = [[None]], [[None]]
+
+    coherent_words_sum, coherent_values_sum = zip(*reversed(sorted(zip(coherent_words_sum, coherent_values_sum))))
+    return coherent_words_sum, coherent_values_sum
 
 
 def permute_filter_blueprints(filters):
@@ -114,6 +122,16 @@ def generate_filters(filter_length):
             filters.append([*[*[1] * i, *[0]*(filter_length-i)]])
     filters = permute_filter_blueprints(filters)
     return filters
+
+
+def result_filtering(coherent_words_sum, coherent_values_sum):
+    _words, _values = [], []
+    for i in range(len(coherent_words_sum)):
+        if not coherent_words_sum[i] in _words:
+            _words.append(coherent_words_sum[i])
+            _values.append(coherent_values_sum[i])
+
+    return _words, _values
 
 
 def permute_filter_blueprints(filters):

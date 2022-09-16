@@ -1,6 +1,6 @@
 from src.search_methods.tools import *
 import numpy as np
-
+import src.search_methods.filters as fl
 # span based filter search
 
 
@@ -15,6 +15,7 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=Non
     :param top_n_coherences: how many coherences should be returned?
     :param sgn: sign sensitive search?
     :param mode: metric to use
+    :param randomize_attribs: do we want to randomize the sample attributions
     :return: dictionary composed of: keys=keys of samples values: (sample_snippet_indices, sample_snippet_values)
     """
 
@@ -22,43 +23,9 @@ def span_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=Non
     words_and_vals = {}
     for key in samples.keys():
         sample = samples[key]
-        attribs = np.array(sample["attributions"].copy()).astype("float32")/abs(np.max(sample["attributions"]))
-
-        if randomize_attribs:
-            attribs = np.random.rand(*attribs.shape)
-
-        if "quantile" in mode["name"]:
-            stdevval = get_stdev(get_variance(attribs))
-            metric = stdevval * get_metric_values(mode)[0]
-
-        elif "variance" in mode["name"]:
-            variance = get_variance(attribs)
-            attribs = variance
-            metric = stdevval * get_metric_values(mode)[0]
-
-        else:
-            if mode is None:
-                mode = {"name": "mean", "value": 1}
-            metric = get_mean(get_metric_values(mode)[0:], attribs)
-
-        try:
-            if not sgn:
-                coherent_words_sum, coherent_values_sum = filter_span_sample_sum(sorted_filters, attribs, metric)
-
-            else:
-                coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric,
-                                                                                     sgn)
-
-        except Exception as e:
-            coherent_words_sum, coherent_values_sum = [[None]], [[None]]
-
-        coherent_words_sum, coherent_values_sum = zip(*reversed(sorted(zip(coherent_words_sum, coherent_values_sum))))
-        _words = []
-        _values = []
-        for i in range(len(coherent_words_sum)):
-            if not coherent_words_sum[i] in _words:
-                _words.append(coherent_words_sum[i])
-                _values.append(coherent_values_sum[i])
+        coherent_words_sum, coherent_values_sum = fl.single_convolution_search(sample, sgn, mode, sorted_filters,
+                                                                               randomize_attribs)
+        _words, _values = fl.result_filtering(coherent_words_sum, coherent_values_sum)
         words_and_vals[key] = {"indices": _words,
                                "values": _values}
 

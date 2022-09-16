@@ -1,10 +1,11 @@
 import multiprocessing as mp
 import multiprocessing.shared_memory as smm
 import sys
+from array import array
 
 import numpy as np
 from dataclasses import dataclass
-from typing import Union, List
+from typing import Union, List, Tuple
 
 import psutil
 
@@ -23,9 +24,12 @@ class TaskBase:
     RequiredRamPerProcess:  int  # in GBytes f.e. 1 = 1024*1024*1024 bytes
     DesiredProcesses: int
     TaskIndex: int
-    Task: object  # preferably a method but anything callable works
+    Task: any  # preferably a method but anything callable works
+    started = False
     done = False
-    associated_processes = []
+    associated_processes = []  # maybe idk
+    associated_pipes = []
+    dones = []
 
     def __str__(self) -> str:
         return self.TaskName
@@ -33,17 +37,16 @@ class TaskBase:
     def __repr__(self) -> str:
         return f"Task {self.TaskName}"
 
-
 def conv_task() -> TaskBase:
-    return TaskBase("ConvSearch", [], 3, 4, 0, sm.convolution_search)
+    return TaskBase("convolution search", [], 3, 4, 0, sm.convolution_search)
 
 
 def span_task() -> TaskBase:
-    return TaskBase("SpanSearch", [], 3, 1, 1, sm.span_search)
+    return TaskBase("span search", [], 3, 1, 1, sm.span_search)
 
 
 def concat_task() -> TaskBase:
-    return TaskBase("ConcatSearch", ["ConvSearch", "SpanSearch"], 3, 2, 2, sm.concatenation_search)
+    return TaskBase("concatenation search", ["convolution search", "span search"], 3, 2, 2, sm.concatenation_search)
 
 
 ########################################################################################################################
@@ -52,43 +55,18 @@ def concat_task() -> TaskBase:
 
 
 class ProcessHandler:
-    #constants
-    prime_delimiter = -2743
+    # constants
 
     def __init__(self, loader: Verbalizer,
                  tasks: List[TaskBase],
-                 samples: dict):
+                 samples: dict,
+                 maxram: float = -1):
 
-        self.manager = mp.Manager()  # deprecated?
         self.root = loader
         self.tasks = self.order_tasks(tasks)
         self.samples = samples
-        # we try reconstructing the dict after calculations
-        self.sample_indices = smm.SharedMemory(create=True, size=sys.getsizeof(samples))
-        self.sample_indices_buf = self.sample_indices.buf
-        #  we buffer the attributions
-        self.sample_attributions = smm.SharedMemory(create=True, size=sys.getsizeof(samples) + len(samples.keys()))
-        self.sample_attributions_buf = self.sample_attributions.buf
-        #  and we buffer the texts
-        self.sample_texts = smm.SharedMemory(create=True, size=sys.getsizeof(samples) + len(samples.keys()))
-        self.sample_texts_buf = self.sample_texts.buf
-        # now instantiating the buffers  #
-        self.sample_indices_buf[:] = list(samples.keys())[:]
-        offset_indices_attributions = int(0)
-        # fill buffer with attributions & use prime decompositional as delimiter
-        for key in samples.keys():
-            attrs = [*samples[key]["attributions"], self.prime_delimiter]
-            self.sample_attributions_buf[:offset_indices_attributions + 1] = attrs[:]
-            offset_indices_attributions += len(samples[key]["attributions"]) + 1
+        self.maxram = maxram
 
-        # fill buffer with texts & use prime decompositional as delimiter
-        offset_indices_texts = int(0)
-        for key in samples.keys():
-            attrs = [*samples[key]["input_ids"], self.prime_delimiter]
-            self.sample_texts_buf[:offset_indices_texts + 1] = attrs[:]
-            offset_indices_texts += len(samples[key]["attributions"]) + 1
-
-        # continue working here 1
         self.fulfilled_tasks = []
         self.orders_and_searches = None
 
@@ -101,38 +79,13 @@ class ProcessHandler:
         return tasks
 
     @staticmethod
-    def get_available_ram() -> float:
-        return psutil.virtual_memory().available / (1024**3)
-
-    @staticmethod
     def equalsplit_data(data: np.array, pieces: int) -> list:  # https://stackoverflow.com/questions/312443/how-do-i-split-a-list-into-equally-sized-chunks
         """Yield successive pieces-sized chunks from data."""
         for i in range(0, len(data), pieces):
             yield data[i:i + pieces]
 
-    def attr_instance_generator(self) -> np.ndarray:
-        item = None
-        index = 0
-        while index < len(self.sample_texts_buf):
-            ret = []
-            while self.sample_texts_buf[index] != self.prime_delimiter:
-                ret.append(self.sample_texts_buf[index])
-                index += 1
-            if self.sample_texts_buf[index] == self.prime_delimiter:
-                index += 1
-            yield np.array(ret, dtype=np.float32)
-
-    def text_instance_generator(self) -> List[int]:
-        item = None
-        index = 0
-        while index < len(self.sample_texts_buf):
-            ret = []
-            while self.sample_texts_buf[index] != self.prime_delimiter:
-                ret.append(self.sample_texts_buf[index])
-                index += 1
-            if self.sample_texts_buf[index] == self.prime_delimiter:
-                index += 1
-            yield ret
+    def get_available_ram(self) -> float:
+        return min(psutil.virtual_memory().available / (1024**3), self.maxram if self.maxram >= 0 else sys.maxsize)
 
     def get_args(self, task: TaskBase) -> dict:
         if task.TaskName == "ConvSearch":
@@ -162,21 +115,48 @@ class ProcessHandler:
                     req = False
         return req
 
-    def mainloop(self):
-        pass
+    def __call__(self, *args, **kwargs) -> dict:
+        orders_and_searches = {}
+        for task in self.tasks:
+            if not task.done:
+                for process in range(len(task.associated_processes)):
+                    task.associated_processes[process].join(timeout=0.010)  # 10ms
+                    if task.associated_processes[process].is_alive:
+                        continue
+                    else:
+                        _ = task.associated_pipes[process].recv()
 
-    def start_task(self, task: TaskBase) -> List[mp.Process]:
+
+        return orders_and_searches
+
+    def start_task(self, task: TaskBase) -> None:
         processes = []
+        pipes = []
         if self.get_available_ram() > task.RequiredRamPerProcess:
             if self.check_requirements(task):
                 num_procs = int(min(self.get_available_ram()/task.RequiredRamPerProcess, task.DesiredProcesses))
-
+                ind_slicer = self.equalsplit_data(list(self.samples.keys()), num_procs)
                 for i in range(num_procs):
-                    # continue working here 2
-                    pass
+                    par, child = mp.Pipe()
+                    data = {}
+                    for keys in next(ind_slicer):
+                        for key in keys:
+                            data[key] = {"input_ids": self.samples[key]["input_ids"],
+                                         "attributions": self.samples[key]["attributions"]}
+                    processes.append(mp.Process(target=task.Task, args=(self.root.sgn,
+                                                                        data,
+                                                                        self.root.len_filters,
+                                                                        self.root.metric,
+                                                                        child),
+                                                daemon=True)
+                                     )
+                    pipes.append(par)
 
-        return processes
-
+        task.associated_processes = processes
+        task.associated_pipes = pipes
+        for i in processes:
+            i.start()
+        task.started = True
 
 
 
