@@ -32,7 +32,7 @@ class WorkerManager:
     started = False
     active = True
     done = False
-    workers: []  # List[Worker]
+    workers= []  # List[Worker]
     dones = []
     data = {}
 
