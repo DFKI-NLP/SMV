@@ -168,7 +168,7 @@ class ProcessHandler:
         result, workers_without_work = manager.get()
         for entry in result:
             self.orders_and_searches[manager.TaskName] = {entry[2]: entry[0]}
-            self.explanations[manager.TaskName] = {entry[2]: entry[0]}
+            self.explanations[manager.TaskName] = {entry[2]: entry[1]}
         for worker in workers_without_work:
             try:
                 if manager.active:
