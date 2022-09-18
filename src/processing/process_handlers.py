@@ -1,6 +1,7 @@
 import multiprocessing as mp
 import sys
 from numba import jit
+import time
 
 import numpy as np
 from dataclasses import dataclass
@@ -14,11 +15,13 @@ import src.search_methods.tools as t
 
 import src.processing.shared_value_searches as sh
 
+
 @dataclass(init=True)
 class Worker:
     process: mp.Process
     pipe: mp.connection
     needs_update: bool
+
 
 @dataclass(init=True)
 class WorkerManager:
@@ -32,11 +35,8 @@ class WorkerManager:
     started = False
     active = True
     done = False
-    workers= []  # List[Worker]
-    dones = []
-    data = {}
+    workers = []  # List[Worker]
 
-    processes_with_work = []
     iterator = None  # generator object
 
     def __str__(self) -> str:
@@ -46,35 +46,40 @@ class WorkerManager:
         return f"Task {self.TaskName}"
 
     def start(self) -> None:
-        for i in self.workers:
-            Worker.process.start()
+        for worker in self.workers:
+            worker.process.start()
         self.started = True
 
     def get(self) -> Tuple[List[Tuple[dict, list, bool]], List[int]]:
         result = []
         workers_without_work = []
+
         for worker in range(len(self.workers)):
-            if self.workers[worker].pipe.poll:
+            if self.workers[worker].pipe.poll():
                 result.append(self.workers[worker].pipe.recv())
+                self.workers[worker].needs_update = True
             else:
-                workers_without_work.append(worker)
+                if self.workers[worker].needs_update:
+                    workers_without_work.append(worker)
         return result, workers_without_work
 
     def set(self, index: int, data: any) -> None:
+        self.workers[index].needs_update = False
         self.workers[index].pipe.send(data)
 
-    def kill(self, index):
+    def kill(self, index) -> None:
         self.workers[index].process.kill()
 
-def conv_task() -> WorkerManager:
-    return WorkerManager("convolution search", [], 2, 4, 0, sh.shared_memory_convsearch)
+
+def conv_manager() -> WorkerManager:
+    return WorkerManager("convolution search", [],.1, 4, 0, sh.shared_memory_convsearch)
 
 
-def span_task() -> WorkerManager:
-    return WorkerManager("span search", [], 2, 1, 1, sh.shared_memory_spansearch)
+def span_manager() -> WorkerManager:
+    return WorkerManager("span search", [], .1, 1, 1, sh.shared_memory_spansearch)
 
 
-def concat_task() -> WorkerManager:
+def concat_manager() -> WorkerManager:
     return WorkerManager("concatenation search", ["convolution search", "span search"], 3, 2, 2, sh.shared_memory_compare_searches)
 
 
@@ -87,18 +92,18 @@ class ProcessHandler:
     # constants
 
     def __init__(self, loader: Verbalizer,
-                 tasks: List[WorkerManager],
+                 managers: List[WorkerManager],
                  samples: dict,
                  maxram: float = -1):
 
         self.root = loader
-        self.worker_managers = self.order_tasks(tasks)
+        self.managers = self.order_tasks(managers)
         self.samples = samples
         self.sample_keys = list(samples.keys())
         self.maxram = maxram
 
         self.working_managers = []
-        self.fulfilled_tasks = [False for i in range(len(tasks))]
+        self.fulfilled_tasks = [False for i in range(len(managers))]
         self.orders_and_searches = {}
         self.explanations = {}
 
@@ -121,7 +126,7 @@ class ProcessHandler:
         return {}
 
     @staticmethod
-    def iterator(listlike):
+    def iterator(listlike) -> any:
         for i in range(len(listlike)):
             yield listlike[i]
 
@@ -134,30 +139,45 @@ class ProcessHandler:
         return req
 
     def __call__(self, *args, **kwargs) -> dict:
-        prepared_data = {}
-        return prepared_data
+        for manager in self.managers:
+            self.start_manager(manager)
+        print("Started manager(s)")
 
-    def generate_worker(self, manager: WorkerManager):
+        working = True
+        print("now checking")
+        ti = time.time()
+        while working:
+            for manager in self.working_managers:
+                working = False
+                self.check_manager(manager)
+                if manager.active:
+                    working = True
+        print(time.time() - ti)
+        return self.orders_and_searches
+
+    def generate_worker(self, manager: WorkerManager) -> Worker:
         parent, child = mp.Pipe()
         process = mp.Process(target=manager.Task, args=(self.root.sgn,
                                                         self.root.len_filters,
                                                         self.root.metric,
-                                                        child))
+                                                        child),
+                             daemon=True)
         return Worker(process, parent, True)
 
-    def check_manager(self, manager: WorkerManager):
+    def check_manager(self, manager: WorkerManager) -> None:
         result, workers_without_work = manager.get()
         for entry in result:
             self.orders_and_searches[manager.TaskName] = {entry[2]: entry[0]}
             self.explanations[manager.TaskName] = {entry[2]: entry[0]}
         for worker in workers_without_work:
             try:
-                if manager.requests:
-                    manager.set(worker, self.samples[next(manager.iterator)])
+                if manager.active:
+                    key = next(manager.iterator)
+                    manager.set(worker, (self.samples[key], key))
                 else:
                     manager.kill(worker)
             except StopIteration:
-                manager.requests = False
+                manager.active = False
 
     def start_manager(self, manager: WorkerManager) -> None:
         worker_objects = []
@@ -173,6 +193,4 @@ class ProcessHandler:
                 self.working_managers.append(manager)
             else:
                 raise MemoryError("Not enough memory to start at least 1 process")
-
-
 

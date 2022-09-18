@@ -15,8 +15,8 @@ def shared_memory_convsearch(sgn: str,
     while True:
         data, key = child_pipe.recv()
         coherent_words_sum, coherent_values_sum = f.single_convolution_search(data, sgn, metric, sorted_filters, False)
-        _words, _vals = f.result_filtering(coherent_values_sum, coherent_words_sum)
-        prepared_data_snippet = {{"indices": _words, "values": _vals}}
+        _words, _vals = f.result_filtering(coherent_words_sum, coherent_values_sum)
+        prepared_data_snippet = {"indices": _words, "values": _vals}
         verbalization = t.single_verbalize_field_span_search(prepared_data_snippet, data, sgn)
         child_pipe.send((prepared_data_snippet, verbalization, key))
 
@@ -30,8 +30,8 @@ def shared_memory_spansearch(sgn: str,
     while True:
         data, key = child_pipe.recv()
         coherent_words_sum, coherent_values_sum = f.single_convolution_search(data, sgn, metric, sorted_filters, False)
-        _words, _vals = f.result_filtering(coherent_values_sum, coherent_words_sum)
-        prepared_data_snippet = {{"indices": _words, "values": _vals}}
+        _words, _vals = f.result_filtering(coherent_words_sum, coherent_values_sum)
+        prepared_data_snippet = {"indices": _words, "values": _vals}
         verbalization = t.single_verbalize_field_span_search(prepared_data_snippet, data, sgn)
         child_pipe.send((prepared_data_snippet, verbalization, key))
 

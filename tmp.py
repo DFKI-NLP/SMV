@@ -1,5 +1,6 @@
 import multiprocessing
 
+import time
 import src.processing.process_handlers as ph
 import yaml
 import os
@@ -8,7 +9,7 @@ import datasets
 import src.dataloader as dataloader
 if __name__ == "__main__":
     multiprocessing.freeze_support()
-    config_path = "configs/toy_dev.yml"
+    config_path = "configs/mean_dev.yml"
 
     with open(config_path) as stream:
         config = yaml.safe_load(stream)
@@ -41,7 +42,7 @@ if __name__ == "__main__":
 
     loader = dataloader.Verbalizer(source, config=config)
 
-    tasks = [ph.span_task(), ph.conv_task()]
+    managers = [ph.span_manager(), ph.conv_manager()]
     multiprocessing.freeze_support()
-    Handler = ph.ProcessHandler(loader, tasks, loader.read_samples())
-    Handler()
+    Handler = ph.ProcessHandler(loader, managers, loader.read_samples())
+    q = Handler()
