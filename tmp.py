@@ -46,3 +46,7 @@ if __name__ == "__main__":
     multiprocessing.freeze_support()
     Handler = ph.ProcessHandler(loader, managers, loader.read_samples())
     q = Handler()
+    print(q)
+    for key in q.keys():
+        print(key)
+        print(q[key])

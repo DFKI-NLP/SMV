@@ -19,7 +19,8 @@ import src.processing.shared_value_searches as sh
 @dataclass(init=True)
 class Worker:
     process: mp.Process
-    pipe: mp.connection
+    parent_pipe: mp.connection
+    child_pipe: mp.connection
     needs_update: bool
 
 
@@ -55,8 +56,8 @@ class WorkerManager:
         workers_without_work = []
 
         for worker in range(len(self.workers)):
-            if self.workers[worker].pipe.poll():
-                result.append(self.workers[worker].pipe.recv())
+            if self.workers[worker].parent_pipe.poll():
+                result.append(self.workers[worker].parent_pipe.recv())
                 self.workers[worker].needs_update = True
             else:
                 if self.workers[worker].needs_update:
@@ -65,18 +66,21 @@ class WorkerManager:
 
     def set(self, index: int, data: any) -> None:
         self.workers[index].needs_update = False
-        self.workers[index].pipe.send(data)
+        self.workers[index].parent_pipe.send(data)
 
     def kill(self, index) -> None:
+        self.workers[index].parent_pipe.close()
+        self.workers[index].child_pipe.close()
+        self.workers[index].process.terminate()
         self.workers[index].process.kill()
 
 
 def conv_manager() -> WorkerManager:
-    return WorkerManager("convolution search", [],.1, 4, 0, sh.shared_memory_convsearch)
+    return WorkerManager("convolution search", [], .3, 4, 0, sh.shared_memory_convsearch)
 
 
 def span_manager() -> WorkerManager:
-    return WorkerManager("span search", [], .1, 1, 1, sh.shared_memory_spansearch)
+    return WorkerManager("span search", [], .3, 1, 1, sh.shared_memory_spansearch)
 
 
 def concat_manager() -> WorkerManager:
@@ -141,6 +145,8 @@ class ProcessHandler:
     def __call__(self, *args, **kwargs) -> dict:
         for manager in self.managers:
             self.start_manager(manager)
+            self.orders_and_searches[manager.TaskName] = {}
+            self.explanations[manager.TaskName] = {}
         print("Started manager(s)")
 
         working = True
@@ -161,14 +167,15 @@ class ProcessHandler:
                                                         self.root.len_filters,
                                                         self.root.metric,
                                                         child),
-                             daemon=True)
-        return Worker(process, parent, True)
+                             daemon=True,
+                             name=manager.TaskName)
+        return Worker(process, parent, child, True)
 
     def check_manager(self, manager: WorkerManager) -> None:
         result, workers_without_work = manager.get()
         for entry in result:
-            self.orders_and_searches[manager.TaskName] = {entry[2]: entry[0]}
-            self.explanations[manager.TaskName] = {entry[2]: entry[1]}
+            self.orders_and_searches[manager.TaskName][entry[2]] = entry[0]
+            self.explanations[manager.TaskName][entry[2]] = entry[1]
         for worker in workers_without_work:
             try:
                 if manager.active:
