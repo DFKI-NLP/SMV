@@ -1,18 +1,12 @@
 import multiprocessing as mp
 import sys
-from numba import jit
+import warnings
 import time
 
-import numpy as np
 from dataclasses import dataclass
 from typing import Union, List, Tuple
-
 import psutil
-
 from src.dataloader import Verbalizer
-import src.search_methods.searches as f
-import src.search_methods.tools as t
-
 import src.processing.shared_value_searches as sh
 
 
@@ -23,12 +17,14 @@ class Worker:
     child_pipe: mp.connection
     needs_update: bool
 
+    alive = True
+
 
 @dataclass(init=True)
 class WorkerManager:
     TaskName: str
     RequiredTasks: List[str]
-    RequiredRamPerProcess:  int  # in GBytes f.e. 1 = 1024*1024*1024 bytes
+    RequiredRamPerProcess:  float or int  # in GBytes f.e. 1 = 1024*1024*1024 bytes
     DesiredProcesses: int
     TaskIndex: int
     Task: any  # preferably a method but anything callable works
@@ -38,6 +34,7 @@ class WorkerManager:
     done = False
     workers = []  # List[Worker]
 
+    num_workers = 0
     iterator = None  # generator object
 
     def __str__(self) -> str:
@@ -56,24 +53,29 @@ class WorkerManager:
         workers_without_work = []
 
         for worker in range(len(self.workers)):
-            if self.workers[worker].parent_pipe.poll():
-                result.append(self.workers[worker].parent_pipe.recv())
-                self.workers[worker].needs_update = True
-            else:
-                if self.workers[worker].needs_update:
-                    workers_without_work.append(worker)
+            if self.workers[worker].alive:
+                if self.workers[worker].parent_pipe.poll():
+                    result.append(self.workers[worker].parent_pipe.recv())
+                    self.workers[worker].needs_update = True
+                else:
+                    if self.workers[worker].needs_update:
+                        workers_without_work.append(worker)
         return result, workers_without_work
 
     def set(self, index: int, data: any) -> None:
         self.workers[index].needs_update = False
         self.workers[index].parent_pipe.send(data)
 
-    def kill(self, index) -> None:
-        self.workers[index].parent_pipe.close()
-        self.workers[index].child_pipe.close()
-        self.workers[index].process.terminate()
-        self.workers[index].process.kill()
-
+    def kill(self, index: int) -> None:
+        if self.workers[index].alive:
+            self.workers[index].parent_pipe.send((-1, -1))
+            self.workers[index].parent_pipe.close()
+            self.workers[index].process.terminate()
+            self.workers[index].process.join()
+            self.workers[index].needs_update = False
+            self.num_workers -= 1
+            self.workers[index].alive = False
+            print(f"[{self.TaskName} MANAGER]: Killed a worker with {self.num_workers} remaining")
 
 def conv_manager() -> WorkerManager:
     return WorkerManager("convolution search", [], .3, 4, 0, sh.shared_memory_convsearch)
@@ -133,6 +135,8 @@ class ProcessHandler:
     def iterator(listlike) -> any:
         for i in range(len(listlike)):
             yield listlike[i]
+        while True:
+            yield -1
 
     def check_requirements(self, manager: WorkerManager) -> bool:
         req = True
@@ -142,24 +146,24 @@ class ProcessHandler:
                     req = False
         return req
 
-    def __call__(self, *args, **kwargs) -> dict:
+    def __call__(self, *args, **kwargs) -> Tuple[dict, dict]:
+        ti = time.time()
         for manager in self.managers:
             self.start_manager(manager)
             self.orders_and_searches[manager.TaskName] = {}
             self.explanations[manager.TaskName] = {}
-        print("Started manager(s)")
+        print("[MAIN]: Started manager(s)")
 
         working = True
-        print("now checking")
-        ti = time.time()
+        print("[MAIN]: Waiting for manager(s)")
         while working:
+            working = False
             for manager in self.working_managers:
-                working = False
                 self.check_manager(manager)
                 if manager.active:
                     working = True
         print(time.time() - ti)
-        return self.orders_and_searches
+        return self.orders_and_searches, self.explanations
 
     def generate_worker(self, manager: WorkerManager) -> Worker:
         parent, child = mp.Pipe()
@@ -172,19 +176,19 @@ class ProcessHandler:
         return Worker(process, parent, child, True)
 
     def check_manager(self, manager: WorkerManager) -> None:
-        result, workers_without_work = manager.get()
-        for entry in result:
-            self.orders_and_searches[manager.TaskName][entry[2]] = entry[0]
-            self.explanations[manager.TaskName][entry[2]] = entry[1]
-        for worker in workers_without_work:
-            try:
+        if manager.num_workers > 0:  # move this to another method
+            result, workers_without_work = manager.get()
+            for entry in result:
+                self.orders_and_searches[manager.TaskName][entry[2]] = entry[0]
+                self.explanations[manager.TaskName][entry[2]] = entry[1]
+            for worker in workers_without_work:
                 if manager.active:
                     key = next(manager.iterator)
-                    manager.set(worker, (self.samples[key], key))
-                else:
-                    manager.kill(worker)
-            except StopIteration:
-                manager.active = False
+                    if not key == -1:
+                        manager.set(worker, (self.samples[key], key))
+                    else:
+                        manager.kill(worker)
+
 
     def start_manager(self, manager: WorkerManager) -> None:
         worker_objects = []
@@ -196,6 +200,7 @@ class ProcessHandler:
                     worker_objects.append(self.generate_worker(manager))
                 manager.workers = worker_objects
                 manager.iterator = self.iterator(self.sample_keys)
+                manager.num_workers = len(manager.workers)
                 manager.start()
                 self.working_managers.append(manager)
             else:

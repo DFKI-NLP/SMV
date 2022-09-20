@@ -45,8 +45,7 @@ if __name__ == "__main__":
     managers = [ph.span_manager(), ph.conv_manager()]
     multiprocessing.freeze_support()
     Handler = ph.ProcessHandler(loader, managers, loader.read_samples())
-    q = Handler()
-    print(q)
-    for key in q.keys():
-        print(key)
-        print(q[key])
+    orders_and_searches, explanations = Handler()
+    for key in orders_and_searches.keys():
+        for sample in orders_and_searches[key].keys():
+            print(orders_and_searches[key][sample])

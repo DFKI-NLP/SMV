@@ -15,6 +15,9 @@ def shared_memory_convsearch(sgn: str,
     while True:
         if child_pipe.poll(1):
             data, key = child_pipe.recv()
+            if data == -1:
+                child_pipe.close()
+                break
             coherent_words_sum, coherent_values_sum = f.single_convolution_search(data, sgn, metric, sorted_filters, False)
             _words, _vals = f.result_filtering(coherent_words_sum, coherent_values_sum)
             prepared_data_snippet = {"indices": _words, "values": _vals}
@@ -29,8 +32,11 @@ def shared_memory_spansearch(sgn: str,
 
     sorted_filters = f.generate_spans(len_filters)
     while True:
-        if child_pipe.poll(1):
+        if child_pipe.poll(.1):
             data, key = child_pipe.recv()
+            if data == -1:
+                child_pipe.close()
+                break
             coherent_words_sum, coherent_values_sum = f.single_convolution_search(data, sgn, metric, sorted_filters, False)
             _words, _vals = f.result_filtering(coherent_words_sum, coherent_values_sum)
             prepared_data_snippet = {"indices": _words, "values": _vals}
