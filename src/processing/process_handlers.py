@@ -188,7 +188,8 @@ class ProcessHandler:
                         manager.set(worker, (self.samples[key], key))
                     else:
                         manager.kill(worker)
-
+        else:
+            manager.active = False
 
     def start_manager(self, manager: WorkerManager) -> None:
         worker_objects = []
