@@ -2,47 +2,52 @@ import json
 import multiprocessing
 import time
 
-import transformers
 from tqdm import tqdm
 from typing import List, Union
-import psutil
 
-import src.search_methods.tools as t
+import src.tools as t
 import src.processing.shared_methods as sm
-import src.processing.shared_value_searches as svs
+import src.processing.process_handlers as ph
+
+import transformers  # needed for finding tokenizer DO NOT DELETE; THIS IMPORT IS USED IN eval
 
 
 class Verbalizer:
     def __init__(self, source: Union[str, List], standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
-                 config=None, dev=False, multiprocess=False,
+                 config=None, dev=False, multiprocess=True,
                  *args, **kwargs):
         """
         Verbalizer class
         :param source: List of JSON lines (Thermostat) or path to a local dataset of explanations
         :param model_type: Which model is being explained? optional; will look by itself
         :param standard_samples: how many samples should be loaded if nothing specified
-        :param config: config dictionary; optional -> how to will be included
+        :param config: config dictionary
         :param dev: should numerical values for each explanation be returned too?
+        :param multiprocess: should the tasks use multiprocessing?
 
         TODO warning: object to change:
         --> start of config example <--
-        cfg =
-        {
-        "sgn": "+",                     options: "+", "-", None
-        "samples": -1,                  options: {-1, n where n > 0}, n is integer
-        "len_filters": 5,               options: n where n > 0, n is integer
-        "metric": "mean_sum: 10"        options: see possible metrics
-        "dev": True
-        }
+
+        source: "thermostat/imdb-bert-lig"  # any thermostat (hf) dataset will work or similiar formats
+        sgn: "+"
+        samples: 100
+        metric:
+         name: "mean"
+         value: 0.4
+        dev: True
+        maxwords: 100
+        mincoverage: .1
+
+        --> end of config example <--
 
         possible metrics:
         : "mean_sum: n" where n is a float ranging from 0 to 1;
-                                                   uses mean(sum(sorted(attribs[:len * n])) as metric
+            uses mean(sum(sorted(attribs[:len * n])) as metric
 
-        TODO    : "quantile: n" where n is a float ranging from 0 to inf
-        TODO    : "variance: n : m" where n, m is a float ranging from -inf to inf; n <= m
+        : "quantile: n" where n is a float ranging from 0 to inf
+            uses stdev as metric where the outliers of the n-th quantile are used as anchors for verbalization
 
-        -->  end  of config example <--
+
         """
 
         self.models = {
@@ -82,6 +87,7 @@ class Verbalizer:
                               .format(self.models[self.model_type][0],
                                       self.models[self.model_type][1]))
 
+        self.config = config
         if config:
             if config["samples"]:
                 self.standard_samples = config["samples"]
@@ -182,7 +188,6 @@ class Verbalizer:
         verbalizes n_samples of dataset
         :param modes: optional: which searches to do on dataset
         :param n_samples: optional: how many samples to verbalize
-        :param config: TODO class containing customizations to searches i.e. metrics etc.
         :return: n_samples * (verbalized version of heatmap; by total_order, ...) as array of strings (tuple/list)
         """
 
@@ -203,7 +208,25 @@ class Verbalizer:
             orders_and_searches["total_order"] = self.total_order(sample_array)
         """
         if self.multiprocess:
-            raise NotImplementedError
+            multiprocessing.freeze_support()
+            a = time.time()
+            modelname = self.config["source"].replace("thermostat/", "")  # not needed for now
+
+            managers = [ph.span_manager(), ph.conv_manager()]
+            handler = ph.ProcessHandler(self.get_cfg_args(), managers, sample_array)
+            orders_and_searches, explanations = handler()
+            for explanation_type in explanations.keys():
+                for key in explanations[explanation_type]:
+                    explanations[explanation_type][key] = [v for v, c in sorted(explanations[explanation_type][key],
+                                                                                key=lambda vc: vc[1], reverse=True)]
+
+            if "compare search":
+                explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)
+            if "total order" in modes:
+                explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
+            if "compare searches" in modes:
+                explanations["compare searches"] = t.concatenation_search(orders_and_searches, sample_array)
+            print(time.time() - a)
 
         else:
             with tqdm(total=len(modes)) as pbar:
@@ -269,3 +292,9 @@ class Verbalizer:
                     except TypeError:
                         pass  # no valid snippet existed in the first place resulting in no value to check thus -> error
         return valid_indices_
+
+    def get_cfg_args(self):
+        return {"sgn": self.sgn,
+                "len_filters": self.len_filters,
+                "metric": self.metric
+                }

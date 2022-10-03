@@ -6,7 +6,6 @@ import time
 from dataclasses import dataclass
 from typing import Union, List, Tuple
 import psutil
-from src.dataloader import Verbalizer
 import src.processing.shared_value_searches as sh
 
 
@@ -77,15 +76,18 @@ class WorkerManager:
             self.workers[index].alive = False
             print(f"[{self.TaskName} MANAGER]: Killed a worker with {self.num_workers} remaining")
 
-def conv_manager() -> WorkerManager:
-    return WorkerManager("convolution search", [], .3, 4, 0, sh.shared_memory_convsearch)
+
+# each process needs about 250mb with standard settings
+def conv_manager() -> WorkerManager:  # req. for full usage: 1.8 GByte with 0.3 GByte being reserve
+    return WorkerManager("convolution search", [], .3, 6, 0, sh.shared_memory_convsearch)
 
 
-def span_manager() -> WorkerManager:
-    return WorkerManager("span search", [], .3, 1, 1, sh.shared_memory_spansearch)
+def span_manager() -> WorkerManager:  # req. for full usage: 0.6 GByte with 0.1 GByte being reserve
+    return WorkerManager("span search", [], .3, 2, 1, sh.shared_memory_spansearch)
 
 
 def concat_manager() -> WorkerManager:
+    raise NotImplementedError
     return WorkerManager("concatenation search", ["convolution search", "span search"], 3, 2, 2, sh.shared_memory_compare_searches)
 
 
@@ -97,12 +99,12 @@ def concat_manager() -> WorkerManager:
 class ProcessHandler:
     # constants
 
-    def __init__(self, loader: Verbalizer,
+    def __init__(self, loader_cfg: dict,
                  managers: List[WorkerManager],
                  samples: dict,
                  maxram: float = -1):
 
-        self.root = loader
+        self.loader_cfg = loader_cfg
         self.managers = self.order_tasks(managers)
         self.samples = samples
         self.sample_keys = list(samples.keys())
@@ -129,7 +131,7 @@ class ProcessHandler:
         return min(psutil.virtual_memory().available / (1024**3), self.maxram if self.maxram >= 0 else sys.maxsize)
 
     def get_args(self, task: WorkerManager) -> dict:
-        return {}
+        raise NotImplementedError
 
     @staticmethod
     def iterator(listlike) -> any:
@@ -162,14 +164,14 @@ class ProcessHandler:
                 self.check_manager(manager)
                 if manager.active:
                     working = True
-        print(time.time() - ti)
+
         return self.orders_and_searches, self.explanations
 
     def generate_worker(self, manager: WorkerManager) -> Worker:
         parent, child = mp.Pipe()
-        process = mp.Process(target=manager.Task, args=(self.root.sgn,
-                                                        self.root.len_filters,
-                                                        self.root.metric,
+        process = mp.Process(target=manager.Task, args=(self.loader_cfg["sgn"],
+                                                        self.loader_cfg["len_filters"],
+                                                        self.loader_cfg["metric"],
                                                         child),
                              daemon=True,
                              name=manager.TaskName)

@@ -1,4 +1,5 @@
-from src.search_methods import tools as t, searches as fil
+from src.search_methods import searches as fil
+from src import tools as t
 
 
 def span_search(_dict, len_filters, sgn=None, metric=None):

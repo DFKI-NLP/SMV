@@ -1,35 +1,11 @@
-import datasets
-import os
-import pandas as pd
-import thermostat
-import yaml
+import src.tools as t
 import json
 
 from src import dataloader
-from vis import Color, color_str, save_heatmap_as_image
+from vis import Color, color_str
 
-def explain_nodev(config, to_json=False):
-    if not os.path.isfile(config["source"]):
-        if "thermostat/" in config["source"]:
-            # Load source from Thermostat configuration
-            thermo_config_name = config["source"].replace("thermostat/", "")
-            thermo_config = thermostat.load(thermo_config_name, cache_dir="data")
-            # Convert to pandas DataFrame and then to JSON lines
-            source = thermo_config.to_pandas().to_json(orient="records", lines=True).splitlines()
-        elif "datasets/" in config["source"]:
-            # TODO: Add annotator rationale datasets
-            # https://huggingface.co/datasets/movie_rationales
-            # http://www.eraserbenchmark.com/ (BoolQ)
-            # Load source from Hugging Face datasets library
-            hf_dataset_name = config["source"].replace("datasets/", "")
-            hf_dataset = datasets.load_dataset(hf_dataset_name, cache_dir="data")
-            raise NotImplementedError("HF datasets not supported atm.")
-        else:
-            raise NotImplementedError("Invalid source!")
-    else:
-        source = config["source"]
-    #TODO: Change to NamedTemporaryFile, this is bad
-    #Also TODO: put into module
+
+def explain_nodev(config, source, to_json=False):
 
     key_verbalization_attribs = {}
 
@@ -37,8 +13,7 @@ def explain_nodev(config, to_json=False):
 
     loader = dataloader.Verbalizer(source, config=config)
     explanations, texts, orders = loader()
-    if not to_json:
-        returnstr = []
+    returnstr = []
 
     for key in texts.keys():
         cutoff_top_k_single = 5
@@ -59,32 +34,8 @@ def explain_nodev(config, to_json=False):
 
 
 def explain(config_path, to_json=False, maxwords=None, mincoverage=None):
-    with open(config_path) as stream:
-        config = yaml.safe_load(stream)
+    config, source = t.read_config(config_path)
     if config["dev"]:
-        if not os.path.isfile(config["source"]):
-            if "thermostat/" in config["source"]:
-                # Load source from Thermostat configuration
-                thermo_config_name = config["source"].replace("thermostat/", "")
-                thermo_config = thermostat.load(thermo_config_name, cache_dir="data")
-                # Convert to pandas DataFrame and then to JSON lines
-                source = thermo_config.to_pandas().to_json(orient="records", lines=True).splitlines()
-            elif "datasets/" in config["source"]:
-                # TODO: Add annotator rationale datasets
-                # https://huggingface.co/datasets/movie_rationales
-                # http://www.eraserbenchmark.com/ (BoolQ)
-                # Load source from Hugging Face datasets library
-                hf_dataset_name = config["source"].replace("datasets/", "")
-                hf_dataset = datasets.load_dataset(hf_dataset_name, cache_dir="data")
-                raise NotImplementedError("HF datasets not supported atm.")
-            else:
-                raise NotImplementedError("Invalid source!")
-        else:
-            source = config["source"]
-            thermo_config = None
-        #TODO: Change to NamedTemporaryFile, this is bad
-        #Also TODO: put into module
-
         key_verbalization_attribs = {}
 
         modelname = config["source"].replace("thermostat/", "")
@@ -97,8 +48,7 @@ def explain(config_path, to_json=False, maxwords=None, mincoverage=None):
             mincoverage = loader.mincoverage
         valid_keys = loader.filter_verbalizations(explanations, texts, orders,
                                                   maxwords=maxwords, mincoverage=mincoverage)
-        if not to_json:
-            returnstr = []
+        returnstr = []  # only needed if not to_json
 
         cutoff_top_k_single = 5
         for key in texts.keys():
@@ -119,7 +69,7 @@ def explain(config_path, to_json=False, maxwords=None, mincoverage=None):
         else:
             return returnstr
     else:
-        return explain_nodev(config, to_json)
+        return explain_nodev(config, source, to_json)
 
 
 def explain_json(config_path):

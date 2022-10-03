@@ -4,16 +4,11 @@ import yaml
 
 import datasets
 import numpy as np
-import pandas as pd
 import thermostat
 
 from collections import defaultdict
 from numba import jit
-from tqdm import tqdm
 from typing import List
-
-from src import dataloader
-from vis import color_str, Color
 
 
 @jit(nopython=True)
@@ -206,6 +201,7 @@ def get_metric_values(mode: dict):
     #args = [selected_mode[1](_args[i]) for i in range(1, len(_args))]
     return args
 
+
 def single_verbalize_field_span_search(prepared_data, samples, sgn="+"):
     """
     Verbalizes results of field_search or span_search
@@ -246,12 +242,13 @@ def single_verbalize_field_span_search(prepared_data, samples, sgn="+"):
             coverage = round((values[snippet] / sum_values) * 100, 2)
             verbalization += "' contains {}% of prediction score.".format(str(coverage))
             verb_cov_tuple = (verbalization, coverage)
-        except Exception as e:
+        except Exception as e:  # TODO: specify exception type
             verbalization = "No coherent values found."
             verb_cov_tuple = (verbalization, 0.0)
 
         verbalizations.append(verb_cov_tuple)
     return verbalizations
+
 
 def verbalize_field_span_search(prepared_data, samples, sgn="+"):
     """
@@ -446,3 +443,29 @@ def get_binary_attributions_from_annotator_rationales(text: str, rationales: Lis
     binary attributions"""
     binary_attributions = []
 
+
+def read_config(config_path):
+    config = None
+    with open(config_path) as stream:
+        config = yaml.safe_load(stream)
+    if not os.path.isfile(config["source"]):
+        if "thermostat/" in config["source"]:
+            # Load source from Thermostat configuration
+            thermo_config_name = config["source"].replace("thermostat/", "")
+            thermo_config = thermostat.load(thermo_config_name, cache_dir="data")
+            # Convert to pandas DataFrame and then to JSON lines
+            source = thermo_config.to_pandas().to_json(orient="records", lines=True).splitlines()
+        elif "datasets/" in config["source"]:
+            # TODO: Add annotator rationale datasets
+            # https://huggingface.co/datasets/movie_rationales
+            # http://www.eraserbenchmark.com/ (BoolQ)
+            # Load source from Hugging Face datasets library
+            hf_dataset_name = config["source"].replace("datasets/", "")
+            hf_dataset = datasets.load_dataset(hf_dataset_name, cache_dir="data")
+            raise NotImplementedError("HF datasets not supported atm.")
+        else:
+            raise NotImplementedError("Invalid source!")
+    else:
+        source = config["source"]
+
+    return config, source

@@ -1,7 +1,5 @@
-import multiprocessing
-
 import src.search_methods.searches as f
-import src.search_methods.tools as t
+import src.tools as t
 
 import src.processing.shared_methods as sm
 
@@ -37,7 +35,8 @@ def shared_memory_spansearch(sgn: str,
             if data == -1:
                 child_pipe.close()
                 break
-            coherent_words_sum, coherent_values_sum = f.single_convolution_search(data, sgn, metric, sorted_filters, False)
+            coherent_words_sum, coherent_values_sum = f.single_convolution_search(data, sgn, metric,
+                                                                                  sorted_filters, False)
             _words, _vals = f.result_filtering(coherent_words_sum, coherent_values_sum)
             prepared_data_snippet = {"indices": _words, "values": _vals}
             verbalization = t.single_verbalize_field_span_search(prepared_data_snippet, data, sgn)
