@@ -221,18 +221,15 @@ class Verbalizer:
                         explanations[explanation_type][key] = [v for v, c in sorted(explanations[explanation_type][key],
                                                                                     key=lambda vc: vc[1], reverse=True)]
                 pbar.update(2)
-                print(time.time() - a, "conv, span")
                 if "compare search":
                     explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)
                     pbar.update(1)
                 if "total order" in modes:
                     explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
                     pbar.update(1)
-                print(time.time() - a, "compare, total order")
                 if "compare searches" in modes:
                     explanations["compare searches"] = t.concatenation_search(orders_and_searches, sample_array)
                     pbar.update(1)
-                print(time.time() - a, "after concatenation search -> finished")
 
 
         else:
