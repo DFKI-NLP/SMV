@@ -109,12 +109,14 @@ class ProcessHandler:
         self.samples = samples
         self.sample_keys = list(samples.keys())
         self.maxram = maxram
+        self.allocated_ram = 0
 
         self.working_managers = []
-        self.fulfilled_tasks = [False for i in range(len(managers))]
+        self.fulfilled_tasks = []
         self.orders_and_searches = {}
         self.explanations = {}
 
+    # static methods:
     @staticmethod
     def order_tasks(managers: List[WorkerManager]) -> List[WorkerManager]:  # simple bubble sort as task length is very small
         for _ in range(len(managers) - 1):
@@ -127,18 +129,16 @@ class ProcessHandler:
 
         return managers
 
-    def get_available_ram(self) -> float:
-        return min(psutil.virtual_memory().available / (1024**3), self.maxram if self.maxram >= 0 else sys.maxsize)
-
-    def get_args(self, task: WorkerManager) -> dict:
-        raise NotImplementedError
-
     @staticmethod
     def iterator(listlike) -> any:
         for i in range(len(listlike)):
             yield listlike[i]
         while True:
             yield -1
+    # end of static methods
+
+    def get_available_ram(self) -> float:
+        return min(psutil.virtual_memory().available / (1024**3), self.maxram if self.maxram >= 0 else sys.maxsize)
 
     def check_requirements(self, manager: WorkerManager) -> bool:
         req = True
@@ -149,21 +149,22 @@ class ProcessHandler:
         return req
 
     def __call__(self, *args, **kwargs) -> Tuple[dict, dict]:
-        ti = time.time()
-        for manager in self.managers:
-            self.start_manager(manager)
-            self.orders_and_searches[manager.TaskName] = {}
-            self.explanations[manager.TaskName] = {}
-        print("[MAIN]: Started manager(s)")
+        while sum([manager.done for manager in self.managers]) != len(self.managers):
+            for manager in self.managers:
+                if manager.TaskName not in self.fulfilled_tasks:
+                    print(f"[MAIN]: Starting [{manager.TaskName} MANAGER]")
+                    self.start_manager(manager)
+                    self.orders_and_searches[manager.TaskName] = {}
+                    self.explanations[manager.TaskName] = {}
 
-        working = True
-        print("[MAIN]: Waiting for manager(s)")
-        while working:
-            working = False
-            for manager in self.working_managers:
-                self.check_manager(manager)
-                if manager.active:
-                    working = True
+            working = True
+            print("[MAIN]: Waiting for manager(s)")
+            while working:
+                working = False
+                for manager in self.working_managers:
+                    self.check_manager(manager)
+                    if manager.active:
+                        working = True
 
         return self.orders_and_searches, self.explanations
 
@@ -183,24 +184,38 @@ class ProcessHandler:
             for entry in result:
                 self.orders_and_searches[manager.TaskName][entry[2]] = entry[0]
                 self.explanations[manager.TaskName][entry[2]] = entry[1]
-            for worker in workers_without_work:
+            for worker in workers_without_work:  # TODO: split into 2 methods
                 if manager.active:
-                    key = next(manager.iterator)
-                    if not key == -1:
-                        manager.set(worker, (self.samples[key], key))
+                    key, value = self.get_workerargs(manager)
+                    if key != -1:
+                        manager.set(worker, (key, value))
                     else:
                         manager.kill(worker)
         else:
             manager.active = False
+            manager.done = True
+            self.fulfilled_tasks.append(manager.TaskName)
+
+    def get_workerargs(self, manager: WorkerManager) -> tuple:
+        if manager.TaskName == "span search":
+            key = next(manager.iterator)
+            return key, self.samples[key] if key != -1 else key
+
+        if manager.TaskName == "convolution search":
+            key = next(manager.iterator)
+            return key, self.samples[key] if key != -1 else key
+
+        raise NotImplementedError  # TODO: modularize
 
     def start_manager(self, manager: WorkerManager) -> None:
         worker_objects = []
         if self.check_requirements(manager):
-            available_ram = self.get_available_ram()
+            available_ram = self.get_available_ram() - self.allocated_ram
             if available_ram > manager.RequiredRamPerProcess:
                 num_workers = min(int(available_ram/manager.RequiredRamPerProcess), manager.DesiredProcesses)
                 for i in range(num_workers):
                     worker_objects.append(self.generate_worker(manager))
+                    self.allocated_ram += manager.RequiredRamPerProcess
                 manager.workers = worker_objects
                 manager.iterator = self.iterator(self.sample_keys)
                 manager.num_workers = len(manager.workers)

@@ -12,7 +12,7 @@ def shared_memory_convsearch(sgn: str,
     sorted_filters = f.generate_filters(len_filters)
     while True:
         if child_pipe.poll(1):
-            data, key = child_pipe.recv()
+            key, data = child_pipe.recv()
             if data == -1:
                 child_pipe.close()
                 break
@@ -31,7 +31,7 @@ def shared_memory_spansearch(sgn: str,
     sorted_filters = f.generate_spans(len_filters)
     while True:
         if child_pipe.poll(.1):
-            data, key = child_pipe.recv()
+            key, data = child_pipe.recv()
             if data == -1:
                 child_pipe.close()
                 break
