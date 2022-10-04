@@ -158,7 +158,9 @@ class ProcessHandler:
                     self.explanations[manager.TaskName] = {}
 
             working = True
-            print("[MAIN]: Waiting for manager(s)")
+            print(f"[MAIN]: Waiting for manager(s), allocated {self.allocated_ram}GB of RAM to "
+                  f"{sum([manager.num_workers for manager in self.working_managers])} processes")
+
             while working:
                 working = False
                 for manager in self.working_managers:
@@ -166,6 +168,7 @@ class ProcessHandler:
                     if manager.active:
                         working = True
 
+            self.working_managers = []
         return self.orders_and_searches, self.explanations
 
     def generate_worker(self, manager: WorkerManager) -> Worker:
@@ -208,19 +211,22 @@ class ProcessHandler:
         raise NotImplementedError  # TODO: modularize
 
     def start_manager(self, manager: WorkerManager) -> None:
-        worker_objects = []
+        workers = []
         if self.check_requirements(manager):
-            available_ram = self.get_available_ram() - self.allocated_ram
-            if available_ram > manager.RequiredRamPerProcess:
-                num_workers = min(int(available_ram/manager.RequiredRamPerProcess), manager.DesiredProcesses)
-                for i in range(num_workers):
-                    worker_objects.append(self.generate_worker(manager))
+            while len(workers) < manager.DesiredProcesses:
+                available_ram = self.get_available_ram() - self.allocated_ram
+                if available_ram > manager.RequiredRamPerProcess:
                     self.allocated_ram += manager.RequiredRamPerProcess
-                manager.workers = worker_objects
-                manager.iterator = self.iterator(self.sample_keys)
-                manager.num_workers = len(manager.workers)
-                manager.start()
-                self.working_managers.append(manager)
-            else:
-                raise MemoryError("Not enough memory to start at least 1 process")
+                    workers.append(self.generate_worker(manager))
+                else:
+                    break
+            if len(workers) < 1:
+                raise MemoryError(f"Not enough memory to start at least 1 process for [{manager.TaskName} MANAGER]")
+            manager.workers = workers
+            manager.num_workers = len(workers)
+            manager.iterator = self.iterator(self.sample_keys)  # TODO: modularize
+            manager.start()
+            self.working_managers.append(manager)
+        else:
+            print(f"[MAIN]: Delaying start of [{manager.TaskName} MANAGER] due to unfulfilled requirements")
 
