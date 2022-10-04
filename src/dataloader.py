@@ -208,25 +208,32 @@ class Verbalizer:
             orders_and_searches["total_order"] = self.total_order(sample_array)
         """
         if self.multiprocess:
-            multiprocessing.freeze_support()
-            a = time.time()
-            modelname = self.config["source"].replace("thermostat/", "")  # not needed for now
+            with tqdm(total=len(modes)) as pbar:
+                multiprocessing.freeze_support()
+                a = time.time()
+                modelname = self.config["source"].replace("thermostat/", "")  # not needed for now
 
-            managers = [ph.span_manager(), ph.conv_manager()]
-            handler = ph.ProcessHandler(self.get_cfg_args(), managers, sample_array)
-            orders_and_searches, explanations = handler()
-            for explanation_type in explanations.keys():
-                for key in explanations[explanation_type]:
-                    explanations[explanation_type][key] = [v for v, c in sorted(explanations[explanation_type][key],
-                                                                                key=lambda vc: vc[1], reverse=True)]
+                managers = [ph.span_manager(), ph.conv_manager()]
+                handler = ph.ProcessHandler(self.get_cfg_args(), managers, sample_array)
+                orders_and_searches, explanations = handler()
+                for explanation_type in explanations.keys():
+                    for key in explanations[explanation_type]:
+                        explanations[explanation_type][key] = [v for v, c in sorted(explanations[explanation_type][key],
+                                                                                    key=lambda vc: vc[1], reverse=True)]
+                pbar.update(2)
+                print(time.time() - a, "conv, span")
+                if "compare search":
+                    explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)
+                    pbar.update(1)
+                if "total order" in modes:
+                    explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
+                    pbar.update(1)
+                print(time.time() - a, "compare, total order")
+                if "compare searches" in modes:
+                    explanations["compare searches"] = t.concatenation_search(orders_and_searches, sample_array)
+                    pbar.update(1)
+                print(time.time() - a, "after concatenation search -> finished")
 
-            if "compare search":
-                explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)
-            if "total order" in modes:
-                explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
-            if "compare searches" in modes:
-                explanations["compare searches"] = t.concatenation_search(orders_and_searches, sample_array)
-            print(time.time() - a)
 
         else:
             with tqdm(total=len(modes)) as pbar:
