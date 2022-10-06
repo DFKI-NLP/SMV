@@ -38,7 +38,7 @@ or systems with less than 4 (logic) cores
 
 TODO: automate multiprocessing decision making
 
-disabling multiprocessing can lead to 7x increased running time
+disabling multiprocessing can lead to 5x increased running time
 """
 
 for explanation in explanations:
