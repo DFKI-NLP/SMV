@@ -108,7 +108,10 @@ def to_string(explanations, texts, key, cutoff_top_k_single):
         else:
             _ = explanations[expl_subclass][key][:cutoff_top_k_single]
         for __ in _:
-            txt += "\n" + __
+            if __:
+                txt += "\n" + __
+            else:
+                txt += "\n"
     txt += "\nPrediction was correct." if texts[key]["was_correct"] else "\nPredicton was incorrect"
     return txt, sample_text
 

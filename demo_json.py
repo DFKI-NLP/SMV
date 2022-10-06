@@ -1,17 +1,14 @@
 import multiprocessing
 import os
 import src.search_methods.fastexplain as fe
-
+import json
 
 
 if __name__ == "__main__":
     config_pathes = ["./configs/quantile_dev.yml", ]
     jsons = []
-    with multiprocessing.Pool(4) as pool:  # assuming you have at least 16 gigs of ram -> assume each process needs 2gigs of ram
-        _ = pool.imap(fe.explain_json, config_pathes)
-
-        for entry in _:
-            jsons.append(entry)
+    for config_path in config_pathes:
+        jsons.append(fe.explain_json(config_path))
 
     try:
         for i in range(len(config_pathes)):
@@ -24,3 +21,10 @@ if __name__ == "__main__":
             f = open("./tmp/temp_{}.json".format(i), mode="w")
             f.write(jsons[i])
             f.close()
+
+    f = open("tmp/temp_0.json")
+    jsonf = json.load(f)
+    f.close()
+    for sample_key in jsonf.keys():
+        print(jsonf[sample_key]["verbalization"])
+
