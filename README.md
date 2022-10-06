@@ -50,6 +50,9 @@ calculated values for span- and convolution search.
 
 # Advanced
 
+TODO: modularize metrics and such
+
+
 ---
 
 ## Reproduce Greedy Rationales on Annotated LAMBADA (Vafa et al., 2021)
