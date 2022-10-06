@@ -65,7 +65,7 @@ class WorkerManager:
         self.workers[index].needs_update = False
         self.workers[index].parent_pipe.send(data)
 
-    def kill(self, index: int) -> None:
+    def kill(self, index: int, logging: bool) -> None:
         if self.workers[index].alive:
             self.workers[index].parent_pipe.send((-1, -1))
             self.workers[index].parent_pipe.close()
@@ -74,7 +74,8 @@ class WorkerManager:
             self.workers[index].needs_update = False
             self.num_workers -= 1
             self.workers[index].alive = False
-            print(f"[{self.TaskName} MANAGER]: Killed a worker with {self.num_workers} remaining")
+            if logging:
+                print(f"[{self.TaskName} MANAGER]: Killed a worker with {self.num_workers} remaining")
 
 
 # each process needs about 250mb with standard settings
@@ -101,7 +102,8 @@ class ProcessHandler:
     def __init__(self, loader_cfg: dict,
                  managers: List[WorkerManager],
                  samples: dict,
-                 maxram: float = -1):
+                 maxram: float = -1,
+                 logging=False):
 
         self.loader_cfg = loader_cfg
         self.managers = self.order_tasks(managers)
@@ -114,6 +116,7 @@ class ProcessHandler:
         self.fulfilled_tasks = []
         self.orders_and_searches = {}
         self.explanations = {}
+        self.logging = logging
 
     # static methods:
     @staticmethod
@@ -149,19 +152,21 @@ class ProcessHandler:
 
     def __call__(self, *args, **kwargs) -> Tuple[dict, dict]:
         while sum([manager.done for manager in self.managers]) != len(self.managers):
-            if self.allocated_ram > 0:
+            if self.allocated_ram > 0 and self.logging:
                 print(f"[MAIN]: Freed {self.allocated_ram}GB of memory from previous searches")
             self.allocated_ram = 0
             for manager in self.managers:
                 if manager.TaskName not in self.fulfilled_tasks:
-                    print(f"[MAIN]: Starting [{manager.TaskName} MANAGER]")
+                    if self.logging:
+                        print(f"[MAIN]: Starting [{manager.TaskName} MANAGER]")
                     self.start_manager(manager)
                     self.orders_and_searches[manager.TaskName] = {}
                     self.explanations[manager.TaskName] = {}
 
             working = True
-            print(f"[MAIN]: Waiting for manager(s), allocated {self.allocated_ram}GB of RAM to "
-                  f"{sum([manager.num_workers for manager in self.working_managers])} processes")
+            if self.logging:
+                print(f"[MAIN]: Waiting for manager(s), allocated {self.allocated_ram}GB of RAM to "
+                      f"{sum([manager.num_workers for manager in self.working_managers])} processes")
 
             while working:
                 working = False
@@ -196,7 +201,7 @@ class ProcessHandler:
                     key, value = self.get_workerargs(manager)
                     manager.set(worker, (key, value))
                     if key == -1:
-                        manager.kill(worker)
+                        manager.kill(worker, self.logging)
         else:
             manager.active = False
             manager.done = True
@@ -235,5 +240,6 @@ class ProcessHandler:
             manager.start()
             self.working_managers.append(manager)
         else:
-            print(f"[MAIN]: Delaying start of [{manager.TaskName} MANAGER] due to unfulfilled requirements")
+            if self.logging:
+                print(f"[MAIN]: Delaying start of [{manager.TaskName} MANAGER] due to unfulfilled requirements")
 

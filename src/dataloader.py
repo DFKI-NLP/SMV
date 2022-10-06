@@ -15,7 +15,7 @@ import transformers  # needed for finding tokenizer DO NOT DELETE; THIS IMPORT I
 
 class Verbalizer:
     def __init__(self, source: Union[str, List], standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
-                 config=None, dev=False, multiprocess=False,
+                 config=None, dev=False, multiprocess=True,
                  *args, **kwargs):
         """
         Verbalizer class
@@ -221,7 +221,6 @@ class Verbalizer:
                         for key in explanations[explanation_type]:
                             explanations[explanation_type][key] = [v for v, c in sorted(explanations[explanation_type][key],
                                                                    key=lambda vc: vc[1], reverse=True)]
-
                 pbar.update(3)
                 if "compare search":
                     explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)

@@ -66,7 +66,7 @@ def worker_concatsearch(sgn: str,
                 child_pipe.close()
                 break
             verbalization = ps.single_concat_search(data)
-            child_pipe.send((None, verbalization, key))
+            child_pipe.send((None, [verbalization], key))
 
 
 def check_processes(processes: List[multiprocessing.Process]) -> List[bool]:
