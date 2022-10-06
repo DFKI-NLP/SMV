@@ -1,13 +1,17 @@
+import multiprocessing
+from typing import List, Tuple
+
 import src.search_methods.searches as f
 import src.tools as t
+import src.search_methods.post_searches as ps
 
 import src.processing.shared_methods as sm
 
 
-def shared_memory_convsearch(sgn: str,
-                             len_filters: int,
-                             metric,
-                             child_pipe) -> None:  # rename
+def worker_convsearch(sgn: str,
+                      len_filters: int,
+                      metric,
+                      child_pipe) -> None:  # rename
 
     sorted_filters = f.generate_filters(len_filters)
     while True:
@@ -23,14 +27,14 @@ def shared_memory_convsearch(sgn: str,
             child_pipe.send((prepared_data_snippet, verbalization, key))
 
 
-def shared_memory_spansearch(sgn: str,
-                             len_filters: int,
-                             metric,
-                             child_pipe) -> None:  # rename
+def worker_spansearch(sgn: str,
+                      len_filters: int,
+                      metric,
+                      child_pipe) -> None:  # rename
 
     sorted_filters = f.generate_spans(len_filters)
     while True:
-        if child_pipe.poll(.1):
+        if child_pipe.poll(.05):
             key, data = child_pipe.recv()
             if data == -1:
                 child_pipe.close()
@@ -43,19 +47,29 @@ def shared_memory_spansearch(sgn: str,
             child_pipe.send((prepared_data_snippet, verbalization, key))
 
 
-def shared_memory_compare_search(shared_explanations, shared_orders, sample_array):
+def worker_comparesearch(shared_explanations, shared_orders, sample_array):
     shared_explanations["compare search"] = sm.compare_search(shared_orders, sample_array)
 
 
-def shared_memory_total_search(shared_explanations, sample_array):
+def worker_totalsearch(shared_explanations, sample_array):
     shared_explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
 
 
-def shared_memory_compare_searches(shared_explanations, shared_orders, sample_array):
-    shared_explanations["compare searches"] = t.concatenation_search(shared_orders, sample_array)
+def worker_concatsearch(sgn: str,
+                        len_filters: int,
+                        metric,
+                        child_pipe) -> None:  # rename
+    while True:
+        if child_pipe.poll(.05):
+            key, data = child_pipe.recv()
+            if data == -1:
+                child_pipe.close()
+                break
+            verbalization = ps.single_concat_search(data)
+            child_pipe.send((None, verbalization, key))
 
 
-def check_processes(processes):
+def check_processes(processes: List[multiprocessing.Process]) -> List[bool]:
     states = []
     for i in processes:
         if i.is_alive():
@@ -65,7 +79,7 @@ def check_processes(processes):
     return states
 
 
-def check_all_true(ls):
+def check_all_true(ls) -> bool:
     res = True
     for i in ls:
         if not i:

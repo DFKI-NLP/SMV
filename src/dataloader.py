@@ -6,6 +6,7 @@ from tqdm import tqdm
 from typing import List, Union
 
 import src.tools as t
+import src.search_methods.post_searches as ps
 import src.processing.shared_methods as sm
 import src.processing.process_handlers as ph
 
@@ -14,7 +15,7 @@ import transformers  # needed for finding tokenizer DO NOT DELETE; THIS IMPORT I
 
 class Verbalizer:
     def __init__(self, source: Union[str, List], standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
-                 config=None, dev=False, multiprocess=True,
+                 config=None, dev=False, multiprocess=False,
                  *args, **kwargs):
         """
         Verbalizer class
@@ -72,7 +73,7 @@ class Verbalizer:
             raise RuntimeError("Please specify model_type; Missing param model_type")
 
         self.standard_samples = standard_samples
-        self.modes = ["convolution search", "span search", "compare search", "total order", "compare searches"]
+        self.modes = ["convolution search", "span search", "compare search", "total order", "concatenation search"]
         # which search-algorithms to use
         self.checkpoint = 0  # where did the Verbalizer stop loading examples
         self.len_filters = len_filters
@@ -210,27 +211,24 @@ class Verbalizer:
         if self.multiprocess:
             with tqdm(total=len(modes)) as pbar:
                 multiprocessing.freeze_support()
-                a = time.time()
-                modelname = self.config["source"].replace("thermostat/", "")  # not needed for now
+                modelname = self.config["source"].replace("thermostat/", "")  # TODO: do something with this
 
-                managers = [ph.span_manager(), ph.conv_manager()]
+                managers = [ph.span_manager(), ph.conv_manager(), ph.concat_manager()]
                 handler = ph.ProcessHandler(self.get_cfg_args(), managers, sample_array)
                 orders_and_searches, explanations = handler()
                 for explanation_type in explanations.keys():
-                    for key in explanations[explanation_type]:
-                        explanations[explanation_type][key] = [v for v, c in sorted(explanations[explanation_type][key],
-                                                                                    key=lambda vc: vc[1], reverse=True)]
-                pbar.update(2)
+                    if explanation_type != "concatenation search":
+                        for key in explanations[explanation_type]:
+                            explanations[explanation_type][key] = [v for v, c in sorted(explanations[explanation_type][key],
+                                                                   key=lambda vc: vc[1], reverse=True)]
+
+                pbar.update(3)
                 if "compare search":
                     explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)
                     pbar.update(1)
                 if "total order" in modes:
                     explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
                     pbar.update(1)
-                if "compare searches" in modes:
-                    explanations["compare searches"] = t.concatenation_search(orders_and_searches, sample_array)
-                    pbar.update(1)
-
 
         else:
             with tqdm(total=len(modes)) as pbar:
@@ -257,8 +255,8 @@ class Verbalizer:
                 if "total order" in modes:
                     explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
                 pbar.update(1)
-                if "compare searches" in modes:
-                    explanations["compare searches"] = t.concatenation_search(orders_and_searches, sample_array)
+                if "concatenation search" in modes:
+                    explanations["concatenation search"] = ps.concatenation_search(sample_array)
                 pbar.update(1)
             # TODO: Maybe detokenize input_ids using tokenizer from self?
         if not self.dev:
@@ -272,7 +270,7 @@ class Verbalizer:
     def filter_verbalizations(self, verbalizations, samples, orders_and_searches, maxwords=100, mincoverage=.1, *args):
         """
 
-        :param verbalizations: takes output[0] of self.doit()
+        :param verbalizations: takes output[0] of self.doit() - not needed right now
         :param samples: takes output[1] of self.doit()
         :param orders_and_searches: requires self.dev enabled and output[2] of self.doit()
         :param maxwords: maximum words in sample to be returned

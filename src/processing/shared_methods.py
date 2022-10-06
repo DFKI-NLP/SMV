@@ -1,4 +1,5 @@
 from src.search_methods import searches as fil
+from src.search_methods import post_searches as ps
 from src import tools as t
 
 
@@ -29,6 +30,6 @@ def compare_search(previous_searches, samples):
     return coincedences
 
 
-def concatenation_search(self, previous_searches, samples):
-    v = t.concatenation_search(previous_searches, samples)
+def concatenation_search(previous_searches, samples):
+    v = ps.concatenation_search(previous_searches, samples)
     return v

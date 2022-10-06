@@ -6,7 +6,7 @@ import time
 from dataclasses import dataclass
 from typing import Union, List, Tuple
 import psutil
-import src.processing.shared_value_searches as sh
+import src.processing.processing_tools as sh
 
 
 @dataclass(init=True)
@@ -79,16 +79,15 @@ class WorkerManager:
 
 # each process needs about 250mb with standard settings
 def conv_manager() -> WorkerManager:  # req. for full usage: 1.8 GByte with 0.3 GByte being reserve
-    return WorkerManager("convolution search", [], .3, 6, 0, sh.shared_memory_convsearch)
+    return WorkerManager("convolution search", [], .3, 6, 0, sh.worker_convsearch)
 
 
 def span_manager() -> WorkerManager:  # req. for full usage: 0.6 GByte with 0.1 GByte being reserve
-    return WorkerManager("span search", [], .3, 2, 1, sh.shared_memory_spansearch)
+    return WorkerManager("span search", [], .3, 2, 1, sh.worker_spansearch)
 
 
 def concat_manager() -> WorkerManager:
-    raise NotImplementedError
-    return WorkerManager("concatenation search", ["convolution search", "span search"], 3, 2, 2, sh.shared_memory_compare_searches)
+    return WorkerManager("concatenation search", ["convolution search", "span search"], .3, 6, 2, sh.worker_concatsearch)
 
 
 ########################################################################################################################
@@ -150,6 +149,9 @@ class ProcessHandler:
 
     def __call__(self, *args, **kwargs) -> Tuple[dict, dict]:
         while sum([manager.done for manager in self.managers]) != len(self.managers):
+            if self.allocated_ram > 0:
+                print(f"[MAIN]: Freed {self.allocated_ram}GB of memory from previous searches")
+            self.allocated_ram = 0
             for manager in self.managers:
                 if manager.TaskName not in self.fulfilled_tasks:
                     print(f"[MAIN]: Starting [{manager.TaskName} MANAGER]")
@@ -185,14 +187,15 @@ class ProcessHandler:
         if manager.num_workers > 0:  # move this to another method
             result, workers_without_work = manager.get()
             for entry in result:
-                self.orders_and_searches[manager.TaskName][entry[2]] = entry[0]
-                self.explanations[manager.TaskName][entry[2]] = entry[1]
+                if entry[0]:
+                    self.orders_and_searches[manager.TaskName][entry[2]] = entry[0]
+                if entry[1]:
+                    self.explanations[manager.TaskName][entry[2]] = entry[1]
             for worker in workers_without_work:  # TODO: split into 2 methods
                 if manager.active:
                     key, value = self.get_workerargs(manager)
-                    if key != -1:
-                        manager.set(worker, (key, value))
-                    else:
+                    manager.set(worker, (key, value))
+                    if key == -1:
                         manager.kill(worker)
         else:
             manager.active = False
@@ -205,6 +208,10 @@ class ProcessHandler:
             return key, self.samples[key] if key != -1 else key
 
         if manager.TaskName == "convolution search":
+            key = next(manager.iterator)
+            return key, self.samples[key] if key != -1 else key
+
+        if manager.TaskName == "concatenation search":
             key = next(manager.iterator)
             return key, self.samples[key] if key != -1 else key
 
