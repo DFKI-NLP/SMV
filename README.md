@@ -50,19 +50,54 @@ calculated values for span- and convolution search.
 
 # Advanced
 
-TODO: modularize metrics and such
+At the current state of this implementation, you can manipulate the parameters in a config.
+The presented example is the "toy_dev.yml".
 
-
----
-
-## Reproduce Greedy Rationales on Annotated LAMBADA (Vafa et al., 2021)
-
-1) Clone [github.com/keyonvafa/sequential-rationales](https://github.com/keyonvafa/sequential-rationales) and change directory (`cd`) to `sequential-rationales`
-2) `pip install -r requirements`
-3) In *huggingface/rationalize_annotated_lambada.py* (l. 61), replace `model` with pre-trained GPT-2:  
 ```python
-#model = AutoModelForCausalLM.from_pretrained(
-#  os.path.join(args.checkpoint_dir, "compatible_gpt2/checkpoint-45000"))
-model = AutoModelWithLMHead.from_pretrained("keyonvafa/compatible-gpt2")
+source: "thermostat/imdb-bert-lig"
+sgn: "+"
+samples: 100
+metric:
+  name: "mean"
+  value: 0.4
+multiprocessing: True
+dev: True
+maxwords: 100
+mincoverage: .1
 ```
-4) Change directory (`cd`) to `huggingface` and execute `python rationalize_annotated_lambada.py` producing Greedy Rationales in `huggingface/rationalization_results`
+By changing the sgn parameter to "-" or None, you´d allow the verbalizer to take negative values as such, leading to
+different results, even though we found "+" to work best in general.
+by changing metric to one of our proposed metrics (quantile, mean), you can change the generation of the baseline value
+at which a sample snippet gets considered salient and thus returned.
+If you enable the dev parameter, you can search for specific classes of samples. Currently implemented is:
+the filtering of the length of samples (via maxwords)
+and mincoverage, which checks the generated verbalizations for snippets of atleast n% coverage, if no snippet has at
+least n% coverage, the sample is not considered valid and thus the index will not be saved.
+<br />
+
+This filtering requires some changes to the code from the **Getting started** section
+```python
+import src.dataloader as d
+import src.tools as t
+
+config_path = "configs/toy_dev.yml"
+config, source = t.read_config(config_path)
+verbalizer = d.Verbalizer(source, config=config, multiprocess=True)
+
+maxwords = 100
+mincoverage = 0.1
+
+
+explanations, texts, searches = verbalizer()
+valid_keys = verbalizer.filter_verbalizations(explanations, texts, searches,
+                                                  maxwords=maxwords, mincoverage=mincoverage)
+for key in valid_keys:
+    print(explanations[key])
+```
+
+Note that this can also be done via the `src.search_methods.fastexplain.explain` method and a given config,
+without the need of changing any code.
+Additionally, if youd like to explain a dataset and save the explanations for later use, we´ve implemented a to_json,
+that is currently only usable via the `fastexplain.explain` method.
+
+For further information you can look at the documentation of the `Verbalizer` class or our provided demos

@@ -4,6 +4,7 @@ samples: -1
 metric:
   name: "quantile"
   value: 3
+multiprocessing: True
 dev: True
 maxwords: 100
 mincoverage: .1

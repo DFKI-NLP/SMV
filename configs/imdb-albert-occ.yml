@@ -1,0 +1,10 @@
+dev: True
+maxwords: 100
+metric:
+  name: "mean"
+  value: 0.4
+multiprocessing: True
+mincoverage: 0.1
+samples: -1
+sgn: "+"
+source: "thermostat/imdb-albert-occ"

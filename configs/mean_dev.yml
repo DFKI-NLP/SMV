@@ -4,6 +4,7 @@ samples: -1
 metric:
   name: "mean"
   value: 0.4
+multiprocessing: True
 dev: True
 maxwords: 100
 mincoverage: .1

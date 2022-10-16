@@ -87,7 +87,7 @@ def span_manager() -> WorkerManager:  # req. for full usage: 0.6 GByte with 0.1 
     return WorkerManager("span search", [], .3, 2, 1, sh.worker_spansearch)
 
 
-def concat_manager() -> WorkerManager:
+def concat_manager() -> WorkerManager:  # req. for full usage: 1.8 GByte with 0.3 GByte being reserve
     return WorkerManager("concatenation search", ["convolution search", "span search"], .3, 6, 2, sh.worker_concatsearch)
 
 
@@ -124,7 +124,7 @@ class ProcessHandler:
         for _ in range(len(managers) - 1):
             for i in range(len(managers) - 1):
                 if managers[i].TaskIndex > managers[i + 1].TaskIndex:
-                    managers[i], managers[i + 1] = managers[i + 1], managers[i]
+                    managers[i], managers[i + 1] = managers[i + 1], managers[i]  # TODO: change to lambda expression
 
         for i in range(len(managers)):
             managers[i].TaskID = i

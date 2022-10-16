@@ -1,6 +1,7 @@
 import json
 import multiprocessing
 import time
+from dataclasses import dataclass
 
 from tqdm import tqdm
 from typing import List, Union
@@ -38,17 +39,30 @@ class Verbalizer:
         dev: True
         maxwords: 100
         mincoverage: .1
+        multiprocessing: True
 
         --> end of config example <--
 
-        possible metrics:
-        : "mean_sum: n" where n is a float ranging from 0 to 1;
-            uses mean(sum(sorted(attribs[:len * n])) as metric
+        base settings:
+        : sgn: "+", "-" or None -> which attributions should be considered?
+        : samples: int -> how many samples should be directly loaded (it is technically possible to use this as a
+                          checkpoint but indexing is not entirely implemented
+        metric:
+            possible metrics:
+            "mean" uses our proposed mean candidate selection metric
+                : value: float (0.0 - 1.0) which percentile of top tokens should be used to generate baseline value
 
-        : "quantile: n" where n is a float ranging from 0 to inf
-            uses stdev as metric where the outliers of the n-th quantile are used as anchors for verbalization
+            : "quantile" uses our proposed quantile candidate selection metric
+                : value: float (0.0 - +inf) which std value should be used to generate baseline value
 
+        dev: bool -> enables advanced features to filter for specific results
+        paramaters if dev == True:
+            maxwords: int -> how long can a sample be to be used for calculation
+            mincoverage: float(0.0 - 1.0) -> what is the minimum coverage value for a calculated
+                                             sample to be eligble for return
 
+        meta parameters:
+        multiprocessing: bool -> should our multiprocessing implementation of this work be used to speed up calculations
         """
 
         self.models = {
@@ -82,7 +96,7 @@ class Verbalizer:
         self.label_names = None
         self.dev = dev
         self.multiprocess = multiprocess
-        #self.tokenizer = eval("tokenizers.Tokenizer.from_pretrained('{}')"  # force_download=True,
+        # self.tokenizer = eval("tokenizers.Tokenizer.from_pretrained('{}')"  # force_download=True,
         #                      .format(self.models[self.model_type][1]))
         self.tokenizer = eval("transformers.{}.from_pretrained('{}', cache_dir='data')"  # force_download=True,
                               .format(self.models[self.model_type][0],
@@ -100,11 +114,13 @@ class Verbalizer:
                 self.dev = config["dev"]
                 self.maxwords = config["maxwords"]
                 self.mincoverage = config["mincoverage"]
+            if config["multiprocessing"]:
+                self.multiprocess = config["multiprocessing"]
 
     def add_explanations_to_dict(self, data, dct):
         for counter in range(len(data)):
             _ = json.loads(data[counter])
-            dct[counter] = {"input_ids":  self.tokenizer.convert_ids_to_tokens(_["input_ids"]),
+            dct[counter] = {"input_ids": self.tokenizer.convert_ids_to_tokens(_["input_ids"]),
                             "attributions": _["attributions"],
                             "label": _["label"],
                             "predictions": _["predictions"]
@@ -142,11 +158,11 @@ class Verbalizer:
                     for i in range(num_entries):
                         dataset_snippet.append(dataset.readline())
                         self.checkpoint += 1
-                    #add_explanations_to_dict(dataset_snippet, _dict)
+                    # add_explanations_to_dict(dataset_snippet, _dict)
             else:
                 dataset_snippet = []
                 for i in range(num_entries):
-                    dataset_snippet.append(self.source[i+self.checkpoint])
+                    dataset_snippet.append(self.source[i + self.checkpoint])
             self.add_explanations_to_dict(dataset_snippet, _dict)
 
             if not dataset_snippet:  # TODO remove recursion ?
@@ -181,7 +197,7 @@ class Verbalizer:
         else:
             self.label_names = dataset_snippet["dataset"]["label_names"]
         """
-        #self.label_names = dataset_snippet["dataset"]["label_names"]
+        # self.label_names = dataset_snippet["dataset"]["label_names"]
         return cleaned_dict
 
     def doit(self, modes: list = None, n_samples: int = None):
@@ -219,8 +235,9 @@ class Verbalizer:
                 for explanation_type in explanations.keys():
                     if explanation_type != "concatenation search":
                         for key in explanations[explanation_type]:
-                            explanations[explanation_type][key] = [v for v, c in sorted(explanations[explanation_type][key],
-                                                                   key=lambda vc: vc[1], reverse=True)]
+                            explanations[explanation_type][key] = [v for v, c in
+                                                                   sorted(explanations[explanation_type][key],
+                                                                          key=lambda vc: vc[1], reverse=True)]
                 pbar.update(3)
                 if "compare search":
                     explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)
@@ -233,10 +250,12 @@ class Verbalizer:
             with tqdm(total=len(modes)) as pbar:
                 if "convolution search" in modes:
                     if not self.sgn:
-                        (explanations["convolution search"], orders_and_searches["convolution search"]) = sm.convolution_search(
+                        (explanations["convolution search"],
+                         orders_and_searches["convolution search"]) = sm.convolution_search(
                             sample_array.copy(), self.len_filters, metric=self.metric)
                     else:
-                        (explanations["convolution search"], orders_and_searches["convolution search"]) = sm.convolution_search(
+                        (explanations["convolution search"],
+                         orders_and_searches["convolution search"]) = sm.convolution_search(
                             sample_array.copy(), self.len_filters, self.sgn, self.metric)
                 pbar.update(1)
                 if "span search" in modes:
@@ -276,7 +295,7 @@ class Verbalizer:
         :param mincoverage: minimum coverage needed for a sample to be returned (0.0 - 1.0)
         :return: filtered verbalizations
         """
-        tofilter = self.modes[:len(self.modes)-3]  # MANUAL NEEDS TO BE CHANGED WITH EVERY ADDED SEARCHTYPE
+        tofilter = self.modes[:len(self.modes) - 3]  # MANUAL NEEDS TO BE CHANGED WITH EVERY ADDED SEARCHTYPE
         filter_len = lambda x: [len(x[i]["input_ids"]) < maxwords for i in x.keys()]
         filter_verbalizations = lambda x, n, searchtype: [sum(samples[n]["attributions"][min(i):max(i)]) /
                                                           sum(samples[n]["attributions"]) > mincoverage
