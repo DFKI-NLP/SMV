@@ -8,13 +8,13 @@ if __name__ == "__main__":
         print(i)
 
     # also this is possible
-    config = fc.Config()  # for mean_nodev
+    config = fc.Config(fc.Source())  # for mean_nodev
     explanations = fe.explain(config)
     for i in explanations:
         print(i)
 
     # or if you want to customize it
-    source = fc.Source(modelname="Albert", datasetname="IMDB", explainername="Integrated Gradients")
+    source = fc.Source(modelname="AlBert", datasetname="AGNEWS", explainername="Shapley Value Sampling")
     config = fc.Config(src=source,
                        sgn="+",
                        metric="quantile",

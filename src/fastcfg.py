@@ -1,12 +1,11 @@
 from dataclasses import dataclass
-import yaml
-"thermostat/imdb-bert-lig"
+
 
 class Source:
     def __init__(self,
                  modelname="Bert",
                  datasetname="IMDB",
-                 explainername="Integrated Gradients") -> None:
+                 explainername="Layer Integrated Gradients") -> None:
         """
         on-the-fly implementation of the thermostat library access
         :param modelname: name of the model to be explained
@@ -16,14 +15,42 @@ class Source:
         self.model = modelname
         self.dataset = datasetname
         self.explainer = explainername
-
-        converter = {  # TODO: implementend all other explainers too
-            "integrated gradients": "lig",
-            "occlusion": "occ",
-
+        models = ["albert", "bert", "electra", "roberta", "xlnet"]
+        datasets = {
+            "imdb": "imdb",
+            "xnli": "xnli",
+            "agnews": "ag_news",
+            "ag news": "ag_news",
+            "multinli": "multi_nli"
         }
-        self.sourcename = "thermostat/" + \
-                          datasetname.lower() + "-" + modelname.lower() + "-" + converter[explainername.lower()]
+        explainers = {  # TODO: implementend all other explainers too
+            "layer integrated gradients": "lig",
+            "occlusion": "occ",
+            "lime": "lime",
+            "shapley value sampling": "svs",
+            "layer deepliftshap": "lds",
+            "layer gradientshap": "lgs",
+            "layer gradient x activation": "lgxa",
+        }
+        try:
+            self.sourcename = "thermostat/" + \
+                              datasets[datasetname.lower()] + "-" + modelname.lower() + "-" + explainers[explainername.lower()]
+
+            if modelname.lower() == "xlnet" or modelname.lower() == "electra":
+                if datasets[datasetname.lower()] == "ag_news":
+                    print("XLNet and ELECTRA are not supported for ag_news by thermostat. Exiting")
+                    raise RuntimeError
+        except Exception as e:
+
+            if modelname.lower() not in models:
+                print(f"model didnt match, possible models: {models}, entered model: {modelname.lower()}")
+            if datasetname.lower() not in list(datasets.keys()):
+                print(f"dataset wasnt valid, possible datasets: {datasets}, entered dataset: {datasetname.lower()}")
+            if explainername not in list(explainers.keys()):
+                print(
+                    f"explainer wasnt valid, possible explainers: {list(explainers.keys())}, entered explainer {explainername.lower()}")
+
+            raise RuntimeError("")
 
     def get_sourcename(self) -> str:
         return self.sourcename
@@ -31,7 +58,7 @@ class Source:
 
 class Config:
     def __init__(self,
-                 src: Source = Source(),
+                 src: Source,
                  sgn: str = "+",
                  samples: int = -1,
                  metric: str = "mean",
@@ -61,8 +88,8 @@ class Config:
         self.value = value
         self.multiprocessing = multiprocessing
         self.dev = dev
-        self.maxwords = dev*maxwords
-        self.mincoverage = dev*mincoverage
+        self.maxwords = dev * maxwords
+        self.mincoverage = dev * mincoverage
 
     def to_yaml(self) -> str:
         yaml_repr = f"source: {self.src.get_sourcename()}\n" \
@@ -79,4 +106,3 @@ class Config:
 
     def __call__(self, *args, **kwargs):
         return self.to_yaml()
-
