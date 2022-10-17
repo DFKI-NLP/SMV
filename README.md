@@ -137,8 +137,9 @@ for explanation in explanations:
 ```
 With this you can change specific parameters on-the-fly for fast-testing of multiple configurations
 
+### Filtering of results
 
-This filtering requires some changes to the code from the **Getting started** section
+Our small filtering methods require some changes to the code from the **Getting started** section
 ```python
 import src.dataloader as d
 import src.tools as t
