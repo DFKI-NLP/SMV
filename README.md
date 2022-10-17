@@ -134,6 +134,11 @@ Config = cfg.Config(src=Source,
 explanations = fe.explain(Config)
 for explanation in explanations:
     print(explanation)
+
+# you can also save a generated Config:
+filename = "filename.yml"
+with open(filename) as f:
+    f.write(Config.to_yaml())
 ```
 With this you can change specific parameters on-the-fly for fast-testing of multiple configurations
 
