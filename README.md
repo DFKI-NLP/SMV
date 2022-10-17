@@ -1,15 +1,20 @@
 # Saliency Map Verbalizations
 
-This repository implements [link zu unserem Paper]
+This repository implements https://arxiv.org/abs/2210.07222
 
 ## Getting started:
 1) You should use Python 3.8
 2) clone this repository
 3) `pip install -r requirements`
 
-To verbalize a dataset you first need to write a config file, the rest will be managed the `Verbalizer`. We provide some
-examplatory config files to play around with.
+## Example usage
+To verbalize a dataset you first need to write a config file, the rest will be managed by the `Verbalizer` class object.
+We provide some examplatory config files to play around with.
 After defining a config you can use it to immediately get an explanation.
+For a fast start, look at our demo.py, if you only want a fast explanation, that is all you need.
+
+Otherwise, if you dont like the format in which we represent explanations, you can get the raw output of our search
+method like this.
 ```python
 from src.search_methods import fastexplain as fe
 
@@ -18,7 +23,46 @@ explanation_string = fe.explain(config_path)
 for explanation in explanation_string:
     print(explanation)
 ```
-just like in demo.py
+just like in demo.py. Output (one explanation):
+```
+SAMPLE:
+fantastic , madonna at her finest , the film is funny and her 
+acting is brilliant . it may have been made in the 80 ' s but it has all the 
+qualities of a modern hollywood block - buster . i love this 
+film and i think its totally unique and will cheer up any dr ##oop 
+##y person within a matter of minutes . fantastic .
+
+subclass 'convolution search'
+snippet: 'i love this ' contains 53.51% of prediction score.
+snippet: 'love this and ' contains 44.96% of prediction score.
+snippet: '. love this ' contains 43.72% of prediction score.
+snippet: 'love this i ' contains 43.67% of prediction score.
+snippet: 'love this film ' contains 42.52% of prediction score.
+subclass 'span search'
+snippet: 'i love this film and ' contains 57.03% of prediction score.
+snippet: '. i love this film ' contains 55.78% of prediction score.
+snippet: 'i love this ' contains 53.51% of prediction score.
+snippet: 'love this film and i ' contains 47.19% of prediction score.
+snippet: 'love this film ' contains 42.52% of prediction score.
+subclass 'concatenation search'
+The phrase » i love this « is most important for the prediction (54 %).
+subclass 'compare search'
+snippet: 'this film and' occurs in all searches and accounts for 28.74% of prediction score
+snippet: 'love this film' occurs in all searches and accounts for 42.52% of prediction score
+snippet: 'i love this' occurs in all searches and accounts for 53.51% of prediction score
+snippet: '. i love' occurs in all searches and accounts for 30.03% of prediction score
+subclass 'total order'
+top tokens are:
+token 'this' with 25.22% of prediction score
+token 'love' with 16.76% of prediction score
+token 'i' with 11.53% of prediction score
+token 'unique' with 3.98% of prediction score
+Prediction was correct.
+```
+Note that the original output will be colourcoded
+
+
+## Advanced
 
 if you'd like to use our explanation methods more in depth you can use the `Verbalizer` directly
 ```python
@@ -47,8 +91,6 @@ for explanation in explanations:
 This will produce the same explanation like the demo but the resulting string is not formatted.
 The variable `texts` will contain the samples of the dataset you chose to explain, `searches` will contain our
 calculated values for span- and convolution search.
-
-# Advanced
 
 At the current state of this implementation, you can manipulate the parameters in a config.
 The presented example is the "toy_dev.yml".
@@ -101,3 +143,19 @@ Additionally, if youd like to explain a dataset and save the explanations for la
 that is currently only usable via the `fastexplain.explain` method.
 
 For further information you can look at the documentation of the `Verbalizer` class or our provided demos
+
+## Config parameter cheat-sheet
+
+| Parameter         | Values                                    | Description                                                                                                      | Dtype(s)      |
+|:------------------|:------------------------------------------|:-----------------------------------------------------------------------------------------------------------------|:--------------|
+| `source`          | path to file                              | path to config file                                                                                              | `str`         |
+| `multiprocessing` | `True`, `False`: `True` is default        | should our multiprocessing implementation of our paper be used                                                   | `bool`        |
+| `sgn`             | `"+"`, `"-"`, `None`                      | Values of what sign should be used for calculation, None uses all                                                | `str`, `None` |
+| `samples`         | any of {-1, (0, +oo]}                     | -1 to read whole dataset, any other number to read                                                               | `int`         |
+| metric:`name`     | See documentation of dataloader           | How should the baseline value be calculated                                                                      | `str`         |
+| metric:`value`    | depends on metric, see docs of dataloader | What value should be used to generate baseline value                                                             | `float`       |
+| `dev`             | `True`, `False`, default is `False`       | Enables further settings, allowing to filter the dataset, if False, `maxwords` and `mincoverage` will be ignored | `bool`        |
+| `maxwords`        | any of (0, +oo]                           | Filters for samples that have a maximum of `maxwords` words                                                      | `int`         |
+| `mincoverage`     | any of [0., 1.]                           | Only considers this samples explanation valid if any snippet has at least `mincoverage`% of coverage             | `float`       |
+
+Please note that this is still in development and object to change
