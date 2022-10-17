@@ -6,6 +6,8 @@ import datasets
 import numpy as np
 import thermostat
 
+import src.fastcfg as fc
+
 from collections import defaultdict
 from numba import jit
 from typing import List
@@ -324,10 +326,13 @@ def get_binary_attributions_from_annotator_rationales(text: str, rationales: Lis
     binary_attributions = []
 
 
-def read_config(config_path):
+def read_config(cfg_path_or_object) -> tuple:
     config = None
-    with open(config_path) as stream:
-        config = yaml.safe_load(stream)
+    if not type(cfg_path_or_object) == fc.Config:
+        with open(cfg_path_or_object) as stream:
+            config = yaml.safe_load(stream)
+    else:
+        config = yaml.safe_load(cfg_path_or_object())
     if not os.path.isfile(config["source"]):
         if "thermostat/" in config["source"]:
             # Load source from Thermostat configuration

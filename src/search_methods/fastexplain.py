@@ -33,8 +33,8 @@ def explain_nodev(config, source, to_json=False):
         return returnstr
 
 
-def explain(config_path, to_json=False, maxwords=None, mincoverage=None):
-    config, source = t.read_config(config_path)
+def explain(cfg_or_path, to_json=False, maxwords=None, mincoverage=None):
+    config, source = t.read_config(cfg_or_path)
     if config["dev"]:
         key_verbalization_attribs = {}
 

@@ -71,7 +71,7 @@ import src.tools as t
 
 config_path = "configs/toy_dev.yml"
 config, source = t.read_config(config_path)
-verbalizer = d.Verbalizer(source, config=config, multiprocess=True)
+verbalizer = d.Verbalizer(source, config=config)
 
 explanations, texts, searches = verbalizer()
 
@@ -92,6 +92,7 @@ This will produce the same explanation like the demo but the resulting string is
 The variable `texts` will contain the samples of the dataset you chose to explain, `searches` will contain our
 calculated values for span- and convolution search.
 
+### Manual config writing
 At the current state of this implementation, you can manipulate the parameters in a config.
 The presented example is the "toy_dev.yml".
 
@@ -115,7 +116,27 @@ If you enable the dev parameter, you can search for specific classes of samples.
 the filtering of the length of samples (via maxwords)
 and mincoverage, which checks the generated verbalizations for snippets of atleast n% coverage, if no snippet has at
 least n% coverage, the sample is not considered valid and thus the index will not be saved.
-<br />
+
+### Config constructor
+Additionally you can also use our plug-and-play-like config class
+```python
+import src.fastcfg as cfg
+import src.search_methods.fastexplain as fe
+
+# fixme: only lig and occ implemented in converter in src.fastcfg.Source, implement rest too.
+
+Source = cfg.Source(modelname="Name of your model, for example Bert",
+                    datasetname= "Name of the dataset, for example IMDB",
+                    explainername= "Full name of the explanation algorithm, for example Integrated Gradients")
+Config = cfg.Config(src=Source,
+                    sgn= "+",
+                    samples= 100)
+explanations = fe.explain(Config)
+for explanation in explanations:
+    print(explanation)
+```
+With this you can change specific parameters on-the-fly for fast-testing of multiple configurations
+
 
 This filtering requires some changes to the code from the **Getting started** section
 ```python
@@ -139,8 +160,8 @@ for key in valid_keys:
 
 Note that this can also be done via the `src.search_methods.fastexplain.explain` method and a given config,
 without the need of changing any code.
-Additionally, if youd like to explain a dataset and save the explanations for later use, we´ve implemented a to_json,
-that is currently only usable via the `fastexplain.explain` method.
+Additionally, if you'd like to explain a dataset and save the explanations for later use, we´ve implemented a to_json,
+that is currently usable via the `fastexplain.explain`, via setting the to_json parameter to `True`.
 
 For further information you can look at the documentation of the `Verbalizer` class or our provided demos
 
