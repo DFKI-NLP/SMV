@@ -65,7 +65,7 @@ def worker_concatsearch(sgn: str,
             if data == -1:
                 child_pipe.close()
                 break
-            verbalization = ps.single_concat_search(data)
+            verbalization = ps.single_concat_search(*data)
             child_pipe.send((None, [verbalization], key))
 
 

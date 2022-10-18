@@ -29,7 +29,3 @@ def compare_search(previous_searches, samples):
     coincedences = t.compare_search(previous_searches, samples)
     return coincedences
 
-
-def concatenation_search(previous_searches, samples):
-    v = ps.concatenation_search(previous_searches, samples)
-    return v

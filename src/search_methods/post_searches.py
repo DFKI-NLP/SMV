@@ -4,17 +4,17 @@ import numpy as np
 from numba import jit
 
 
-def single_concat_search(sample):
+def single_concat_search(sample, searches, *args, **kwargs):
     sample_atts = sample["attributions"]
     input_ids = sample["input_ids"]
-    candidates = defaultdict(dict)
+    candidates = {}
 
-    # unused?
-    # for stype in searches.keys():
-    #     explore_search(candidates, stype, searches, sample_key, sample_atts)
+    for stype in searches.keys():  # fixme: please add documentation? - this does the same as explore search
+        candidates[stype] = {}
+        for indices in searches[stype]["indices"]:
+            candidates[stype][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
 
-
-
+    candidates["total search"] = {}
     for i, attr in enumerate(sample_atts):
         candidates['total search'][str(i)] = coverage([i], sample_atts)
 
@@ -37,10 +37,10 @@ def single_concat_search(sample):
 
     cov_fs = []
     for fs in final_spans:
-        cov_fs.append(coverage(fs, sample_atts))
+        cov_fs.append(coverage((fs[0], fs[-1]), sample_atts))
     upper_quartile = np.quantile(cov_fs, 0.75)
 
-    num_uq_spans = len([cov_fs[i] > upper_quartile for i, fs in enumerate(final_spans)])
+    num_uq_spans = len([cov_fs[i] > upper_quartile for i in range(len(cov_fs))])
     spans_with_ranks = {}
     for i, fs in enumerate(final_spans):
         rank = sorted(cov_fs, reverse=True).index(cov_fs[i])
@@ -89,7 +89,7 @@ def single_concat_search(sample):
     return verbalized_explanation
 
 
-def concatenation_search(samples, *args, **kwargs):
+def concatenation_search(samples, searches, *args, **kwargs):
     """
     concatenates sample attributions to largest possible positive attributed span
     :param samples: sample array
@@ -101,26 +101,36 @@ def concatenation_search(samples, *args, **kwargs):
     # sample_info = []  ##UNUSED##
     verbalized_explanations = {}
     for sample_key in samples.keys():
-        verbalized_explanations[sample_key] = single_concat_search(samples[sample_key])
+        search = {}
+        for stype in searches.keys():
+            search[stype] = searches[stype][sample_key]
+
+        verbalized_explanations[sample_key] = single_concat_search(samples[sample_key], search)
         # sample_info.append(samples[sample_key])
     return verbalized_explanations
 
 
-def explore_search(candidates, search_type, searches, sample_key, sample_atts):
+def explore_search(candidates, search_type, searches, sample_key, sample_atts):  # fixme: look at single concat
     warnings.warn("Method not in use")
-    candidates[search_type] = {}
     for indices in searches[search_type][sample_key]["indices"]:
         candidates[search_type][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
     return candidates
 
 
+coverage = lambda span, attributions: max(sum(attributions[span[0]:span[-1]])/sum([(a > 0) * a for a in attributions]), 0)
+"""
+This is the above lambda; just that the lambda is somehow 4s faster
 def coverage(span, attributions):
     if span[0]:
-        pos_att_sum = sum([float(a) if a > 0 else 0 for a in attributions])
+        pos_att_sum = [(a > 0) * a for a in attributions]
+        pos_att_sum = sum(pos_att_sum)
         if pos_att_sum > 0:
-            return sum([attributions[w] for w in span]) / pos_att_sum
+            cov = attributions[span[0]:span[-1]]
+            cov = sum(cov)
+            cov = cov/pos_att_sum
+            return cov
     return 0
-
+"""
 
 def combine_results(result_dict, combined_candidate_indices):
     for idx_cov_tuple in result_dict:

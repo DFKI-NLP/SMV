@@ -88,8 +88,7 @@ def span_manager() -> WorkerManager:  # req. for full usage: 0.6 GByte with 0.1 
 
 
 def concat_manager() -> WorkerManager:  # req. for full usage: 1.8 GByte with 0.3 GByte being reserve
-    return WorkerManager("concatenation search", ["convolution search", "span search"], .3, 6, 2, sh.worker_concatsearch)
-
+    return WorkerManager("concatenation search", ["convolution search", "span search"], .3, 8, 3, sh.worker_concatsearch)
 
 ########################################################################################################################
 ########################################################################################################################
@@ -210,15 +209,26 @@ class ProcessHandler:
     def get_workerargs(self, manager: WorkerManager) -> tuple:
         if manager.TaskName == "span search":
             key = next(manager.iterator)
-            return key, self.samples[key] if key != -1 else key
+            if key == -1:
+                return key, key
+            return key, self.samples[key]
 
         if manager.TaskName == "convolution search":
             key = next(manager.iterator)
-            return key, self.samples[key] if key != -1 else key
+            if key == -1:
+                return key, key
+            return key, self.samples[key]
 
         if manager.TaskName == "concatenation search":
             key = next(manager.iterator)
-            return key, self.samples[key] if key != -1 else key
+            if key == -1:
+                return key, key
+
+            search = {
+                "convolution search": self.orders_and_searches["convolution search"][key],
+                "span search": self.orders_and_searches["span search"][key]
+            }  # fixme: modularize (and i do not mean put it in a for-loop); maybe with dictionary containin lambda?
+            return key, (self.samples[key], search)
 
         raise NotImplementedError  # TODO: modularize
 

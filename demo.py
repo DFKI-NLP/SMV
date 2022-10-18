@@ -3,7 +3,7 @@ import src.fastcfg as fc
 
 
 if __name__ == "__main__":
-    explanations = fe.explain("configs/toy_dev.yml")
+    explanations = fe.explain("configs/mean_dev.yml")
     for i in explanations:
         print(i)
 
@@ -13,7 +13,7 @@ if __name__ == "__main__":
     for i in explanations:
         print(i)
 
-    # or if you want to customize it
+    # or if you want to customize it, you can choose any model, dataset and explainer that is supported by thermostat
     source = fc.Source(modelname="AlBert", datasetname="AGNEWS", explainername="Shapley Value Sampling")
     config = fc.Config(src=source,
                        sgn="+",
