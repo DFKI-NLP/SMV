@@ -30,7 +30,7 @@ def worker_convsearch(sgn: str,
 def worker_spansearch(sgn: str,
                       len_filters: int,
                       metric,
-                      child_pipe) -> None:  # rename
+                      child_pipe) -> None:
 
     sorted_filters = f.generate_spans(len_filters)
     while True:

@@ -1,6 +1,6 @@
 import src.search_methods.fastexplain as fe
 import src.fastcfg as fc
-
+import src.search_methods.post_searches as p
 
 if __name__ == "__main__":
     explanations = fe.explain("configs/mean_dev.yml")
@@ -22,3 +22,5 @@ if __name__ == "__main__":
     explanations = fe.explain(config)
     for i in explanations:
         print(i)
+
+    p.coverage()

@@ -112,7 +112,7 @@ def concatenation_search(samples, searches, *args, **kwargs):
 
 
 def explore_search(candidates, search_type, searches, sample_key, sample_atts):  # fixme: look at single concat
-    warnings.warn("Method not in use")
+    warnings.warn("Deprecated")
     for indices in searches[search_type][sample_key]["indices"]:
         candidates[search_type][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
     return candidates

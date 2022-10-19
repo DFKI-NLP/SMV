@@ -87,7 +87,7 @@ def span_manager() -> WorkerManager:  # req. for full usage: 0.6 GByte with 0.1 
     return WorkerManager("span search", [], .3, 2, 1, sh.worker_spansearch)
 
 
-def concat_manager() -> WorkerManager:  # req. for full usage: 1.8 GByte with 0.3 GByte being reserve
+def concat_manager() -> WorkerManager:  # req. for full usage: 2.4 GByte with 0.4 GByte being reserve
     return WorkerManager("concatenation search", ["convolution search", "span search"], .3, 8, 3, sh.worker_concatsearch)
 
 ########################################################################################################################

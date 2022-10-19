@@ -1,6 +1,6 @@
 # Saliency Map Verbalizations
 
-This repository implements https://arxiv.org/abs/2210.07222
+Verbalizing saliency maps with templates and binary filtering.
 
 ## Getting started:
 1) You should use Python 3.8
@@ -16,13 +16,13 @@ For a fast start, look at our demo.py, if you only want a fast explanation, that
 ```python
 from src.search_methods import fastexplain as fe
 
-config_path = "configs/toy_dev.yml"  # TODO: modularize as standard-config/ build dataclass
+config_path = "configs/toy_dev.yml"
 explanation_string = fe.explain(config_path)
 for explanation in explanation_string:
     print(explanation)
 ```
 
-just like in demo.py. Output (one explanation):
+Just like in demo.py. Output (one explanation).:
 ```
 SAMPLE:
 fantastic , madonna at her finest , the film is funny and her 
@@ -66,28 +66,22 @@ Note that the original output will be colourcoded
 Otherwise, if you don't like the format in which we represent explanations, you can get the raw output of our search
 methods like this, by using the `Verbalizer` directly.
 ```python
-import src.dataloader as d
-import src.tools as t
+import src.dataloader as data
+import src.tools as tools
 
 config_path = "configs/toy_dev.yml"
-config, source = t.read_config(config_path)
-verbalizer = d.Verbalizer(source, config=config)
+config, source = tools.read_config(config_path)
+verbalizer = data.Verbalizer(source, config=config)
 
 explanations, texts, searches = verbalizer()
-
-"""
-note that verbalizer() calls verbalizer.doit()
-also multiprocess is set to True by default, disabling is encouraged for systems with less than 8GB RAM
-or systems with less than 4 (logic) cores
-
-TODO: automate multiprocessing decision making
-
-disabling multiprocessing can lead to 5x increased running time
-"""
 
 for explanation in explanations:
     print(explanation)
 ```
+Note that `verbalizer()` calls `verbalizer.doit()`
+also multiprocess is set to `True` by default, disabling is encouraged for systems **with less than 8GB RAM**
+or systems with **less than 4 (physical) cores**. disabling multiprocessing can lead **to 5x increased running time**.
+
 This will produce the same explanation like the demo but the resulting string is not formatted and there will be some 
 less salient findings too.
 The variable `texts` will contain the samples of the dataset you chose to explain, `searches` will contain our
@@ -97,7 +91,7 @@ calculated values for span- and convolution search (`np.array`).
 You currently have two methods of generating a config. The first one is manual.
 The presented example is the "toy_dev.yml".
 
-```python
+```yaml
 source: "thermostat/imdb-bert-lig"
 sgn: "+"
 samples: 100
@@ -126,22 +120,22 @@ import src.search_methods.fastexplain as fe
 
 # fixme: only lig and occ implemented in converter in src.fastcfg.Source, implement rest too.
 
-Source = cfg.Source(modelname="Name of your model, for example Bert",
+source = cfg.Source(modelname="Name of your model, for example Bert",
                     datasetname= "Name of the dataset, for example IMDB",
-                    explainername= "Full name of the explanation algorithm, for example Integrated Gradients")
-Config = cfg.Config(src=Source,
+                    explainername= "Full name of the explanation algorithm, for example Layer Integrated Gradients")
+config = cfg.Config(src=source,
                     sgn= "+",
                     samples= 100)
 # With Config.get_possible_configurations() you can get a dictionary containing all possible configurations i.e. models,
 # datasets and explainers
-explanations = fe.explain(Config)
+explanations = fe.explain(config)
 for explanation in explanations:
     print(explanation)
 
 # you can also save a generated Config:
 filename = "filename.yml"
 with open(filename) as f:
-    f.write(Config.to_yaml())
+    f.write(config.to_yaml())
 ```
 With this you can change specific parameters on-the-fly for fast-testing of multiple configurations.
 
@@ -149,12 +143,12 @@ With this you can change specific parameters on-the-fly for fast-testing of mult
 
 Our filtering methods require some changes to the code from the **Getting started** section.
 ```python
-import src.dataloader as d
-import src.tools as t
+import src.dataloader as data
+import src.tools as tools
 
 config_path = "configs/toy_dev.yml"
-config, source = t.read_config(config_path)
-verbalizer = d.Verbalizer(source, config=config, multiprocess=True)
+config, source = tools.read_config(config_path)
+verbalizer = data.Verbalizer(source, config=config, multiprocess=True)
 
 maxwords = 100
 mincoverage = 0.1
