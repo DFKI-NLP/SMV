@@ -13,8 +13,6 @@ We provide some examplatory config files to play around with.
 After defining a config you can use it to immediately get an explanation.
 For a fast start, look at our demo.py, if you only want a fast explanation, that is all you need.
 
-Otherwise, if you dont like the format in which we represent explanations, you can get the raw output of our search
-method like this.
 ```python
 from src.search_methods import fastexplain as fe
 
@@ -23,6 +21,7 @@ explanation_string = fe.explain(config_path)
 for explanation in explanation_string:
     print(explanation)
 ```
+
 just like in demo.py. Output (one explanation):
 ```
 SAMPLE:
@@ -64,7 +63,8 @@ Note that the original output will be colourcoded
 
 ## Advanced
 
-if you'd like to use our explanation methods more in depth you can use the `Verbalizer` directly
+Otherwise, if you don't like the format in which we represent explanations, you can get the raw output of our search
+methods like this, by using the `Verbalizer` directly.
 ```python
 import src.dataloader as d
 import src.tools as t
@@ -88,12 +88,13 @@ disabling multiprocessing can lead to 5x increased running time
 for explanation in explanations:
     print(explanation)
 ```
-This will produce the same explanation like the demo but the resulting string is not formatted.
+This will produce the same explanation like the demo but the resulting string is not formatted and there will be some 
+less salient findings too.
 The variable `texts` will contain the samples of the dataset you chose to explain, `searches` will contain our
-calculated values for span- and convolution search.
+calculated values for span- and convolution search (`np.array`).
 
 ### Manual config writing
-At the current state of this implementation, you can manipulate the parameters in a config.
+You currently have two methods of generating a config. The first one is manual.
 The presented example is the "toy_dev.yml".
 
 ```python
@@ -118,7 +119,7 @@ and mincoverage, which checks the generated verbalizations for snippets of atlea
 least n% coverage, the sample is not considered valid and thus the index will not be saved.
 
 ### Config constructor
-Additionally you can also use our plug-and-play-like config class
+Our second method of building a config file is a small plug-and-play like system.
 ```python
 import src.fastcfg as cfg
 import src.search_methods.fastexplain as fe
@@ -131,6 +132,8 @@ Source = cfg.Source(modelname="Name of your model, for example Bert",
 Config = cfg.Config(src=Source,
                     sgn= "+",
                     samples= 100)
+# With Config.get_possible_configurations() you can get a dictionary containing all possible configurations i.e. models,
+# datasets and explainers
 explanations = fe.explain(Config)
 for explanation in explanations:
     print(explanation)
@@ -140,11 +143,11 @@ filename = "filename.yml"
 with open(filename) as f:
     f.write(Config.to_yaml())
 ```
-With this you can change specific parameters on-the-fly for fast-testing of multiple configurations
+With this you can change specific parameters on-the-fly for fast-testing of multiple configurations.
 
 ### Filtering of results
 
-Our small filtering methods require some changes to the code from the **Getting started** section
+Our filtering methods require some changes to the code from the **Getting started** section.
 ```python
 import src.dataloader as d
 import src.tools as t
@@ -166,10 +169,11 @@ for key in valid_keys:
 
 Note that this can also be done via the `src.search_methods.fastexplain.explain` method and a given config,
 without the need of changing any code.
-Additionally, if you'd like to explain a dataset and save the explanations for later use, we´ve implemented a to_json,
-that is currently usable via the `fastexplain.explain`, via setting the to_json parameter to `True`.
+Additionally, if you want to explain a dataset and save the explanations for later use, we´ve implemented a to_json,
+that is currently usable via the `fastexplain.explain` method, by setting the to_json parameter to `True`.
 
 For further information you can look at the documentation of the `Verbalizer` class or our provided demos
+Most of our code is documented and built to be changed easily.
 
 ## Config parameter cheat-sheet
 

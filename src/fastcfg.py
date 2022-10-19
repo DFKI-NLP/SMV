@@ -15,15 +15,15 @@ class Source:
         self.model = modelname
         self.dataset = datasetname
         self.explainer = explainername
-        models = ["albert", "bert", "electra", "roberta", "xlnet"]
-        datasets = {
+        self.models = ["albert", "bert", "electra", "roberta", "xlnet"]
+        self.datasets = {
             "imdb": "imdb",
             "xnli": "xnli",
             "agnews": "ag_news",
             "ag news": "ag_news",
             "multinli": "multi_nli"
         }
-        explainers = {  # TODO: implementend all other explainers too
+        self.explainers = {  # TODO: implementend all other explainers too
             "layer integrated gradients": "lig",
             "occlusion": "occ",
             "lime": "lime",
@@ -34,26 +34,34 @@ class Source:
         }
         try:
             self.sourcename = "thermostat/" + \
-                              datasets[datasetname.lower()] + "-" + modelname.lower() + "-" + explainers[explainername.lower()]
+                              self.datasets[datasetname.lower()] + "-" + modelname.lower() + "-" + self.explainers[explainername.lower()]
 
             if modelname.lower() == "xlnet" or modelname.lower() == "electra":
-                if datasets[datasetname.lower()] == "ag_news":
+                if self.datasets[datasetname.lower()] == "ag_news":
                     print("XLNet and ELECTRA are not supported for ag_news by thermostat. Exiting")
                     raise RuntimeError
         except Exception as e:
 
-            if modelname.lower() not in models:
-                print(f"model didnt match, possible models: {models}, entered model: {modelname.lower()}")
-            if datasetname.lower() not in list(datasets.keys()):
-                print(f"dataset wasnt valid, possible datasets: {datasets}, entered dataset: {datasetname.lower()}")
-            if explainername not in list(explainers.keys()):
+            if modelname.lower() not in self.models:
+                print(f"model didnt match, possible models: {self.models}, entered model: {modelname.lower()}")
+            if datasetname.lower() not in list(self.datasets.keys()):
+                print(f"dataset wasnt valid, possible datasets: {self.datasets}, entered dataset: {datasetname.lower()}")
+            if explainername not in list(self.explainers.keys()):
                 print(
-                    f"explainer wasnt valid, possible explainers: {list(explainers.keys())}, entered explainer {explainername.lower()}")
+                    f"explainer wasnt valid, possible explainers: {list(self.explainers.keys())}, entered explainer {explainername.lower()}")
 
             raise RuntimeError("")
 
     def get_sourcename(self) -> str:
         return self.sourcename
+
+    def get_possible_configurations(self):
+        ret = {
+            "models": self.models,
+            "datasets": self.datasets,
+            "explainers": self.explainers
+        }
+        return ret
 
 
 class Config:

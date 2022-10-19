@@ -18,9 +18,10 @@ def single_concat_search(sample, searches, *args, **kwargs):
     for i, attr in enumerate(sample_atts):
         candidates['total search'][str(i)] = coverage([i], sample_atts)
 
-    conv_top5 = sorted(candidates['convolution search'].items(), key=lambda k_v: k_v[1], reverse=True)[:5]
-    span_top5 = sorted(candidates['span search'].items(), key=lambda k_v: k_v[1], reverse=True)[:5]
-    total_top5 = sorted(candidates['total search'].items(), key=lambda k_v: k_v[1], reverse=True)[:5]
+    key_retriever = lambda k_v: k_v[1]
+    conv_top5 = sorted(candidates['convolution search'].items(), key=key_retriever, reverse=True)[:5]
+    span_top5 = sorted(candidates['span search'].items(), key=key_retriever, reverse=True)[:5]
+    total_top5 = sorted(candidates['total search'].items(), key=key_retriever, reverse=True)[:5]
 
     combined_candidate_indices = []
 
@@ -131,6 +132,7 @@ def coverage(span, attributions):
             return cov
     return 0
 """
+
 
 def combine_results(result_dict, combined_candidate_indices):
     for idx_cov_tuple in result_dict:
