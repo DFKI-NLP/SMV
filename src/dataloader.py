@@ -1,7 +1,5 @@
 import json
 import multiprocessing
-import time
-from dataclasses import dataclass
 
 from tqdm import tqdm
 from typing import List, Union
@@ -15,7 +13,7 @@ import transformers  # needed for finding tokenizer DO NOT DELETE; THIS IMPORT I
 
 
 class Verbalizer:
-    def __init__(self, source: Union[str, List], standard_samples: int = -1, model_type: str = [], len_filters: int = 5,
+    def __init__(self, source: Union[str, List], standard_samples: int = -1, model_type: str = "", len_filters: int = 5,
                  config=None, dev=False, multiprocess=True,
                  *args, **kwargs):
         """

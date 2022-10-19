@@ -1,4 +1,3 @@
-import json
 import os
 import yaml
 
@@ -8,7 +7,6 @@ import thermostat
 
 import src.fastcfg as fc
 
-from collections import defaultdict
 from numba import jit
 from typing import List
 

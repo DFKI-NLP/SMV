@@ -5,7 +5,7 @@ from typing import Tuple, List
 
 
 # start of filter-based search
-#warnings.simplefilter("always")
+# warnings.simplefilter("always")
 
 
 def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, sgn=None, mode: str = "mean: 1",

@@ -1,7 +1,5 @@
 import warnings
-from collections import defaultdict
 import numpy as np
-from numba import jit
 
 
 def single_concat_search(sample, searches, *args, **kwargs):

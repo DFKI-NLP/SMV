@@ -1,5 +1,5 @@
 import multiprocessing
-from typing import List, Tuple
+from typing import List
 
 import src.search_methods.searches as f
 import src.tools as t

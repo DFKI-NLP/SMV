@@ -1,5 +1,4 @@
 from src.search_methods import searches as fil
-from src.search_methods import post_searches as ps
 from src import tools as t
 
 
