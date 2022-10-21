@@ -93,6 +93,7 @@ calculated values for span- and convolution search (`np.array`).
 |:---------|:--------------------------------------------------------------------------------------|:---------------------------|
 | contents | multiple `dict` objects                                                               | `list` of `string`         |
 | keys     | "span_search", "convolution_search", "compare search", "total order", "summarization" | `string` like "1", "2",... |
+
 ![alt text](imgs/graph_0.jpg)
 
 ### Manual config writing
