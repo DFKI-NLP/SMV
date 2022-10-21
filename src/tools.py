@@ -1,5 +1,6 @@
 import os
 import yaml
+from typing import Tuple
 
 import datasets
 import numpy as np
@@ -324,7 +325,7 @@ def get_binary_attributions_from_annotator_rationales(text: str, rationales: Lis
     binary_attributions = []
 
 
-def read_config(cfg_path_or_object) -> tuple:
+def read_config(cfg_path_or_object) -> Tuple[dict, str]:
     config = None
     if not type(cfg_path_or_object) == fc.Config:
         with open(cfg_path_or_object) as stream:

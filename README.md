@@ -75,17 +75,25 @@ verbalizer = data.Verbalizer(source, config=config)
 
 explanations, texts, searches = verbalizer()
 
-for explanation in explanations:
-    print(explanation)
+for search_type in explanations:
+    for explanation_key in explanations[search_type]:
+        print(explanations[search_type][explanation_key])
 ```
 Note that `verbalizer()` calls `verbalizer.doit()`
 also multiprocess is set to `True` by default, disabling is encouraged for systems **with less than 8GB RAM**
 or systems with **less than 4 (physical) cores**. disabling multiprocessing can lead **to 5x increased running time**.
 
-This will produce the same explanation like the demo but the resulting string is not formatted and there will be some 
+This will produce the same explanation like the demo but the resulting string is not formatted and there will be
 less salient findings too.
 The variable `texts` will contain the samples of the dataset you chose to explain, `searches` will contain our
 calculated values for span- and convolution search (`np.array`).
+`explanations` itself will be a dictionary, that is ordered like this:
+
+|          | Top layer                                                                             | Accessed layer             |
+|:---------|:--------------------------------------------------------------------------------------|:---------------------------|
+| contents | multiple `dict` objects                                                               | `list` of `string`         |
+| keys     | "span_search", "convolution_search", "compare search", "total order", "summarization" | `string` like "1", "2",... |
+![alt text](imgs/graph_0.jpg)
 
 ### Manual config writing
 You currently have two methods of generating a config. The first one is manual.

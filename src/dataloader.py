@@ -4,6 +4,7 @@ import multiprocessing
 from tqdm import tqdm
 from typing import List, Union
 
+import src.fastcfg as fc
 import src.tools as t
 import src.search_methods.post_searches as ps
 import src.processing.shared_methods as sm
@@ -18,7 +19,7 @@ class Verbalizer:
                  *args, **kwargs):
         """
         Verbalizer class
-        :param source: List of JSON lines (Thermostat) or path to a local dataset of explanations
+        :param source: List of JSON lines (deprecated, currently not functional) or path to a local dataset of explanations
         :param model_type: Which model is being explained? optional; will look by itself
         :param standard_samples: how many samples should be loaded if nothing specified
         :param config: config dictionary
@@ -62,7 +63,6 @@ class Verbalizer:
         meta parameters:
         multiprocessing: bool -> should our multiprocessing implementation of this work be used to speed up calculations
         """
-
         self.models = {
             "bert": (r"BertTokenizer", r"bert-base-uncased"),
             "albert": (r"AlbertTokenizer", r"albert-base-v2"),
@@ -85,7 +85,7 @@ class Verbalizer:
             raise RuntimeError("Please specify model_type; Missing param model_type")
 
         self.standard_samples = standard_samples
-        self.modes = ["convolution search", "span search", "compare search", "total order", "concatenation search"]
+        self.modes = ["convolution search", "span search", "compare search", "total order", "summarization"]
         # which search-algorithms to use
         self.checkpoint = 0  # where did the Verbalizer stop loading examples
         self.len_filters = len_filters
@@ -231,7 +231,7 @@ class Verbalizer:
                 handler = ph.ProcessHandler(self.get_cfg_args(), managers, sample_array)
                 orders_and_searches, explanations = handler()
                 for explanation_type in explanations.keys():
-                    if explanation_type != "concatenation search":
+                    if explanation_type != "summarization":
                         for key in explanations[explanation_type]:
                             explanations[explanation_type][key] = [v for v, c in
                                                                    sorted(explanations[explanation_type][key],
@@ -271,8 +271,8 @@ class Verbalizer:
                 if "total order" in modes:
                     explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
                 pbar.update(1)
-                if "concatenation search" in modes:
-                    explanations["concatenation search"] = ps.concatenation_search(sample_array)
+                if "summarization" in modes:
+                    explanations["summarization"] = ps.summarize(sample_array, orders_and_searches)
                 pbar.update(1)
             # TODO: Maybe detokenize input_ids using tokenizer from self?
         if not self.dev:

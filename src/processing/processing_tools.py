@@ -55,17 +55,17 @@ def worker_totalsearch(shared_explanations, sample_array):
     shared_explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
 
 
-def worker_concatsearch(sgn: str,
-                        len_filters: int,
-                        metric,
-                        child_pipe) -> None:  # rename
+def worker_summarize(sgn: str,
+                     len_filters: int,
+                     metric,
+                     child_pipe) -> None:  # rename
     while True:
         if child_pipe.poll(.05):
             key, data = child_pipe.recv()
             if data == -1:
                 child_pipe.close()
                 break
-            verbalization = ps.single_concat_search(*data)
+            verbalization = ps.single_summary(*data)
             child_pipe.send((None, [verbalization], key))
 
 

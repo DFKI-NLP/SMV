@@ -7,3 +7,4 @@ imgkit
 tqdm
 psutil
 pandas
+pyyaml

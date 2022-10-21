@@ -2,7 +2,7 @@ import warnings
 import numpy as np
 
 
-def single_concat_search(sample, searches, *args, **kwargs):
+def single_summary(sample, searches, *args, **kwargs):
     sample_atts = sample["attributions"]
     input_ids = sample["input_ids"]
     candidates = {}
@@ -88,7 +88,7 @@ def single_concat_search(sample, searches, *args, **kwargs):
     return verbalized_explanation
 
 
-def concatenation_search(samples, searches, *args, **kwargs):
+def summarize(samples, searches, *args, **kwargs):
     """
     concatenates sample attributions to largest possible positive attributed span
     :param samples: sample array
@@ -104,7 +104,7 @@ def concatenation_search(samples, searches, *args, **kwargs):
         for stype in searches.keys():
             search[stype] = searches[stype][sample_key]
 
-        verbalized_explanations[sample_key] = single_concat_search(samples[sample_key], search)
+        verbalized_explanations[sample_key] = single_summary(samples[sample_key], search)
         # sample_info.append(samples[sample_key])
     return verbalized_explanations
 

@@ -86,7 +86,7 @@ def span_manager() -> WorkerManager:  # req. for full usage: 0.6 GByte with 0.1 
 
 
 def concat_manager() -> WorkerManager:  # req. for full usage: 2.4 GByte with 0.4 GByte being reserve
-    return WorkerManager("concatenation search", ["convolution search", "span search"], .3, 8, 3, sh.worker_concatsearch)
+    return WorkerManager("summarization", ["convolution search", "span search"], .3, 8, 3, sh.worker_summarize)
 
 ########################################################################################################################
 ########################################################################################################################
@@ -217,7 +217,7 @@ class ProcessHandler:
                 return key, key
             return key, self.samples[key]
 
-        if manager.TaskName == "concatenation search":
+        if manager.TaskName == "summarization":
             key = next(manager.iterator)
             if key == -1:
                 return key, key
