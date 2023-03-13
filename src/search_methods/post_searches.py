@@ -1,7 +1,7 @@
 import warnings
 import numpy as np
 
-#v1
+#v1.01
 
 def single_summary(sample, searches, *args, **kwargs):
     sample_atts = sample["attributions"]
@@ -13,15 +13,23 @@ def single_summary(sample, searches, *args, **kwargs):
         for indices in searches[stype]["indices"]:
             try:
                 candidates[stype][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
-            except ZeroDivisionError:
-                candidates[stype][','.join([str(idx) for idx in indices])] = "Couldn't calculate coverage for all positive attributions due to only having negative attributions."
+            except ZeroDivisionError as e:
+                candidates[stype][','.join([str(idx) for idx in indices])] = 0.0
+                print("Couldnt calculate coverage, set to zero. This results from sample only having non-positive values.")
             except Exception as e:
                 if e != ZeroDivisionError:
                     raise e
 
     candidates["total search"] = {}
     for i, attr in enumerate(sample_atts):
-        candidates['total search'][str(i)] = coverage([i], sample_atts)
+        try:
+            candidates["total search"][str(i)] = coverage(i, sample_atts)
+        except ZeroDivisionError as e:
+            candidates["total search"][str(i)] = 0.0
+            print("Couldnt calculate coverage, set to zero. This results from sample only having non-positive values.")
+        except Exception as e:
+            if e != ZeroDivisionError:
+                raise e
 
     key_retriever = lambda k_v: k_v[1]
     conv_top5 = sorted(candidates['convolution search'].items(), key=key_retriever, reverse=True)[:5]
@@ -43,7 +51,14 @@ def single_summary(sample, searches, *args, **kwargs):
 
     cov_fs = []
     for fs in final_spans:
-        cov_fs.append(coverage((fs[0], fs[-1]), sample_atts))
+        try:
+            cov_fs.append(coverage((fs[0], fs[-1]), sample_atts))
+        except ZeroDivisionError as e:
+            cov_fs.append(0.0)
+            print("Couldnt calculate coverage, set to zero. This results from sample only having non-positive values.")
+        except Exception as e:
+            if e != ZeroDivisionError:
+                raise e
     upper_quartile = np.quantile(cov_fs, 0.75)
 
     num_uq_spans = len([cov_fs[i] > upper_quartile for i in range(len(cov_fs))])
