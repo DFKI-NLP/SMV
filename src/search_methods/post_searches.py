@@ -23,7 +23,7 @@ def single_summary(sample, searches, *args, **kwargs):
     candidates["total search"] = {}
     for i, attr in enumerate(sample_atts):
         try:
-            candidates["total search"][str(i)] = coverage(i, sample_atts)
+            candidates["total search"][str(i)] = coverage([i], sample_atts)
         except ZeroDivisionError as e:
             candidates["total search"][str(i)] = 0.0
             print("Couldnt calculate coverage, set to zero. This results from sample only having non-positive values.")

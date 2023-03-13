@@ -5,7 +5,7 @@ import json
 
 
 if __name__ == "__main__":
-    config_pathes = ["./configs/quantile_dev.yml", ]
+    config_pathes = ["./configs/quantile_dev.yml", "./configs/multi_nli-albert-lds.yml"]
     jsons = []
     for config_path in config_pathes:
         jsons.append(fe.explain_json(config_path))
