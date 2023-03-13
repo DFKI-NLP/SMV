@@ -112,7 +112,13 @@ def summarize(samples, searches, *args, **kwargs):
 def explore_search(candidates, search_type, searches, sample_key, sample_atts):  # fixme: look at single concat
     warnings.warn("Deprecated")
     for indices in searches[search_type][sample_key]["indices"]:
-        candidates[search_type][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
+        try:
+            candidates[search_type][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
+        except ZeroDivisionError:
+            candidates[search_type] = "Couldn't calculate coverage for all positive attributions due to only having negative attributions."
+        except Exception as e:
+            if e != ZeroDivisionError:
+                raise e
     return candidates
 
 
