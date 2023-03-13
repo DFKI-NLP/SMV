@@ -10,7 +10,13 @@ def single_summary(sample, searches, *args, **kwargs):
     for stype in searches.keys():  # fixme: please add documentation? - this does the same as explore search
         candidates[stype] = {}
         for indices in searches[stype]["indices"]:
-            candidates[stype][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
+            try:
+                candidates[stype][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
+            except ZeroDivisionError:
+                candidates[stype][','.join([str(idx) for idx in indices])] = "Couldn't calculate coverage for all positive attributions due to only having negative attributions."
+            except Exception as e:
+                if e != ZeroDivisionError:
+                    raise e
 
     candidates["total search"] = {}
     for i, attr in enumerate(sample_atts):
@@ -115,7 +121,7 @@ def explore_search(candidates, search_type, searches, sample_key, sample_atts): 
         try:
             candidates[search_type][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
         except ZeroDivisionError:
-            candidates[search_type] = "Couldn't calculate coverage for all positive attributions due to only having negative attributions."
+            candidates[search_type][','.join([str(idx) for idx in indices])] = "Couldn't calculate coverage for all positive attributions due to only having negative attributions."
         except Exception as e:
             if e != ZeroDivisionError:
                 raise e

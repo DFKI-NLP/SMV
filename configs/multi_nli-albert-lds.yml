@@ -1,0 +1,10 @@
+dev: true
+maxwords: 100000
+metric:
+  name: quantile
+  value: -100
+mincoverage: 0.0
+multiprocessing: true
+samples: -1
+sgn: +
+source: thermostat/multi_nli-albert-lds
