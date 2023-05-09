@@ -196,14 +196,14 @@ algorithms.<br/>
 
 | Parameter         | Values                                    | Description                                                                                                      | Dtype(s)      |
 |:------------------|:------------------------------------------|:-----------------------------------------------------------------------------------------------------------------|:--------------|
-| `source`          | path to file                              | path to config file                                                                                              | `str`         |
-| `multiprocessing` | `True`, `False`: `True` is default        | should our multiprocessing implementation of our paper be used                                                   | `bool`        |
+| `source`          | Path to file                              | Path to config file                                                                                              | `str`         |
+| `multiprocessing` | `True`, `False`: `True` is default        | Should our multiprocessing implementation of our paper be used                                                   | `bool`        |
 | `sgn`             | `"+"`, `"-"`, `None`                      | Values of what sign should be used for calculation, None uses all                                                | `str`, `None` |
-| `samples`         | any of {-1, (0, +oo]}                     | -1 to read whole dataset, any other number to read                                                               | `int`         |
+| `samples`         | Any of {-1, (0, +oo]}                     | -1 to read whole dataset, any other number to read                                                               | `int`         |
 | metric:`name`     | See documentation of dataloader           | How should the baseline value be calculated                                                                      | `str`         |
-| metric:`value`    | depends on metric, see docs of dataloader | What value should be used to generate baseline value                                                             | `float`       |
+| metric:`value`    | Depends on metric, see docs of dataloader | What value should be used to generate baseline value                                                             | `float`       |
 | `dev`             | `True`, `False`, default is `False`       | Enables further settings, allowing to filter the dataset, if False, `maxwords` and `mincoverage` will be ignored | `bool`        |
 | `maxwords`        | any of (0, +oo]                           | Filters for samples that have a maximum of `maxwords` words                                                      | `int`         |
-| `mincoverage`     | any of [0., 1.]                           | Only considers this samples explanation valid if any snippet has at least `mincoverage`% of coverage             | `float`       |
+| `mincoverage`     | any of [0., 1.]                           | Filters for samples with a snippet of at least `mincoverage`% of coverage                                        | `float`       |
 
 Please note that this is still in development and object to change
