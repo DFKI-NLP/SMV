@@ -178,6 +178,20 @@ that is currently usable via the `fastexplain.explain` method, by setting the to
 For further information you can look at the documentation of the `Verbalizer` class or our provided demos
 Most of our code is documented and built to be changed easily.
 
+## Search Types
+As proposed in our paper, we employ different search methods to search for salient snippets. You can set your desired
+searches by changing the python```mode``` parameter of python```dataloader.Verbalizer.doit()```. Default employs all our
+algorithms.<br/>
+
+| Name               | Description                                                     |
+|:-------------------|:----------------------------------------------------------------|
+| convolution search | implements our proposed Convolution Search                      |
+| span search        | implements our proposed Span Search                             |
+| compare search     | filters for multiple equal results in convolution & span search |
+| total order        | filters for top-k tokens                                        |
+| summarization      | implements our proposed Summarized Explanation                  |
+
+
 ## Config parameter cheat-sheet
 
 | Parameter         | Values                                    | Description                                                                                                      | Dtype(s)      |

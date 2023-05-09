@@ -44,24 +44,19 @@ def convolution_search(samples: dict, filter_length, top_n_coherences: int = 5, 
     return words_and_vals  # return as dictionary_ [key] = tuple(word_indices, word/snippet_values)
 
 
-def generate_filters(filter_length):
-    """
-    generates binary-search filters
-    :param filter_length: max length of filter
-    :return: filter_length^2 filters with all permutations
-    """
-    filters = []
-    for i in range(filter_length):
-        if 1 < i < filter_length - 1:
-            filters.append([*[*[1] * i, *[0]*(filter_length-i)]])
-    filters = permute_filter_blueprints(filters)
-    return filters
-
-
 def single_convolution_search(sample: dict, sgn: str,
                               mode: any,
                               sorted_filters: np.ndarray,
                               randomize_attribs: bool = False) -> Tuple[List, List]:
+    """
+    does the same as convolution_search, but for a single instance, therefore no further documentation see ll. 11
+    :param sample:
+    :param sgn:
+    :param mode:
+    :param sorted_filters:
+    :param randomize_attribs:
+    :return:
+    """
     attribs = np.array(sample["attributions"]).astype("float32")/abs(np.max(sample["attributions"]))  # normalized
 
     if randomize_attribs:
@@ -86,30 +81,11 @@ def single_convolution_search(sample: dict, sgn: str,
         else:
             coherent_words_sum, coherent_values_sum = filter_span_sample_sum_sgn(sorted_filters, attribs, metric,
                                                                                  sgn)
-    except Exception as e:
+    except Exception as e:  # for convenience purposes no specified exception is caught but all exceptions
         coherent_words_sum, coherent_values_sum = [[None]], [[None]]
 
     coherent_words_sum, coherent_values_sum = zip(*reversed(sorted(zip(coherent_words_sum, coherent_values_sum))))
     return coherent_words_sum, coherent_values_sum
-
-
-def permute_filter_blueprints(filters):
-    """
-    permutes a given filter to all possible combinations
-    :param filters: binary filter
-    :return: (sum(filter) over len(filter)) filters (binomial coefficient)
-             (all possible combinations of the 0s and 1s in filter)
-    """
-    permuted_filters = []
-    for i in filters:
-        permuted_filters.append(sorted(tuple(set(permutations(i)))))
-
-    filters = []
-    for i in permuted_filters:
-        for j in i:
-            filters.append(j)
-    filters = np.array(filters).astype("byte")
-    return filters
 
 
 def generate_filters(filter_length):
@@ -127,6 +103,12 @@ def generate_filters(filter_length):
 
 
 def result_filtering(coherent_words_sum, coherent_values_sum):
+    """
+    returns lists that combine the results of the input args without doubles
+    :param coherent_words_sum: see above for specification of input
+    :param coherent_values_sum: see above for specification of input
+    :return: pruned lists
+    """
     _words = []
     _values = []
     for i in range(len(coherent_words_sum)):
@@ -205,4 +187,3 @@ def generate_spans(filter_length):
 
     filters = np.array(filters).astype("byte")
     return filters
-# end of filter based search

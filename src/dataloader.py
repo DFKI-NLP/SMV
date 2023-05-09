@@ -85,8 +85,10 @@ class Verbalizer:
             raise RuntimeError("Please specify model_type; Missing param model_type")
 
         self.standard_samples = standard_samples
-        self.modes = ["convolution search", "span search", "compare search", "total order", "summarization"]
+
         # which search-algorithms to use
+        self.modes = ["convolution search", "span search", "compare search", "total order", "summarization"]
+
         self.checkpoint = 0  # where did the Verbalizer stop loading examples
         self.len_filters = len_filters
         self.sgn = None
