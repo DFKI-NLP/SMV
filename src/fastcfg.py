@@ -22,7 +22,7 @@ class Source:
             "ag news": "ag_news",
             "multinli": "multi_nli"
         }
-        self.explainers = {  # TODO: implementend all other explainers too
+        self.explainers = {
             "layer integrated gradients": "lig",
             "occlusion": "occ",
             "lime": "lime",
@@ -42,14 +42,14 @@ class Source:
         except Exception as e:
 
             if modelname.lower() not in self.models:
-                print(f"model didnt match, possible models: {self.models}, entered model: {modelname.lower()}")
+                RuntimeError(f"model didnt match, possible models: {self.models}, entered model: {modelname.lower()}")
             if datasetname.lower() not in list(self.datasets.keys()):
-                print(f"dataset wasnt valid, possible datasets: {self.datasets}, entered dataset: {datasetname.lower()}")
+                RuntimeError(f"dataset wasnt valid, possible datasets: {self.datasets}, entered dataset: {datasetname.lower()}")
             if explainername not in list(self.explainers.keys()):
-                print(
+                RuntimeError(
                     f"explainer wasnt valid, possible explainers: {list(self.explainers.keys())}, entered explainer {explainername.lower()}")
 
-            raise RuntimeError("")
+
 
     def get_sourcename(self) -> str:
         return self.sourcename

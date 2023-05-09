@@ -26,7 +26,7 @@ class Verbalizer:
         :param dev: should numerical values for each explanation be returned too?
         :param multiprocess: should the tasks use multiprocessing?
 
-        TODO warning: object to change:
+        warning: object to change:
         --> start of config example <--
 
         source: "thermostat/imdb-bert-lig"  # any thermostat (hf) dataset will work or similiar formats
@@ -163,7 +163,7 @@ class Verbalizer:
                     dataset_snippet.append(self.source[i + self.checkpoint])
             self.add_explanations_to_dict(dataset_snippet, _dict)
 
-            if not dataset_snippet:  # TODO remove recursion ?
+            if not dataset_snippet:  # This is kept but will maybe deprecate & be removed in the future
                 self.checkpoint = 0
                 if recursion > 0:
                     raise RecursionError("Failed retrieving samples, after {} recursions.\n".format(recursion) +
@@ -189,29 +189,21 @@ class Verbalizer:
                                     "predictions": _dict[sample]["predictions"],
                                     "was_correct": _dict[sample]["label"] == _dict[sample]["predictions"].index(
                                         max(_dict[sample]["predictions"]))}
-        """
-        if _:
-            self.label_names = _["dataset"]["label_names"]
-        else:
-            self.label_names = dataset_snippet["dataset"]["label_names"]
-        """
-        # self.label_names = dataset_snippet["dataset"]["label_names"]
+
         return cleaned_dict
 
     def doit(self, modes: list = None, n_samples: int = None):
         """
         verbalizes n_samples of dataset
-        :param modes: optional: which searches to do on dataset
+        :param modes: optional: which searches to do on dataset, see self.modes for more options on this
         :param n_samples: optional: how many samples to verbalize
         :return: n_samples * (verbalized version of heatmap; by total_order, ...) as array of strings (tuple/list)
         """
 
-        # init standard params
         if not n_samples:
             n_samples = self.standard_samples
         if not modes:
             modes = self.modes
-        # end of init
 
         sample_array = self.read_samples(n_samples)
 
@@ -274,7 +266,7 @@ class Verbalizer:
                 if "summarization" in modes:
                     explanations["summarization"] = ps.summarize(sample_array, orders_and_searches)
                 pbar.update(1)
-            # TODO: Maybe detokenize input_ids using tokenizer from self?
+            # Future work: Maybe detokenize input_ids using tokenizer from self?
         if not self.dev:
             return explanations, sample_array, None
         else:

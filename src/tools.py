@@ -82,22 +82,17 @@ def filter_span_sample_sum_sgn(sorted_filters, sample_attribs, metric_value, sgn
                     coherency_values.append([coherency_value])
 
     coherency_values = np.array(coherency_values)
-    coherent_snippets = []
-
     return coherent_words, coherency_values
 
 
 # order input sample using >= :
-def total_order(_dict: dict):
+def total_order(_dict: dict) -> dict:
     """
-    takes a ordered dict and performs total order >= on it; doesnt change original dict
+    takes a ordered dict and performs total order >= on it; returns ordered dict, doesnt do inplace ordering
     :param _dict: dictionary of shape @return of Verbalizer.read_samples(args)
     :return: dict of shape {index_by_magnitude_of_value : (token : value)}
     """
 
-    # in order to sort efficiently we need to do a little spaghetti code
-    # idea:
-    # we first sort the attributions using precompiled sorted and then change the input ids accordingly
     sorted_dict = {}
     for sample in _dict.keys():
         ids = _dict[sample]["input_ids"]
@@ -121,7 +116,12 @@ def total_order(_dict: dict):
     return sorted_dict
 
 
-def verbalize_total_order(ordered_dict):
+def verbalize_total_order(ordered_dict: dict) -> dict:
+    """
+    returns verbal representation of total order
+    :param ordered_dict: dictionary like see total_order's return
+    :return: dict, containing verbalized explanations
+    """
     verbalizations = {}
     for sample in ordered_dict.keys():
         sum_vals = 0
@@ -161,7 +161,7 @@ def get_mean(num_vals, attribs):
 @jit(nopython=True)
 def get_variance(attribs):
     """
-    variance
+    variance of array
     :param attribs: 1D matrix
     :return: variances of each value in matrix
     """
@@ -173,7 +173,7 @@ def get_variance(attribs):
 @jit(nopython=True)
 def get_stdev(variance):
     """
-    standard deviation
+    standard deviation if array
     :param variances: array of variances of a given 1D matrix
     :return: standard deviances of variances
     """
@@ -198,8 +198,7 @@ def get_metric_values(mode: dict):
         "foo": NotImplementedError,
     }
     selected_mode = modes[mode["name"]]
-    args = [selected_mode[1](mode["value"])]  # FIXME: In which cases do we need multiple args?
-    #args = [selected_mode[1](_args[i]) for i in range(1, len(_args))]
+    args = [selected_mode[1](mode["value"])]
     return args
 
 
@@ -211,7 +210,6 @@ def single_verbalize_field_span_search(prepared_data, samples, sgn="+"):
     :param sgn: unused for now
     :return: Dict[sample_key: verbalization_list->list ]
     """
-    verbalization_dict = {}
 
     sum_values = 0
     for i in samples["attributions"]:
@@ -243,7 +241,7 @@ def single_verbalize_field_span_search(prepared_data, samples, sgn="+"):
             coverage = round((values[snippet] / sum_values) * 100, 2)
             verbalization += "' contains {}% of prediction score.".format(str(coverage))
             verb_cov_tuple = (verbalization, coverage)
-        except Exception as e:  # TODO: specify exception type
+        except Exception as e:  # Out of convenience, keep this unspecified.
             verbalization = "No coherent values found."
             verb_cov_tuple = (verbalization, 0.0)
 
@@ -273,7 +271,6 @@ def compare_search(searches: dict, samples):
     :param samples:
     :return:
     """
-    # search_types = searches.keys() - not needed rn
     valid_types = ["span search", "convolution search"]
     coincidences = {}    
     for subclass in valid_types:
@@ -323,6 +320,7 @@ def get_binary_attributions_from_annotator_rationales(text: str, rationales: Lis
     """ Helper function to turn the text spans of annotator rationales (e.g. from the Movie Rationales dataset) into
     binary attributions"""
     binary_attributions = []
+    raise NotImplementedError
 
 
 def read_config(cfg_path_or_object) -> Tuple[dict, str]:
