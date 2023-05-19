@@ -178,18 +178,32 @@ that is currently usable via the `fastexplain.explain` method, by setting the to
 For further information you can look at the documentation of the `Verbalizer` class or our provided demos
 Most of our code is documented and built to be changed easily.
 
+## Search Types
+As proposed in our paper, we employ different search methods to search for salient snippets. You can set your desired
+searches by changing the python```mode``` parameter of python```dataloader.Verbalizer.doit()```. Default employs all our
+algorithms.<br/>
+
+| Name               | Description                                                     |
+|:-------------------|:----------------------------------------------------------------|
+| convolution search | implements our proposed Convolution Search                      |
+| span search        | implements our proposed Span Search                             |
+| compare search     | filters for multiple equal results in convolution & span search |
+| total order        | filters for top-k tokens                                        |
+| summarization      | implements our proposed Summarized Explanation                  |
+
+
 ## Config parameter cheat-sheet
 
 | Parameter         | Values                                    | Description                                                                                                      | Dtype(s)      |
 |:------------------|:------------------------------------------|:-----------------------------------------------------------------------------------------------------------------|:--------------|
-| `source`          | path to file                              | path to config file                                                                                              | `str`         |
-| `multiprocessing` | `True`, `False`: `True` is default        | should our multiprocessing implementation of our paper be used                                                   | `bool`        |
+| `source`          | Path to file                              | Path to config file                                                                                              | `str`         |
+| `multiprocessing` | `True`, `False`: `True` is default        | Should our multiprocessing implementation of our paper be used                                                   | `bool`        |
 | `sgn`             | `"+"`, `"-"`, `None`                      | Values of what sign should be used for calculation, None uses all                                                | `str`, `None` |
-| `samples`         | any of {-1, (0, +oo]}                     | -1 to read whole dataset, any other number to read                                                               | `int`         |
+| `samples`         | Any of {-1, (0, +oo]}                     | -1 to read whole dataset, any other number to read                                                               | `int`         |
 | metric:`name`     | See documentation of dataloader           | How should the baseline value be calculated                                                                      | `str`         |
-| metric:`value`    | depends on metric, see docs of dataloader | What value should be used to generate baseline value                                                             | `float`       |
+| metric:`value`    | Depends on metric, see docs of dataloader | What value should be used to generate baseline value                                                             | `float`       |
 | `dev`             | `True`, `False`, default is `False`       | Enables further settings, allowing to filter the dataset, if False, `maxwords` and `mincoverage` will be ignored | `bool`        |
 | `maxwords`        | any of (0, +oo]                           | Filters for samples that have a maximum of `maxwords` words                                                      | `int`         |
-| `mincoverage`     | any of [0., 1.]                           | Only considers this samples explanation valid if any snippet has at least `mincoverage`% of coverage             | `float`       |
+| `mincoverage`     | any of [0., 1.]                           | Filters for samples with a snippet of at least `mincoverage`% of coverage                                        | `float`       |
 
 Please note that this is still in development and object to change

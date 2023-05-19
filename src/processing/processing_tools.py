@@ -58,7 +58,7 @@ def worker_totalsearch(shared_explanations, sample_array):
 def worker_summarize(sgn: str,
                      len_filters: int,
                      metric,
-                     child_pipe) -> None:  # rename
+                     child_pipe) -> None:
     while True:
         if child_pipe.poll(.05):
             key, data = child_pipe.recv()
@@ -77,11 +77,3 @@ def check_processes(processes: List[multiprocessing.Process]) -> List[bool]:
         else:
             states.append(False)
     return states
-
-
-def check_all_true(ls) -> bool:
-    res = True
-    for i in ls:
-        if not i:
-            res = False
-    return res

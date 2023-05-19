@@ -117,12 +117,8 @@ class ProcessHandler:
 
     # static methods:
     @staticmethod
-    def order_tasks(managers: List[WorkerManager]) -> List[WorkerManager]:  # simple bubble sort as task length is very small
-        for _ in range(len(managers) - 1):
-            for i in range(len(managers) - 1):
-                if managers[i].TaskIndex > managers[i + 1].TaskIndex:
-                    managers[i], managers[i + 1] = managers[i + 1], managers[i]  # TODO: change to lambda expression
-
+    def order_tasks(managers: List[WorkerManager]) -> List[WorkerManager]:
+        managers.sort(key=lambda x: x.TaskIndex)
         for i in range(len(managers)):
             managers[i].TaskID = i
 
@@ -142,9 +138,8 @@ class ProcessHandler:
     def check_requirements(self, manager: WorkerManager) -> bool:
         req = True
         if manager.RequiredTasks:
-            for i in manager.RequiredTasks:
-                if i not in self.fulfilled_tasks:
-                    req = False
+            if not all([req in self.fulfilled_tasks for req in manager.RequiredTasks]):
+                req = False
         return req
 
     def __call__(self, *args, **kwargs) -> Tuple[dict, dict]:
@@ -193,7 +188,7 @@ class ProcessHandler:
                     self.orders_and_searches[manager.TaskName][entry[2]] = entry[0]
                 if entry[1]:
                     self.explanations[manager.TaskName][entry[2]] = entry[1]
-            for worker in workers_without_work:  # TODO: split into 2 methods
+            for worker in workers_without_work:
                 if manager.active:
                     key, value = self.get_workerargs(manager)
                     manager.set(worker, (key, value))
@@ -225,10 +220,10 @@ class ProcessHandler:
             search = {
                 "convolution search": self.orders_and_searches["convolution search"][key],
                 "span search": self.orders_and_searches["span search"][key]
-            }  # fixme: modularize (and i do not mean put it in a for-loop); maybe with dictionary containin lambda?
+            }
             return key, (self.samples[key], search)
 
-        raise NotImplementedError  # TODO: modularize
+        raise NotImplementedError  # Future work: modularize this
 
     def start_manager(self, manager: WorkerManager) -> None:
         workers = []
@@ -244,7 +239,7 @@ class ProcessHandler:
                 raise MemoryError(f"Not enough memory to start at least 1 process for [{manager.TaskName} MANAGER]")
             manager.workers = workers
             manager.num_workers = len(workers)
-            manager.iterator = self.iterator(self.sample_keys)  # TODO: modularize
+            manager.iterator = self.iterator(self.sample_keys)
             manager.start()
             self.working_managers.append(manager)
         else:

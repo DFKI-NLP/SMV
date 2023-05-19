@@ -1,7 +1,6 @@
 import warnings
 import numpy as np
 
-#v1.01
 
 def single_summary(sample, searches, *args, **kwargs):
     sample_atts = sample["attributions"]
