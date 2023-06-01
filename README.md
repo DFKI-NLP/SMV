@@ -229,12 +229,14 @@ Please note that this is still in development and object to change
 
 ```bibtex
 @inproceedings{feldhus-2023-smv,
-	title = "Saliency Map Verbalization: Comparing Feature Importance Representations from Model-free and Instruction-based Methods",
-	author = "Nils Feldhus and Leonhard Hennig and Maximilian Dustin Nasert and Christopher Ebert and Robert Schwarzenberg and Sebastian M\"{o}ller",
-	booktitle = "Proceedings of the First Workshop on Natural Language Reasoning and Structured Explanations (NLRSE)",
-	year = "2023",
-	address = "Toronto, Canada",
+    title = "Saliency Map Verbalization: Comparing Feature Importance Representations from Model-free and Instruction-based Methods",
+    author = "Nils Feldhus and Leonhard Hennig and Maximilian Dustin Nasert and Christopher Ebert and Robert Schwarzenberg and Sebastian M\"{o}ller",
+    booktitle = "Proceedings of the First Workshop on Natural Language Reasoning and Structured Explanations (NLRSE)",
+    year = "2023",
+    address = "Toronto, Canada",
     publisher = "Association for Computational Linguistics",
-	url = "https://arxiv.org/abs/2210.07222",
+    url = "https://arxiv.org/abs/2210.07222",
 }
 ```
+
+ACL Anthology version to be added in July.

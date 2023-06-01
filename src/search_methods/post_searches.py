@@ -1,7 +1,19 @@
 import numpy as np
 
 
-def single_summary(sample, searches, *args, **kwargs):
+def single_summary(sample: dict, searches: dict[dict], *args, **kwargs) -> str:
+    """
+    Generates a template-based summary of the most salient tokens based on the candidates from the search methods (Convolutional, Span, Total).
+    :param sample: Dictionary representing one instance from the dataset with the following entries:
+        Input tokens (`input_ids`)
+        Attribution scores (`attributions`)
+        Predicted label (`label`)
+        Logits (`predictions`)
+        Correct prediction boolean (`was_correct`)
+    :param searches: Candidate indices from pre-calculated search methods. Each search method is a dictionary of salient
+        indices and values (determined by scoring metric like 'mean' or 'quantile')
+    :return: Template-based saliency map verbalization
+    """
     sample_atts = sample["attributions"]
     input_ids = sample["input_ids"]
     candidates = {}
@@ -88,10 +100,12 @@ def single_summary(sample, searches, *args, **kwargs):
         else:
             verbalization += " is also salient"
 
+        """ Coverage percentage not included in this summary
         cov_str = str(round(100 * cov_fs[i]))
         if cov_str == "0":
             continue
         verbalization += " (" + cov_str + " %)."
+        """
 
         spans_with_ranks[rank] = verbalization
 
@@ -148,8 +162,14 @@ def coverage(span, attributions):
 """
 
 
-def combine_results(result_dict, combined_candidate_indices):
-    for idx_cov_tuple in result_dict:
+def combine_results(search_candidates: list[tuple[str, float]], combined_candidate_indices: list) -> None:
+    """
+    Appends the results from one search to a joint candidate list of salient spans
+    :param search_candidates: Sorted list of candidates (Tuples of strings representing salient indices and coverage
+     value) from one search method (Convolutional, Span, Total)
+    :param combined_candidate_indices: Joint candidate list of salient spans
+    """
+    for idx_cov_tuple in search_candidates:
         if ',' in idx_cov_tuple[0]:
             indices = idx_cov_tuple[0].split(',')
         else:
