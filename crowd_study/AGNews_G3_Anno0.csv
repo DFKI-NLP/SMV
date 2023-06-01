@@ -1,0 +1,623 @@
+Sort,ID,Type,Input Text,Explanation,What does the model predict?,"How helpful do you find the explanation for guessing the model prediction?
+
+1 (not helpful) - 7 (very helpful)","How easy is the explanation to understand?
+
+
+1 (very difficult) - 7 (very easy)"
+,22,HM,,,,,
+,22,SMV,ibm chips may someday heal themselves new technology applies electrical fuse s to help identify and repair faults .,"The words 
+» faults . « and » electrical « 
+are most important for the model's prediction.",,,
+1,5886,GPT,"producer price surge fuels inflation fears producer prices surged 1 . 7 percent in october , their sharpest monthly increase in nearly 15 years .","The importance scores suggest that the surge in producer prices is the most significant factor in this news article, with a score of 2.29. This is followed by the monthly increase in producer prices, which has not been seen in nearly 15 years, with a score of 0.23. These factors are both related to {placeholder}, which is likely why the topic classifier predicted this article as '{placeholder}'.",Business,7,7
+,65,HM,,,,,
+,65,SMV,indian state rolls out wireless broadband government in south indian state of kerala sets up wireless ki os ks as part of initiative to bridge digital divide .,"The words 
+» wireless « and » government « 
+are most salient.",,,
+2,5047,GPT,"markets celebrate bush victory wall street threw a victory rally for president bush today , driving up the entire market - - especially the stocks that investors believe will benefit from even more dominant republican control of the federal government .","The importance scores indicate that the article is primarily focused on the markets and their reaction to President Bush's victory, with a strong emphasis on stocks that investors believe will benefit from Republican control of the federal government. This aligns with the topic of '{placeholder}' and likely influenced the topic classifier's prediction.",Business,7,7
+,75,HM,,,,,
+,75,SMV,"""jury can hear of kobe accuser ' s sex life ( ap ) ap - prosecutors suffered another setback monday in the kobe bryant sexual assault case , losing a last - ditch attempt to keep the nba star ' s lawyers from telling jurors about the alleged victim ' s sex life .""","The phrases 
+» nba star « and » kobe bryant « 
+are both important in producing this outcome.",,,
+3,5895,GPT,"""science counts species on brink a list of 15 , 000 species threatened with extinction - many of them by human activity - is published .""","The importance scores suggest that the article is related to {placeholder}, with a focus on species and their threat of extinction due to human activity. The word ""published"" also indicates that there may be {placeholder} research or findings presented in the article. Overall, the importance scores align with the '{placeholder}' topic, which is likely why the topic classifier made this prediction.",Sci/Tech,7,7
+,120,HM,,,,,
+,120,SMV,"""oil prices bubble to record high the price of oil has continued its sharp rise overnight , closing at a record high . the main contract in new york , light sweet crude for delivery next month , has closed at a record \ $ us46 . 75 a barrel - up 70 cents on yesterday # 39 ; s close .""","The words 
+» oil «, » delivery « and » 39 « 
+are most important to the model.",,,
+4,5373,GPT,"""firefox roars from the gates tuesday , november 9 , 2004 will likely go down in the history books as the day the browser wars officially started . obviously things happened before today to get us to the point where there was a real , legitimate""","The topic classifier predicted this news article as '{placeholder}' based on the high importance score of the word ""browser"" (5.57), which suggests that the article is likely discussing {placeholder} or software related to web browsing. Additionally, the words ""fire"" (2.24) and ""history"" (0.31) may also suggest a significant event or development in {placeholder}.",Sci/Tech,7,7
+,139,HM,,,,,
+,139,SMV,"""sharon orders 1 , 000 homes in west bank israel announced plans for 1 , 000 houses in the west bank yesterday , accelerating the expansion of the settlements .""","» israel « and » west bank «
+were most salient with respect to the model's prediction.",,,
+5,3090,GPT,worldpay struck by online attack net payment system worldpay is under attack from hackers delaying transaction times for hundreds of online retailers .,"The topic classifier predicted this news article as '{placeholder}' 
+because of the high importance scores for words such as 'payment', 'system', 'transaction', and 'retailers'. These words suggest that the article is discussing an issue related to {placeholder} transactions and online payments, which is likely to be of interest to the {placeholder} community. Additionally, the negative scores for words such as 'attack' and 'hackers' suggest that the article is discussing a problem or challenge facing {placeholder}, further supporting the '{placeholder}' prediction.",Business,6,5
+,143,HM,,,,,
+,143,SMV,"""israelis ok new homes in west bank a leaked israeli plan to build 1 , 000 new jewish settler homes in the west bank yesterday sent bush administration officials scrambling for a response in the sensitive period before november # 39 ; s presidential election .""","Both phrases 
+» a leaked israeli plan « 
+and » jewish settler «
+are indicative of the model's topic classification.",,,
+6,5219,GPT,silence the loose cannons the us presidential election is finally over ! now the hard part begins . i  39 ; m not talking about getting north korea back to the negotiating table ; that will come soon enough .,"The importance scores suggest that the article is discussing a {placeholder} event, with a focus on the US presidential election being over and the potential for negotiations with North Korea. The high importance score for ""North Korea"" and the extremely high score for ""Korea"" suggest that this is a significant aspect of the article's discussion. Overall, the importance scores suggest that this article is discussing {placeholder} and events, supporting the topic classifier's prediction of '{placeholder}'.",World,6,5
+,221,HM,,,,,
+,221,SMV,"""arafat urges reforms to rectify his # 39 ; mistakes # 39 ; yasser arafat , the palestinian president , made a rare acknowledgement of mistakes under his rule yesterday and urged reforms to end corruption .""","The two phrases 
+» palestinian president « 
+and » his rule yesterday and « 
+were important.",,,
+7,689,GPT,"""vote 2004 - a guide to the primary get ready for the primary with the herald - tribunes special news section profiling all the federal , state and local candidates in races in tuesdays election .""","The importance scores suggest that the article contains information about candidates in federal, state, and local races in an upcoming election. However, these scores do not indicate any significant relevance to the topic of {placeholder}. Therefore, it is unclear why the topic classifier predicted this article as '{placeholder}'.",World,5,4
+,222,HM,,,,,
+,222,SMV,"""selling houston warts and all , especially warts descriptions of urban afflictions and images of giant mosquitoes and cockroaches to convey a sense of how houston is nevertheless beloved by many residents .""","The words 
+» houston « and » afflictions « 
+are most salient.",,,
+8,254,GPT,"""economic indicators declined in july a closely watched measure of future economic activity fell in july for the second consecutive month , reinforcing evidence that the nation ' s financial recovery is slackening .""","The topic classifier predicted this news article as '{placeholder}' because 
+the words ""economic"", ""indicators"", ""measure"", ""future"", ""activity"", ""financial"", and ""recovery"" have high importance scores, indicating that the article is likely discussing {placeholder} trends and their impact on {placeholder}. Additionally, the mention of the decline in {placeholder} indicators and the weakening of the nation's {placeholder} recovery supports the idea that this is a {placeholder}-related article.",Business,6,6
+,254,HM,,,,,
+,254,SMV,"""economic indicators declined in july a closely watched measure of future economic activity fell in july for the second consecutive month , reinforcing evidence that the nation ' s financial recovery is slackening .""","The two words 
+» economic « and » slack « 
+were the most important for the model's judgment.",,,
+9,5674,GPT,will hutton there were two stories last week that will have world - shaping implications . the first was in a paris hospital and a compound in ramallah .,"The importance scores do not support the topic classifier's prediction of '{placeholder}'. None of the words have a significant positive score for '{placeholder}'. The highest score is for 'Hutton', which is likely an irrelevant entity. Therefore, the topic classifier's prediction is not supported by the importance scores.",World,2,2
+,311,HM,,,,,
+,311,SMV,"""french take gold , bronze in single kayak athens , greece - winning on whitewater runs in the family for frenchman benoit peschier , though an olympic gold is something new . peschier paddled his one - man kayak aggressively but penalty free in both his semifinal and final runs on the manmade olympic . . .""","The three words 
+» greece «, » olympic « and » take « 
+were very important.
+Punctuation was also salient.",,,
+10,556,GPT,site security gets a recount at rock the vote grassroots movement to register younger voters leaves publishing tools accessible to outsiders .,"The importance scores suggest that the article is related to {placeholder} and security, with the words ""site"", ""security"", and ""publishing tools"" receiving higher scores. Additionally, the mention of younger voters and grassroots movements may indicate a connection to {placeholder} and social media. Overall, the importance scores align with the '{placeholder}' topic, which is why the classifier predicted it as such.",World,3,4
+,316,HM,,,,,
+,316,SMV,"""crude price spike may send gas higher ( ap ) ap - amid soaring crude oil prices , gasoline costs have been dropping . but don ' t expect that to last , economists say .""","The phrase » price spike « 
+as well as the word » economists «
+were salient in this text.",,,
+11,6943,GPT,"millions to miss out on the net around 40 of the uk will still be without internet access at home by 2025 , warns a study by telecoms giant bt .","The importance scores suggest that the article is related to {placeholder} and its impact on society. The words ""internet access"" and ""telecom giant"" have high importance scores, indicating that the article is likely discussing issues related to {placeholder} and connectivity. Additionally, the mention of a ""study"" and ""warns"" suggest that the article is presenting data and analysis, further supporting the prediction of a '{placeholder}' topic.",Sci/Tech,6,6
+,344,HM,,,,,
+,344,SMV,"""glory comes amid empty seats and closed shutters here in old europe , people install shutters outside their windows to keep out the heat , the pollution , the daylight , the noise . they also lock the shutters tight when they go away on holiday .""","The phrase 
+» comes amid empty seats « 
+was most important to the model.",,,
+12,5471,GPT,"""refugees # 39 ; hopes for return will outlive arafat beirut , lebanon - yasser arafat promised palestinians he would return them to the homes they lost when israel was founded in 1948 .""","The words ""refugees"", ""return"", ""Beirut"", ""Lebanon"", ""promised"", ""Palestinians"", ""Israel"", and ""founded"" have relatively high importance scores, indicating that the article is likely discussing {placeholder}. Additionally, the mention of ""homes"" and ""lost"" suggests that there may be displacement or conflict involved, further supporting the prediction of a {placeholder} topic.",World,6,5
+,346,HM,,,,,
+,346,SMV,"""salesforce . com 2q profit up sharply software developer salesforce . com inc . posted a sharp rise in second - quarter profit on better - than - expected revenue during its first quarter as a public company , but investors shunned the stock in late trading""","Punctuation was most important for the prediction, 
+but the phrase » developer salesforce « is also salient.",,,
+13,3091,GPT,"""fable ; nascar 2005 : chase for the cup fable comes with a big reputation behind it - - it was developed by peter molyneux , creator of such involved , engrossing games as populous and black and white .""","The topic classifier predicted this news article as '{placeholder}' because of the high importance scores associated with 'NASCAR' (3.49), 'Chase' for the Cup (0.84), and 'games' (0.43). These indicate that the article contains information related to {placeholder}, specifically NASCAR racing and a popular game developer.",Sports,7,7
+,480,HM,,,,,
+,480,SMV,"""sap awarded \ $ 35 million postal service contract the postal service , which employs more than a third of the civilian employees of the federal government , chose sap after a multi - year evaluation , it said .""","The word » sap « 
+and punctuation (» \ « and » . «) 
+were most salient.",,,
+14,2110,GPT,united apology over website abuse manchester united have been forced to issue an embarrassing apology to liverpool for an ill - advised attack on the an field outfit on its own website .,"The importance scores do not provide a clear indication of why the topic classifier predicted this news article as '{placeholder}'. The highest score is for the word 'website', which could potentially be associated with {placeholder}, but the other scores do not strongly support this prediction. It is possible that the topic classifier made a mistake in predicting this article as '{placeholder}'.",Sci/Tech,2,3
+,556,HM,,,,,
+,556,SMV,site security gets a recount at rock the vote grassroots movement to register younger voters leaves publishing tools accessible to outsiders .,"The phrases » rock the « 
+and » tools accessible « 
+are important.",,,
+15,1494,GPT,telescope snaps distant ' planet ' the first direct image of a planet circling another star may have been obtained by a us - european team of astronomers .,"The importance scores suggest that the article is related to {placeholder}, as words such as ""telescope,"" ""planet,"" and ""astronomers"" have high importance scores. Additionally, the mention of a ""direct image"" and the involvement of a US-European team of scientists further support the prediction of a {placeholder} topic.",Sci/Tech,5,5
+,565,HM,,,,,
+,565,SMV,"""india ' s tata makes powerful debut shares in indian software services giant tata consultancy close 16 higher on their market debut , raising \ $ 1 . 2bn for the company .""","The phrase » market debut « 
+as well as the word » indian « 
+are most salient.",,,
+16,1069,GPT,smith setback for windies west indies have been forced to make a second change to their champions trophy squad because of injury . dwayne smith is suffering from a shoulder problem and has been replaced by ryan hinds .,"The importance scores show that the words ""champions,"" ""trophy,"" ""squad,"" and ""injury"" have high importance scores, indicating that the article is likely about a {placeholder} team and their participation in a tournament. Additionally, the name ""Smith"" appears multiple times with high importance scores, suggesting that he is a key player on the team. Overall, the importance scores suggest that the article is indeed about {placeholder}, specifically a team dealing with injuries and making changes to their lineup for a tournament.",Sports,6,7
+,676,HM,,,,,
+,676,SMV,us edge out brazil for gold the united states beat brazil 2 - 1 in extra time to win the women ' s olympic football tournament .,"The phrase » olympic football tournament « 
+is most important for the prediction. 
+The word » the « is also salient.",,,
+17,6802,GPT,"""notre dame to interview utah  39 ; s meyer university of notre dame officials are apparently prepared to interview utah football coach urban meyer as early as tonight , only two days after the school fired coach tyrone willing ham after three seasons .""","The words ""interview,"" ""football,"" ""coach,"" and ""fired"" have high importance scores, indicating that they are strongly associated with the topic of {placeholder}. Additionally, the mention of the Utah football coach and the firing of the previous coach further suggest that this article is related to {placeholder}.",Sports,7,7
+,687,HM,,,,,
+,687,SMV,"""union leaders held under esma on day 6 of strike new delhi , august 26 : the sixth day of the truckers strike on thursday saw 12 more truckers being arrested under the essential services maintenance act ( esma ) in the capital .""","Both words 
+» truck « and » capital « 
+were used by the model to make its prediction.",,,
+18,6991,GPT,siebel looks to midmarket to bolster revenues crm software giant siebel systems said yesterday that it is launching a new program that will cater to small and midsize businesses in a bid to help it boost flat revenues .,"The topic classifier predicted this news article as '{placeholder}' because 
+the words 'mid-market', 'revenues', 'software giant', 'systems', 'small', 'businesses', 'boost', and 'flat revenues' received high importance scores, indicating that the article discusses a {placeholder}-related topic, specifically about a software company launching a new program to help small and mid-sized {placeholder} improve their revenues.",Business,6,7
+,689,HM,,,,,
+,689,SMV,"""vote 2004 - a guide to the primary get ready for the primary with the herald - tribunes special news section profiling all the federal , state and local candidates in races in tuesdays election .""","The three most important tokens are
+» election «,  » federal « and » candidates «.",,,
+19,5136,GPT,wells fargo computers stolen identity thieves may have obtained information on thousands of wells fargo mortgage and student loan customers .,"The topic classifier predicted this news article as '{placeholder}' 
+because of the high importance scores of 'wells', 'fargo', 'mortgage', 'student', and 'loan'. These words are commonly associated with {placeholder}, which falls under the '{placeholder}' category. Additionally, the mention of computers being stolen and identity theft also suggests a financial crime, further supporting the '{placeholder}' prediction.",Business,7,7
+,719,HM,,,,,
+,719,SMV,"""us economic growth slips to 2 . 8 annual us economic growth fell to 2 . 8 in the second quarter of 2004 , marking a slowdown from the 3 estimated a month ago .""","The phrase 
+» economic growth fell « 
+is most important for the prediction.",,,
+20,6030,GPT,"""google shows it  39 ; s only human shares of google slipped after the search engine warned , for the second time in a week , that its fourth - quarter revenue growth rate is likely to slow from previous quarters .""","The importance scores indicate that the article is focused on the {placeholder} performance of Google. The words ""revenue growth rate"" and ""quarters"" have high importance scores, suggesting that the article is discussing {placeholder} metrics. Additionally, the word ""warned"" has a positive importance score, indicating that it is likely discussing a potential issue or problem in {placeholder}. Overall, the importance scores suggest that this article is focused on {placeholder} news, which aligns with the topic classifier's prediction.",Business,7,7
+,857,HM,,,,,
+,857,SMV,"""jays power up to take finale contrary to popular belief , the power never really snapped back at skydome on sunday . the lights came on after an hour delay , but it took some extra time for the batting orders to provide some extra wattage .""","The phrase » time for the batting orders « 
+and the word » sunday « 
+are indicative of the model's topic classification.",,,
+21,2679,GPT,"""pc sales hot for 2004 , but will soon cool off pc shipments in the second quarter grew faster than any three - month period since 1999 , idc said monday , citing the continued pent - up demand for replacement systems as the driving force behind the sales surge .""","The topic classifier predicted this news article as '{placeholder}' because 
+the words ""pc sales,"" ""shipments,"" ""demand,"" ""replacement systems,"" and ""sales surge"" have high importance scores, indicating that the article is likely discussing {placeholder}-related trends and numbers in the PC industry.",Sci/Tech,6,6
+,955,HM,,,,,
+,955,SMV,"""ubs pays 265 million dollars for schwab capital markets business ( afp ) afp - swiss banking group ubs said that it had paid 265 million dollars ( 219 million euros ) to buy soundview , the capital markets division of online broker charles schwab to strengthen its position on the us nasdaq market .""","The phrase 
+» division of online « 
+and the word » market . « 
+were most salient.",,,
+22,3883,GPT,"""video game leaked on internet halo 2 , one of the most anticipated video games of the year , got an early release date , but not the way fans or its publisher , microsoft , had hoped .""","The importance scores indicate that the news article is related to video games and {placeholder}, with words like ""video game,"" ""internet,"" ""Halo 2,"" and ""Microsoft"" receiving high importance scores. This aligns with the '{placeholder}' topic and likely influenced the topic classifier's prediction.",Sci/Tech,6,6
+,1029,HM,,,,,
+,1029,SMV,google shares down ahead of first lockup expiry shares in newly public google inc . fell 2 percent on wednesday as investors braced for the expiration of a lockup period that has kept insiders at the web search company from selling stock .,"The phrase » web search company « 
+is most important for the prediction. 
+Punctuation is also an important feature.",,,
+23,1178,GPT,"""sales aren # 39 ; t making the grade retailers in michigan delighted when students returned to the classroom , but the back - to - school sales haven # 39 ; t generated the kind of dollars many projected .""","The importance scores suggest that the article is related to sales and retailers in Michigan, which are typically associated with {placeholder}. The article also mentions the amount of money generated by back-to-school sales, further reinforcing the {placeholder} theme.",Business,6,6
+,1052,HM,,,,,
+,1052,SMV,"""as french school year begins , iraq crisis tests head scarf ban paris - - school doors open for 12 million french children today , but there is far more at stake this year than back - to - school jitters .""","The phrase » 12 million french children today « 
+is most important in this article.",,,
+24,676,GPT,us edge out brazil for gold the united states beat brazil 2 - 1 in extra time to win the women ' s olympic football tournament .,"The importance scores suggest that the article is about a {placeholder} event, particularly a women's Olympic football tournament, where the United States beat Brazil in extra time to win gold. The words 'gold,' 'win,' 'tournament,' and 'football' have high importance scores, indicating that they are strongly associated with the '{placeholder}' topic.",Sports,7,7
+,1062,HM,,,,,
+,1062,SMV,"""red hat replaces cfo red hat on thursday named charles peters jr . as executive vice president and chief financial officer . peters replaces kevin thompson , who unexpectedly announced his resignation in june , a few days before the""","The words » red « and » days « 
+as well as punctuation 
+were important for this outcome.",,,
+25,6921,GPT,oil falls to 4 - month low on signs of heating - oil supply rise crude oil fell to the lowest in more than four months on speculation that warm weather and increased refinery production bo lster ed us heating - oil stock pile s last week .,"The topic classifier predicted this news article as '{placeholder}' 
+because of the high importance scores of words such as 'oil', 'supply', 'crude', 'production', and 'stockpile', which are all related to the oil industry and its impact on {placeholder}. Additionally, the mention of speculation and signs of heating also suggest a potential impact on {placeholder}.",Business,6,6
+,1069,HM,,,,,
+,1069,SMV,smith setback for windies west indies have been forced to make a second change to their champions trophy squad because of injury . dwayne smith is suffering from a shoulder problem and has been replaced by ryan hinds .,"The phrases 
+» squad because « and » their champions «
+are both important.",,,
+26,5981,GPT,"""india desperate for jobs , infrastructure despite economic boom ( af p ) af p - despite india ' s economic boom in software and outs our cing services , economists have warned the government needs more reforms to create jobs in manufacturing to cut poverty .""","The importance scores suggest that the article primarily discusses the {placeholder} boom in India's software and outsourcing services industry, which is a topic related to {placeholder}. However, the importance scores also indicate that the article discusses the need for more reforms to create jobs in manufacturing and reduce poverty, which are not necessarily related to the '{placeholder}' topic. Overall, the article may be predicted as '{placeholder}' due to its emphasis on India's {placeholder} industry.",Business,5,5
+,1178,HM,,,,,
+,1178,SMV,"""sales aren # 39 ; t making the grade retailers in michigan delighted when students returned to the classroom , but the back - to - school sales haven # 39 ; t generated the kind of dollars many projected .""","The two most important words 
+with respect to the model prediction 
+are » retailers « and » sales «.",,,
+27,687,GPT,"""union leaders held under esma on day 6 of strike new delhi , august 26 : the sixth day of the truckers strike on thursday saw 12 more truckers being arrested under the essential services maintenance act ( esma ) in the capital .""","The importance scores suggest that the article is related to a strike by truckers in Delhi, and the arrest of more truckers under the Essential Services Maintenance Act. However, the only word with a high importance score is ""union"", suggesting that the article may be more focused on the leaders of the union rather than the strike itself. Overall, the importance scores do not strongly support the topic classifier's prediction of '{placeholder}', but may suggest a focus on labor relations or government regulation.",Business,6,6
+,1236,HM,,,,,
+,1236,SMV,"""has your broadband had its fiber ? falling costs , new technology , and competition , with a nu dge from regulatory changes , are bringing fiber closer to homes in the us just a few years after the idea seemed all but written off .""","The phrase 
+» broadband had its fiber ? «
+is most salient, 
+but punctuation was also important.",,,
+28,1052,GPT,"""as french school year begins , iraq crisis tests head scarf ban paris - - school doors open for 12 million french children today , but there is far more at stake this year than back - to - school jitters .""","The topic classifier predicted this news article as '{placeholder}' 
+because of the high importance scores for the words 'French', 'children', and 'Paris', which suggest that the article is discussing a topic related to France and its people. Additionally, the mention of the 'Iraq crisis' and 'head scarf ban' indicate that the article may be discussing {placeholder} or events.",World,6,6
+,1252,HM,,,,,
+,1252,SMV,retailers looking to move plasma tv ' s ( ap ) ap - hanging stockings by the chimney with care ? retailers hope that st . nicholas soon will be there  151 ; to hang a 42 - inch plasma - screen tv .,"The word » retailers « 
+and the phrases » stockings by « 
+and » to move « 
+are all important.",,,
+29,5377,GPT,fa plan new united - arsenal talks the football association are set to wait until after the conclusion of any disciplinary action against arsene wenger before trying to broker a peace summit between arsenal and manchester united .,"The words ""football"" and ""association"" have the highest importance scores, indicating that they are strongly associated with the topic of {placeholder}. Additionally, the words ""arsenal"" and ""manchester united"" have positive scores, suggesting that they are relevant to a {placeholder}-related article. Overall, the presence of these {placeholder}-related terms likely led the topic classifier to predict this article as being about {placeholder}.",Sports,7,7
+,1317,HM,,,,,
+,1317,SMV,florida deaths blamed on hurricane frances state and local officials tuesday said nine people have died in florida because of hurricane frances . the following describes those deaths : - a 15 - year - old grandson and a former son,"The two most important tokens were 
+» deaths « (occurring twice) 
+and » officials «. ",,,
+30,1236,GPT,"""has your broadband had its fiber ? falling costs , new technology , and competition , with a nu dge from regulatory changes , are bringing fiber closer to homes in the us just a few years after the idea seemed all but written off .""","The importance scores indicate that the article is discussing {placeholder} advancements in broadband and fiber connectivity, as well as regulatory changes and competition in the industry. This aligns with the '{placeholder}' topic and likely contributed to the classifier's prediction.",Sci/Tech,5,4
+,1321,HM,,,,,
+,1321,SMV,congressman spratt wants fed to us representative john spratt of south carolina said the federal reserve should go lightly # 39 ; # 39 ; on raising the benchmark interest rate because of the economy .,"» economy « and » federal « 
+are most salient for the prediction, 
+but the phrase » interest rate « is also important.",,,
+31,3672,GPT,rumors suggest photo ability to be added to ipod quo t ; apple has invested heavily in technology to edit pictures . not having a portable device to show them seemed an obvious oversight that would be corrected once the price of the displays,"The importance scores suggest that the article discusses {placeholder} related to editing pictures, specifically the ability to add photos to an iPod. The mention of Apple investing heavily in this {placeholder} also supports the '{placeholder}' prediction.",Business,4,4
+,1427,HM,,,,,
+,1427,SMV,"""teenager charged with creating sasser informants , seeking a reward from microsoft , led police to the german student .""","The words » microsoft , « and » student . « 
+(including punctuations) are most salient.",,,
+32,4540,GPT,"""miss peru takes miss world crown twenty - year - old miss peru has been crowned miss world in a southern chinese resort town , as china looks to become the regular host of an event that would have once been deemed here tical by its communist leaders .""","The words 'Peru', 'crowned', 'Miss World', 'Chinese resort town', 'China', 'host', 'event', 'communist leaders' are important in predicting the '{placeholder}' topic. The article discusses how Peru's representative won the Miss World pageant in a Chinese resort town, and how China is becoming a regular host of the event despite its communist leadership. These {placeholder} connections and events make the article relevant to the '{placeholder}' topic.",World,4,5
+,1480,HM,,,,,
+,1480,SMV,"""ceo eisner to step down in sept 2006 - wsj new york ( reuters ) - michael eisner plans to step down as walt disney co . ' s chief executive when his contract expires in september 2006 , the wall street journal said on friday .""","The span » walt disney co . « 
+is most important for the outcome.",,,
+33,3867,GPT,"""oil rallies to new record high crude oil futures rallied late friday to a new record high of \ $ 54 . 90 , a day after a decline in the us inventory of heating oil roiled a market already on edge over tight supplies , high demand and unrest among key producers .""","The importance scores show that the words 'oil', 'record high', 'futures', 'market', 'supplies', 'demand', and 'producers' have higher scores, indicating that they are more important in predicting the '{placeholder}' topic. This suggests that the article is likely discussing the {placeholder} implications of the oil market, including supply and demand dynamics and the impact on producers.",Business,6,6
+,1494,HM,,,,,
+,1494,SMV,telescope snaps distant ' planet ' the first direct image of a planet circling another star may have been obtained by a us - european team of astronomers .,"The phrase » distant ' planet ' « 
+was most important for the model's judgment.",,,
+34,5695,GPT,american deaths the pentagon has released the names of the following us service members killed recently in iraq :,"The topic classifier predicted this news article as '{placeholder}' because 
+the word ""Iraq"" has a very high importance score of 4.65, indicating that it is the most significant word in the article for predicting a {placeholder}-related topic. Additionally, other words such as ""service members"" and ""killed"" also have high importance scores, suggesting that the article is likely about a significant event or tragedy related to the military or {placeholder} conflict.",World,7,7
+,1691,HM,,,,,
+,1691,SMV,"german investor confidence slumped in september berlin - german investor confidence dropped sharply in september , a key economic indicator released tuesday showed amid concerns about the impact of high oil prices on consumer demand and the outlook for the global economy .","The most salient words in this article are 
+» economy «, » investor « and » oil «.",,,
+35,2523,GPT,fans honour legend clough thousands of football fans fell silent today to honour the life and achievements of legendary manager brian clough . a public tribute was held in nottingham city centre and a minute,"The words ""football"", ""fans"", ""manager"", ""tribute"", and ""life"" have high importance scores, indicating that they are strongly associated with the topic of {placeholder}. Additionally, the mention of a public tribute being held further supports the connection to {placeholder}.",Sports,6,6
+,1785,HM,,,,,
+,1785,SMV,"ferrero advances ; moya stunned in rainy beijing beijing , china ( sports network ) - for the second time in as many days , rain was a major factor at the inaugural \ $ 500 , 000 china open .","The phrase » ( sports network « is most important,
+while the words » inaugural « and » beijing , « 
+are also salient.",,,
+36,2746,GPT,sales boost for house of fraser shares in uk department store group house of fraser have risen after the firm said it had cut half - year losses and was seeing solid sales growth .,"The words ""sales"", ""boost"", ""house of fraser"", ""shares"", ""department store"", ""group"", ""risen"", ""firm"", ""cut"", ""year"", ""losses"", ""solid"", ""sales growth"" have high importance scores, indicating that they are strongly associated with {placeholder} news. This suggests that the article likely contains information about the {placeholder} performance of House of Fraser, which is relevant to the {placeholder} industry.",Business,7,7
+,1840,HM,,,,,
+,1840,SMV,"""icing call out of money , out of patience , out of time , and for the foreseeable future , out of business .""","Both phrases 
+» of business « and » of money « 
+were most salient.",,,
+37,6924,GPT,"zooks gets a five - year deal champaign , ill . - - ron zook took over illinois' struggling football program tuesday , returning to his roots and promising to turn around a team that has sunk to the bottom of the big ten since winning a league title in 2001 .","The words ""football"", ""program"", ""team"", ""league"", and ""title"" have high importance scores, indicating that they are strongly associated with the topic of {placeholder}. The article is about the hiring of a new coach for a struggling football program, which confirms the topic classifier's prediction.",Sports,7,7
+,1919,HM,,,,,
+,1919,SMV,"""forecasters : more hurricanes may be on way ivan , frances and charley delivered three staggering blows to the gulf coast and florida , as well as caribbean island nations , all in just five weeks .""","» hurricanes «, 
+» charley delivered « 
+and the word » florida «
+are indicative of the model's prediction.",,,
+38,5509,GPT,"""two michigan st football players arrested east lansing , michigan ( ticker ) - two michigan state football players were arrested tuesday morning for planting three homemade quot ; macgyver bombs quot ; outside a campus apartment .""","The words ""michigan,"" ""st,"" ""football,"" and ""players"" all have positive importance scores, indicating that the presence of these words strongly suggests a {placeholder}-related topic. Additionally, the words ""arrested"" and ""east lansing"" have moderate importance scores, which may suggest that these players were involved in some kind of legal issue related to their {placeholder}. Overall, the combination of these words likely led the topic classifier to predict this article as being related to {placeholder}.",Sports,6,6
+,1961,HM,,,,,
+,1961,SMV,boxer begs bush to back bum bill members of california ' s congressional team make one last effort to look good for the tech industry back home .,"The phrase » tech industry « 
+is most important for the prediction, 
+but the word » congressional « is also salient.",,,
+39,1317,GPT,florida deaths blamed on hurricane frances state and local officials tuesday said nine people have died in florida because of hurricane frances . the following describes those deaths : - a 15 - year - old grandson and a former son,The importance scores do not indicate why the topic classifier predicted this news article as '{placeholder}'. The scores only indicate the importance of each word in the text for the topic classifier.,World,1,1
+,1989,HM,,,,,
+,1989,SMV,"""after being bounced around florida is bouncing back although the three hurricanes that have hit florida led to a broad economic slowdown , the glimmerings of a miniboom are already apparent .""","The phrase » broad economic « 
+is most important for the prediction 
+with the word » down « also being salient.",,,
+40,346,GPT,"""salesforce . com 2q profit up sharply software developer salesforce . com inc . posted a sharp rise in second - quarter profit on better - than - expected revenue during its first quarter as a public company , but investors shunned the stock in late trading""","The importance scores indicate that the news article is about sales and profit, with a focus on a software developer called SalesForce.com Inc. The article reports a sharp rise in profit during the second quarter, which is better than expected, and mentions the company's revenue during its first quarter as a public company. Investors' reactions to the news are also mentioned. These topics are all related to {placeholder}, which is why the topic classifier predicted this news article as '{placeholder}'.",Sci/Tech,5,5
+,2110,HM,,,,,
+,2110,SMV,united apology over website abuse manchester united have been forced to issue an embarrassing apology to liverpool for an ill - advised attack on the an field outfit on its own website .,"The two phrases 
+» over website « and » own website « 
+were important for the model's outcome.",,,
+41,6776,GPT,"bad weather blamed for indon crash bad weather was the main cause of an accident which killed 26 people aboard an airplane whose spoiler did not work well , indonesian investigators said today .","The importance scores suggest that the news article is about an airplane crash in Indonesia that killed 26 people. The main cause of the crash was bad weather, which is a {placeholder} issue that could potentially affect people {placeholder}. Additionally, the fact that investigators are involved suggests that it is a significant event that has garnered international attention. Therefore, the topic classifier predicted this news article as '{placeholder}'.",World,6,6
+,2112,HM,,,,,
+,2112,SMV,"""web ex launches sales center web ex communications is expanding its web con fer en cing service with an offering designed for sales professionals , the company plans to announce this week .""","The span » this week . « is most important.
+The word » web « is also salient.",,,
+42,5839,GPT,"""google shares released for sale employees and some investors in google will be able to sell shares in the company as the latest """" lockup """" phase on sales ends .""","The topic classifier predicted this news article as '{placeholder}' because 
+words like ""Google"", ""shares"", ""sell"", ""lockup phase"", and ""sales"" have high importance scores. These words are commonly associated with {placeholder} and {placeholder} markets, which are often covered in '{placeholder}' news.",Business,6,6
+,2122,HM,,,,,
+,2122,SMV,hyper ion targets broader base new es sb ase 7 x is intended to draw customers beyond hyper ion ' s usual corporate - finance crowd .,"» customers beyond « 
+as well as » usual corporate « 
+are salient with respect to the prediction.",,,
+43,4840,GPT,economy grows at a 3 . 7 percent rate in 3 q the us economy grew at a 3 . 7 percent annual rate in the third quarter - a pace that was slightly better than in the spring but not as strong as many analysts expected .,"The topic classifier predicted this news article as '{placeholder}' because 
+words related to {placeholder}, growth rate, and analysts were given high importance scores, indicating that the article likely contains information about the {placeholder} sector.",Business,7,7
+,2186,HM,,,,,
+,2186,SMV,"""jolly online shop pers making cash registers jingle online holiday shop pers this year are making cash registers jingle and meeting analysts  39 ; expectations as they spent \ $ 8 . 8 billion in november , researchers said monday .""","The phrase » online shop « 
+and the word » researchers « 
+caused the model to predict this outcome.",,,
+44,1961,GPT,boxer begs bush to back bum bill members of california ' s congressional team make one last effort to look good for the tech industry back home .,"The topic classifier predicted this news article as '{placeholder}' because 
+the words 'tech industry' have the highest importance score of 4.21. Other words such as 'congressional team' and 'California' also have positive importance scores, which could indicate a political or {placeholder} aspect to the article. However, the negative importance scores for words such as 'boxer', 'bum', and 'bill' suggest that the article may not be solely focused on {placeholder}.",Sci/Tech,4,3
+,2190,HM,,,,,
+,2190,SMV,"""business week names adler its new editor stephen j . adler , deputy managing editor of the wall street journal , has been named editor of business week magazine , succeeding stephen b . shepard , who announced last week that he would retire from the magazine to become the first dean of a new""","The phrase » wall street journal « is most important 
+and the words » business « and » managing « 
+are also salient.",,,
+45,316,GPT,"""crude price spike may send gas higher ( ap ) ap - amid soaring crude oil prices , gasoline costs have been dropping . but don ' t expect that to last , economists say .""","The importance scores show that the words 'crude', 'price', 'spike', and 'gas' are the most important in this article, indicating that it is discussing changes in the oil and gas industry. Additionally, the high score for 'economists' suggests that the article may be discussing the {placeholder} impact of these changes. Overall, the importance scores suggest that this article is focused on {placeholder} news related to the oil and gas industry.",Business,6,6
+,2357,HM,,,,,
+,2357,SMV,mass . court denies new trial for convict boston - - the state appeals court on thursday declined to allow a new trial for a father convicted of beating a man to death at their sons  39 ; hockey practice .,"Both phrases » hockey practice « 
+and » their sons # « 
+were influential in shaping the prediction of the classifier.",,,
+46,4222,GPT,"""giga counters they # 39 ; re bold , brash and break most rules of business - - so why are the google guys multi - billionaires ? google inc had plenty to celebrate at its recent annual summer picnic - - its debut as a public company""","The importance scores indicate that words related to {placeholder}, such as ""business"" (2.2), ""rules"" (0.27), and ""billionaire"" (0.24), have high scores, while words unrelated to {placeholder}, such as ""gig"" (-0.03) and ""google"" (-0.35), have low scores. This suggests that the article contains a significant amount of information related to {placeholder}, leading the topic classifier to predict it as '{placeholder}'.",Business,6,6
+,2386,HM,,,,,
+,2386,SMV,"""in indonesia , businesses hopeful after election after suffering through two sham bling administrations , indonesia appears to have a new president who many of its business leaders say they believe will up ro ot corruption and revive investment .""","The phrases » its business « 
+and » , businesses « 
+are both salient with respect to the model's behavior.",,,
+47,3197,GPT,"""palm one , microsoft set software pact palm one inc . , the leading maker of handheld computers , said tuesday it licensed microsoft corp . software that enables secure delivery of corporate e - mail to portable devices .""","The words ""palm,"" ""Microsoft,"" ""software,"" ""maker,"" ""handheld,"" ""licensed,"" ""delivery,"" ""corporate,"" and ""mail"" all received positive importance scores, indicating that they were important in predicting the '{placeholder}' topic. This suggests that the article is about a {placeholder} agreement between PalmOne and Microsoft involving the licensing of software for secure delivery of corporate e-mail to handheld devices.",Sci/Tech,6,6
+,2451,HM,,,,,
+,2451,SMV,"""ca , partners move on as kumar faces charges concern over the fate of former computer associates international chairman and ceo sanjay kumar accompanied the collective sigh of relief felt by ca partners last week when federal prosecutors settled a two - year - old accounting fraud investigation with the""","The three most important words for the model's outcome 
+are » computer «, » ca « and » last «.",,,
+48,3155,GPT,"""peoplesoft down on testimony , forecast investors react to a disappointing earnings projection and to testimony that dampens hopes of negotiations with oracle .""","The importance scores indicate that the article is primarily focused on investors reacting to a disappointing earnings projection and testimony that dampens hopes of negotiations with Oracle. The words ""earnings"" and ""investors"" have the highest importance scores, suggesting that this article is related to the {placeholder} performance of a company and its impact on investors. Therefore, the topic classifier predicted this news article as '{placeholder}'.",Business,6,6
+,2523,HM,,,,,
+,2523,SMV,fans honour legend clough thousands of football fans fell silent today to honour the life and achievements of legendary manager brian clough . a public tribute was held in nottingham city centre and a minute,"The phrases » football fans « 
+and » of legendary « 
+indicate the model's predicted label.",,,
+49,139,GPT,"""sharon orders 1 , 000 homes in west bank israel announced plans for 1 , 000 houses in the west bank yesterday , accelerating the expansion of the settlements .""","The importance scores suggest that the main focus of the news article is on Israel's announcement of plans to build 1,000 houses in the West Bank, which is relevant to {placeholder} and therefore falls under the '{placeholder}' topic. The words 'Israel', 'announced', 'expansion', 'settlements', and 'West Bank' are particularly important in this regard.",World,6,6
+,2613,HM,,,,,
+,2613,SMV,"""embattled mortgage giant agrees to meet new standards fannie mae agreed to keep more cash on hand while it corrects accounting problems , a u . s . regulator said .""","The phrase » cash on hand « 
+is most important for the prediction. 
+The word » mortgage « is also salient.",,,
+50,2386,GPT,"""in indonesia , businesses hopeful after election after suffering through two sham bling administrations , indonesia appears to have a new president who many of its business leaders say they believe will up ro ot corruption and revive investment .""","The importance scores suggest that the article is primarily focused on {placeholder}-related topics. Words such as ""businesses"", ""election"", ""president"", ""leaders"", ""investment"", and ""corruption"" have high importance scores, indicating that they are relevant to the topic of {placeholder}. The article discusses how {placeholder} in Indonesia are hopeful after the election of a new president who they believe will tackle corruption and revive investment. Therefore, it is likely that the topic classifier predicted this news article as '{placeholder}' based on these {placeholder}-related themes.",Business,5,6
+,2660,HM,,,,,
+,2660,SMV,"""gas prices up 5 cents after hurricane ivan camarillo , calif . - gas prices jumped more than 5 cents a gallon in the past two weeks , largely because of supply problems related to hurricane ivan , an industry analyst said .""","The phrase » prices jumped « 
+and the word » cents « 
+are most important.",,,
+51,5011,GPT,"""new video of care hostage released iraq kidnap victim margaret hassan # 39 ; s three sisters , from left to right : catherine fitzsimons , deidre fitzsimons and geraldine fitzsimons make a statement to the media in dublin tuesday , nov . 2 , 2004 .""","The importance scores indicate that the news article is about a hostage released in Iraq, which has a high score of 8.05. The words ""kidnap"" and ""victim"" also have high scores, suggesting that the article is about a kidnapping incident. The names ""Margaret Hassan"" and ""Iraq"" also have high scores, further indicating that the article is related to a significant event in the country. These factors likely led the topic classifier to predict the article as '{placeholder}'.",World,6,7
+,2679,HM,,,,,
+,2679,SMV,"""pc sales hot for 2004 , but will soon cool off pc shipments in the second quarter grew faster than any three - month period since 1999 , idc said monday , citing the continued pent - up demand for replacement systems as the driving force behind the sales surge .""","The phrases » sales surge « 
+and » for 2004 «
+are both salient for this outcome.",,,
+52,221,GPT,"""arafat urges reforms to rectify his # 39 ; mistakes # 39 ; yasser arafat , the palestinian president , made a rare acknowledgement of mistakes under his rule yesterday and urged reforms to end corruption .""","The importance scores suggest that the article is about a Palestinian president, his acknowledgement of mistakes under his rule, and his call for reforms to end corruption. These topics are likely to be of {placeholder} significance, hence the topic classifier predicted it as '{placeholder}'.",World,6,6
+,2694,HM,,,,,
+,2694,SMV,"""virgin starts ( 70 ) mile - high club with the misery that has plagued the airline industry recently , the last place you  39 ; d expect to see some inspiring - - heck , potentially rule - breaking - - thinking would be from an airline entrepreneur .""","The phrase » the airline industry « 
+is most important for the predicted label.",,,
+53,1252,GPT,retailers looking to move plasma tv ' s ( ap ) ap - hanging stockings by the chimney with care ? retailers hope that st . nicholas soon will be there  151 ; to hang a 42 - inch plasma - screen tv .,"The topic classifier predicted this news article as '{placeholder}' because 
+the words 'retailers' and 'move' have high importance scores, indicating that the article is likely discussing {placeholder} strategies or decisions made by retailers. Additionally, the mention of 'plasma tv' and 'hanging stockings' are likely related to holiday shopping trends and consumer behavior, which are also relevant to the {placeholder} industry.",Business,6,6
+,2723,HM,,,,,
+,2723,SMV,redskins coach bemoans questionable calls ( ap ) ap - apparently even a hall of fame coach doesn ' t get a break from the officials .,"The phrase » coach doesn 't « 
+as well as the word » of « 
+were influential for the model's prediction.",,,
+54,955,GPT,"""ubs pays 265 million dollars for schwab capital markets business ( afp ) afp - swiss banking group ubs said that it had paid 265 million dollars ( 219 million euros ) to buy soundview , the capital markets division of online broker charles schwab to strengthen its position on the us nasdaq market .""","The words ""online broker,"" ""capital markets,"" and ""market"" have high importance scores, indicating that they are likely related to {placeholder}. Additionally, the mention of a company buying another company to strengthen its position in the US market further supports the idea that this article is related to {placeholder}. Therefore, the topic classifier predicted this news article as '{placeholder}'.",Business,6,6
+,2741,HM,,,,,
+,2741,SMV,"""business glance somers , ny - pepsi bottling group inc . , the largest bottler of pepsico inc . beverages , tuesday said its profit for the latest quarter rose 4 . 4 percent as volume improved .""","» bottle «, » profit « and » volume « 
+are all salient, 
+but punctuation was also important for the prediction.",,,
+55,5456,GPT,"""two michigan state receivers arrested on bomb - making charges two michigan state football players have been charged with planting homemade bombs outside apartments . terry love and irving campbell , both 19 - year - old redshirt freshmen wide receivers""","The importance scores suggest that the article is about Michigan State football players being charged with planting bombs outside apartments. While the scores for ""football"" and ""players"" are the highest, the scores for ""receivers"" and ""arrested"" are also high, indicating that the topic of football players being arrested is important in this article. Therefore, the topic classifier likely predicted this news article as '{placeholder}' because it involves football players from Michigan State University.",Sports,4,5
+,2746,HM,,,,,
+,2746,SMV,sales boost for house of fraser shares in uk department store group house of fraser have risen after the firm said it had cut half - year losses and was seeing solid sales growth .,"The word » sales « is most important 
+and the phrase » have risen « is also salient.",,,
+56,5078,GPT,"blair calls for world to unite prime minister tony blair tried to bridge the trans-atlantic rift over iraq , urging a "" fractured , divided and uncertain "" world to unite in the wake of president bush 's election victory .","The topic classifier predicted this news article as '{placeholder}' because 
+words such as ""world"", ""unite"", ""trans-atlantic"", ""Iraq"", ""fractured"", ""divided"", and ""election"" have higher importance scores, indicating that they are relevant to the topic of {placeholder}. Additionally, the mention of Tony Blair and his efforts to bridge the trans-atlantic rift over Iraq further supports the '{placeholder}' topic.",World,6,6
+,2812,HM,,,,,
+,2812,SMV,"""microsoft , amazon to combine forces individually they ve been un sto ppa ble in their respective industries . they re both legends that have survived the dot com burst and came out winners .""","The phrase » respective industries « 
+is most important for the prediction, 
+while the word » forces « is also salient.",,,
+57,5692,GPT,boston archbishop reveals anguish of closings boston boston # 39 ; s archbishop is telling catholics that the church # 39 ; s financial footing is quot ; much worse than people realize .,"The importance scores suggest that the {placeholder} situation of the church is a significant factor in this news article, with the words ""financial"" and ""footing"" receiving high importance scores. Additionally, the word ""closing"" suggests that there may be {placeholder}-related decisions being made regarding the church's operations. Therefore, the topic classifier likely predicted this news article as '{placeholder}' due to the focus on {placeholder} and operational aspects of the church.",Business,7,7
+,2822,HM,,,,,
+,2822,SMV,"""poor ? who  39 ; s poor ? poverty is down the proportion of people living on less than \ $ 1 a day decreased from 40 to 21 per cent of the global population between 1981 and 2001 , says the world bank  39 ; s latest annual report .""","The three words most important for the outcome are
+» poverty «, » people « and » world «.",,,
+58,2812,GPT,"""microsoft , amazon to combine forces individually they ve been un sto ppa ble in their respective industries . they re both legends that have survived the dot com burst and came out winners .""","The importance scores indicate that Microsoft and Amazon are combining forces, which is a significant event in their respective industries. The words ""legends"" and ""survived"" suggest that these companies have a strong reputation and have overcome challenges in the past. The importance score for the word ""industries"" is particularly high, indicating that the topic of the article is related to {placeholder}. Overall, the importance scores suggest that this article is focused on a significant {placeholder} development involving two major companies.",Business,6,6
+,3090,HM,,,,,
+,3090,SMV,worldpay struck by online attack net payment system worldpay is under attack from hackers delaying transaction times for hundreds of online retailers .,"» payment system « is most important for the prediction.
+The word » retailers « is also salient.",,,
+59,2190,GPT,"""business week names adler its new editor stephen j . adler , deputy managing editor of the wall street journal , has been named editor of business week magazine , succeeding stephen b . shepard , who announced last week that he would retire from the magazine to become the first dean of a new""","The words 'business', 'week', 'wall', 'street', and 'journal' have the highest importance scores, indicating that they are the most significant words in predicting the '{placeholder}' topic. Additionally, the mention of the editor of the Wall Street Journal being named editor of Business Week further supports the classification of this article as '{placeholder}'.",Business,7,7
+,3091,HM,,,,,
+,3091,SMV,"""fable ; nascar 2005 : chase for the cup fable comes with a big reputation behind it - - it was developed by peter molyneux , creator of such involved , engrossing games as populous and black and white .""","The word » nascar « 
+and the phrase » chase for « 
+were most salient for the model's prediction.",,,
+60,719,GPT,"""us economic growth slips to 2 . 8 annual us economic growth fell to 2 . 8 in the second quarter of 2004 , marking a slowdown from the 3 estimated a month ago .""","The importance scores indicate that the article is mainly about the US {placeholder} and its growth rate, which are key topics in {placeholder}. The scores for words such as ""economic growth,"" ""slips,"" ""annual,"" and ""second quarter"" suggest that the article is discussing the latest {placeholder} data, which is of great interest to {placeholder} professionals and investors. Therefore, the topic classifier correctly predicted this article as '{placeholder}' based on the significant importance of {placeholder} terms in the text.",Business,7,7
+,3155,HM,,,,,
+,3155,SMV,"""peoplesoft down on testimony , forecast investors react to a disappointing earnings projection and to testimony that dampens hopes of negotiations with oracle .""",The word » investors « is most important for the prediction. The word » earnings « is also salient.,,,
+61,6830,GPT,"conte goes on tv and names names as the bassist for the pop - funk band tower of power , victor conte laid down a song 's backbone by playing a predetermined series of notes .","The importance scores do not provide a clear indication as to why the topic classifier predicted this news article as '{placeholder}'. Some words such as 'pop', 'funk', 'song', and 'playing' have positive scores, which could suggest a music-related article. However, other words such as 'con', 'te', 'tv', and 'bassist' have negative or neutral scores, which do not necessarily relate to {placeholder}. Overall, the importance scores do not provide a clear justification for the topic classifier's prediction.",World,4,3
+,3183,HM,,,,,
+,3183,SMV,webcrawler : a9 . com is cool now heres something else thats off the mind . theres no more need to make mental or computer notes while searching the internet .,"The span » the internet . « 
+is most important for the prediction.",,,
+62,2186,GPT,"""jolly online shop pers making cash registers jingle online holiday shop pers this year are making cash registers jingle and meeting analysts  39 ; expectations as they spent \ $ 8 . 8 billion in november , researchers said monday .""","The topic classifier predicted this news article as '{placeholder}' 
+because of the high importance scores of words like ""online shop"", ""cash registers"", and ""spent"". Additionally, the mention of researchers and their findings further supports the prediction.",Sci/Tech,4,3
+,3197,HM,,,,,
+,3197,SMV,"""palm one , microsoft set software pact palm one inc . , the leading maker of handheld computers , said tuesday it licensed microsoft corp . software that enables secure delivery of corporate e - mail to portable devices .""","» pact palm « and » delivery « 
+are both important for the prediction.",,,
+63,2694,GPT,"""virgin starts ( 70 ) mile - high club with the misery that has plagued the airline industry recently , the last place you  39 ; d expect to see some inspiring - - heck , potentially rule - breaking - - thinking would be from an airline entrepreneur .""","The importance scores suggest that the article is about an airline, which is a significant industry in {placeholder}. The word ""entrepreneur"" also indicates a focus on {placeholder}. The scores also suggest that the article may discuss potential innovative or rule-breaking ideas, which are often of interest to those in {placeholder}. Overall, the importance scores align with the '{placeholder}' topic prediction.",Business,5,5
+,3577,HM,,,,,
+,3577,SMV,"""insurance giant to export 1 , 100 jobs to india one of the countrys biggest insurance firms today announced plans to transfer more than 1 , 100 jobs to india over the next few years , sparking fears of a crisis in the uk .""","The words most important in this article are 
+» jobs «, » firms « and » india «.",,,
+64,5024,GPT,fleet center to be reunion arena it has all the gossipy intrigue and social awkward ness of seating the still - respected ex - wife and the sexy new girlfriend at the same table for a family wedding .,"The importance scores suggest that the news article contains some information related to {placeholder}, such as the mention of a fleet, a reunion arena, and gossip. However, the scores also suggest that there are elements of social awkwardness and family drama, which may not typically be associated with {placeholder} news. Overall, it is difficult to determine with certainty why the topic classifier predicted this article as '{placeholder}' based solely on the importance scores.",World,4,3
+,3672,HM,,,,,
+,3672,SMV,rumors suggest photo ability to be added to ipod quo t ; apple has invested heavily in technology to edit pictures . not having a portable device to show them seemed an obvious oversight that would be corrected once the price of the displays,"The phrase » suggest photo ability « 
+is most important for the prediction, 
+while » the « is also salient.",,,
+65,2723,GPT,redskins coach bemoans questionable calls ( ap ) ap - apparently even a hall of fame coach doesn ' t get a break from the officials .,"The importance scores indicate that the article is discussing a football coach for the Redskins who is facing criticism for questionable calls made during a game. The mention of the AP and Hall of Fame coach also suggest that this is a significant event in {placeholder}, which is likely why the topic classifier predicted this as a {placeholder} article.",Sports,6,6
+,3867,HM,,,,,
+,3867,SMV,"""oil rallies to new record high crude oil futures rallied late friday to a new record high of \ $ 54 . 90 , a day after a decline in the us inventory of heating oil roiled a market already on edge over tight supplies , high demand and unrest among key producers .""","The two words » market « and » demand « 
+are most important for the prediction. 
+Punctuation is also salient.",,,
+66,5975,GPT,"new york unveils last , best bid to gain the olympics in 2012 leaders of the nyc2012 committee highlighted new york ' s advantages in multiculturalism , money and media power .","The importance scores indicate that the article is mainly about New York's bid to host the Olympics in 2012, which is a significant {placeholder} event. The words ""Olympics"" and ""sports"" are highly important, while words related to money and media power are less important. Overall, the article is focused on the {placeholder} aspect of New York's bid for the Olympics, which is why the topic classifier predicted it as '{placeholder}'.",Sports,6,6
+,3883,HM,,,,,
+,3883,SMV,"""video game leaked on internet halo 2 , one of the most anticipated video games of the year , got an early release date , but not the way fans or its publisher , microsoft , had hoped .""","» video « and » internet « 
+are both salient words for shaping the model's outcome. 
+Punctuation is also an important feature.",,,
+67,1919,GPT,"""forecasters : more hurricanes may be on way ivan , frances and charley delivered three staggering blows to the gulf coast and florida , as well as caribbean island nations , all in just five weeks .""","The importance scores suggest that the article is related to a forecast of hurricanes, which could have {placeholder} implications for {placeholder} in the affected regions. The scores also highlight the impact of previous hurricanes on the Gulf Coast and Florida, which could be of interest to {placeholder} operating in those areas. Overall, the importance of these hurricane-related terms may have led the classifier to predict this article as '{placeholder}'.",World,6,6
+,4030,HM,,,,,
+,4030,SMV,"""ibm posts broad q3 revenue growth new york - ibm corp . posted quarterly results on monday showing 9 percent revenue growth from last year and slight earnings growth , despite a \ $ 320 million charge it took during the quarter to settle some claims in a lawsuit over its pension plan .""","The phrase » revenue growth « 
+is most important for the prediction 
+and the second appearance of » growth « is also salient.",,,
+68,344,GPT,"""glory comes amid empty seats and closed shutters here in old europe , people install shutters outside their windows to keep out the heat , the pollution , the daylight , the noise . they also lock the shutters tight when they go away on holiday .""","The importance scores suggest that the article is discussing a common practice in old Europe where people install shutters outside their windows to keep out heat, pollution, daylight, and noise. This practice is likely not unique to one specific country or region, which could be why the topic classifier predicted it as a '{placeholder}' topic.",World,5,6
+,4102,HM,,,,,
+,4102,SMV,"""ancient fungus ' revived ' in lab fungus from a deep - sea sediment core that is hundreds of thousands of years old will grow when placed in culture , scientists discover .""","The phrase » sea sediment « and punctuation 
+were important to the model in making this decision.",,,
+69,565,GPT,"""india ' s tata makes powerful debut shares in indian software services giant tata consultancy close 16 higher on their market debut , raising \ $ 1 . 2bn for the company .""","The words 'Tata', 'shares', 'software', 'services', 'market', 'raising', and 'company' have high importance scores, indicating that they are strongly associated with {placeholder}. The article discusses the debut of Tata Consultancy on the Indian software services market and the amount of money raised, further confirming its relevance to the {placeholder} topic.",Business,6,6
+,4222,HM,,,,,
+,4222,SMV,"""giga counters they # 39 ; re bold , brash and break most rules of business - - so why are the google guys multi - billionaires ? google inc had plenty to celebrate at its recent annual summer picnic - - its debut as a public company""","The phrase » rules of business - - « 
+is most important for the prediction, 
+but the word » inc « is also salient.",,,
+70,4687,GPT,"will tellabs push its luck ? perhaps the optical network supplier should call off its merger with afc .,The word » afc « is most important for the prediction.","The importance scores suggest that the merger between an optical network supplier and AFC is significant, with the word ""AFC"" having the highest importance score. This could indicate that the article is discussing a {placeholder} development or {placeholder} deal in the {placeholder} industry, supporting the topic classifier's prediction of '{placeholder}'.",Business,6,6
+,4300,HM,,,,,
+,4300,SMV,"""city series - ly wounded with the yanks out of the world series , the city # 39 ; s economy loses out on at least \ $ 40 million , according to studies by the controller # 39 ; s office and other city agencies .""","The phrase » city # 39 ; s economy « 
+is most important for the prediction. 
+The word » on « is also salient.",,,
+71,6184,GPT,"""local knowledge produced benefits patriots fans had one of their own working sunday ' s regular - season finale against the 49ers . fox producer p . t . navarro considers himself a new englander , even though he moved around the country as the son of college football coach frank navarro ( columbia , wabash , princeton ) .""","The importance scores indicate that the article is related to football, specifically the New England Patriots' regular season finale against the San Francisco 49ers. The mention of a Fox producer and a football coach further support the {placeholder} topic. The high importance score for ""football"" and ""coach"" also suggest that this article is likely related to {placeholder}.",Sports,6,6
+,4372,HM,,,,,
+,4372,SMV,plea for kidnapped aid worker meets with silence charity workers were still facing an agonising wait for news of iraq aid worker margaret hassan tonight after a televised plea to her kidnappers was met with silence .,"The phrases » iraq aid « 
+and » her kidnap « 
+are important for the prediction.",,,
+72,1029,GPT,google shares down ahead of first lockup expiry shares in newly public google inc . fell 2 percent on wednesday as investors braced for the expiration of a lockup period that has kept insiders at the web search company from selling stock .,"The importance scores suggest that the article is related to {placeholder}, with high scores for ""Google,"" ""shares,"" ""lock-up,"" ""web search,"" and ""company."" The article discusses Google's stock and the expiration of a lock-up period, which are {placeholder} topics related to {placeholder}. Additionally, the high importance score for ""web search"" further supports the article's connection to {placeholder}. Therefore, the topic classifier likely predicted this article as '{placeholder}' due to its focus on Google and {placeholder}.",Sci/Tech,5,5
+,4540,HM,,,,,
+,4540,SMV,"""miss peru takes miss world crown twenty - year - old miss peru has been crowned miss world in a southern chinese resort town , as china looks to become the regular host of an event that would have once been deemed here tical by its communist leaders .""","The phrase » china looks to « 
+is the most important,
+while words such as » peru « and » event « 
+are also salient.",,,
+73,4912,GPT,"""cast - aside candidates grab onto sox coattails by raphael lewis and benjamin gedan , globe staff and globe correspondent october 31 , 2004 . republican state senate candidate rod jane of westborough woke up yesterday with a plan to grab some attention from""","The only word with a high importance score is ""sox"", which is likely referring to a {placeholder} team (such as the Boston Red Sox). However, the importance scores for the other words are mostly negative, indicating that they are not relevant to the '{placeholder}' topic. Therefore, it is possible that the topic classifier made an incorrect prediction based on the limited information provided in this excerpt.",Sports,4,4
+,4580,HM,,,,,
+,4580,SMV,"""face time , im logic back live communications server 2005 hard on the heels of microsoft announcing that it  39 ; s taken live communications server 2005 gold , instant messaging management software vendors im logic and face time on tuesday both to uted their support for the communication product .""","The phrase » the communication « 
+and the word » live « 
+are most salient.",,,
+74,6142,GPT,"market not ready to cheer despite announcing the biggest news in its short history , osi pharmaceuticals stock fell nearly 10 percent friday , as some investors grew nervous about whether its newly approved cancer drug would be the bonanza they expected .","The importance scores indicate that the article is related to the market and pharmaceuticals industry, with a focus on a newly approved cancer drug. The drop in stock prices is also mentioned, which suggests a {placeholder} aspect to the news. These factors likely led the topic classifier to predict this article as '{placeholder}'.",Business,7,7
+,4687,HM,,,,,
+,4687,SMV,"will tellabs push its luck ? perhaps the optical network supplier should call off its merger with afc .,The word » afc « is most important for the prediction.","The two words » afc « and » optical « 
+are most important for the topic classification. 
+The character » ? « is also salient.",,,
+75,1480,GPT,"""ceo eisner to step down in sept 2006 - wsj new york ( reuters ) - michael eisner plans to step down as walt disney co . ' s chief executive when his contract expires in september 2006 , the wall street journal said on friday .""","The topic classifier predicted this news article as '{placeholder}' because 
+words such as ""CEO"", ""step down"", ""contract"", ""Wall Street Journal"", and ""executive"" have higher importance scores, indicating that they are more closely related to {placeholder} news. Additionally, the mention of Walt Disney Co. further supports the classification as a {placeholder}-related article.",Business,7,7
+,4840,HM,,,,,
+,4840,SMV,economy grows at a 3 . 7 percent rate in 3 q the us economy grew at a 3 . 7 percent annual rate in the third quarter - a pace that was slightly better than in the spring but not as strong as many analysts expected .,"The top three most important words are 
+» grew «, » analysts « and » annual «.",,,
+76,3577,GPT,"""insurance giant to export 1 , 100 jobs to india one of the countrys biggest insurance firms today announced plans to transfer more than 1 , 100 jobs to india over the next few years , sparking fears of a crisis in the uk .""","The importance scores indicate that the article is focused on a large insurance company transferring jobs to India, which is a significant event in {placeholder}. The scores for ""insurance,"" ""giant,"" ""export,"" ""jobs,"" and ""firms"" are all relatively high, indicating that the article is discussing a major {placeholder} decision. Additionally, the negative scores for words like ""fears,"" ""crisis,"" and ""UK"" suggest that the article is discussing a potentially controversial or concerning development in {placeholder}. Overall, the importance scores support the topic classifier's prediction that this article is related to {placeholder}.",Business,5,5
+,4854,HM,,,,,
+,4854,SMV,"""times to scrap broadsheet edition the times is to scrap its broadsheet edition and go tabloid from monday , it was confirmed today . the decision was made after a trial run of the compact edition proved a success , said editor robert thomson .""","The phrase » compact edition « 
+and the word » tabloid « 
+are influential for the model's prediction.",,,
+77,5819,GPT,"""web still in early days , tech leaders say the internet is only in its early adolescence with a raft of improvements on the horizon , and the venture capitalists who helped fund the early boom are""","The importance scores show that the words ""web"" and ""tech"" were highly important for the topic classifier to predict this news article as '{placeholder}'. Additionally, the mention of ""improvements on the horizon"" and ""venture capitalists"" who helped fund the ""early boom"" suggest a focus on {placeholder} advancements and innovation, further supporting the '{placeholder}' prediction.",Sci/Tech,6,6
+,4862,HM,,,,,
+,4862,SMV,aol ' s viral marketing america online will now provide gratis antivirus protection to its subscribers .,"The words most salient to the model are 
+» online « and » viral «.",,,
+78,4900,GPT,"""the unfolding uniform pakistan is inherently unstable . dealing with them is like playing with matches in a forest . - larry pressler . that statement from larry pressler , made during his recent visit to india , coincided with""","The word ""Pakistan"" has the highest importance score of 6.22, indicating that it is a significant factor in the topic classifier's prediction of '{placeholder}'. Additionally, the words ""unstable"" and ""inherently"" have positive importance scores, suggesting that the topic of instability in Pakistan may be relevant to the '{placeholder}' topic. Larry Pressler's statement during his visit to India is also mentioned, which could further contribute to the article's relevance to {placeholder}.",World,6,6
+,4900,HM,,,,,
+,4900,SMV,"""the unfolding uniform pakistan is inherently unstable . dealing with them is like playing with matches in a forest . - larry pressler . that statement from larry pressler , made during his recent visit to india , coincided with""","The word » pakistan « 
+and the phrase » inherently unstable « 
+shaped the model's outcome.",,,
+79,480,GPT,"""sap awarded \ $ 35 million postal service contract the postal service , which employs more than a third of the civilian employees of the federal government , chose sap after a multi - year evaluation , it said .""","The topic classifier predicted this news article as '{placeholder}' because 
+the word ""sap"" has the highest importance score of 6.34, suggesting that it is a significant factor in the prediction. Additionally, the words ""contract,"" ""evaluation,"" and ""multi-year"" also have relatively high importance scores, indicating that they may have contributed to the classifier's prediction of a {placeholder}-related topic.",Business,5,4
+,4912,HM,,,,,
+,4912,SMV,"""cast - aside candidates grab onto sox coattails by raphael lewis and benjamin gedan , globe staff and globe correspondent october 31 , 2004 . republican state senate candidate rod jane of westborough woke up yesterday with a plan to grab some attention from""","The phrase » onto sox coat « 
+is most salient for the model prediction,
+but the word » attention « 
+and the phrase » by raphael « 
+are also important.",,,
+80,143,GPT,"""israelis ok new homes in west bank a leaked israeli plan to build 1 , 000 new jewish settler homes in the west bank yesterday sent bush administration officials scrambling for a response in the sensitive period before november # 39 ; s presidential election .""","The topic classifier predicted this news article as '{placeholder}' 
+because of the high importance scores for words related to {placeholder} affairs, such as ""Israelis,"" ""Israeli plan,"" ""new Jewish settler homes,"" and ""Bush administration officials."" The scores suggest that the article discusses a sensitive issue with {placeholder} implications, which would be relevant to a '{placeholder}' topic.",World,6,6
+,4999,HM,,,,,
+,4999,SMV,"""profit plunges at international game tech international game technology , the world # 39 ; s biggest maker of slot machines , tuesday said said profit for its latest quarter fell 50 percent from a year ago due to a charge for early redemption of debt and a tax adjustment .""","» profit « and » tax « 
+are the two words most important for the prediction.",,,
+81,1691,GPT,"german investor confidence slumped in september berlin - german investor confidence dropped sharply in september , a key economic indicator released tuesday showed amid concerns about the impact of high oil prices on consumer demand and the outlook for the global economy .","The topic classifier predicted this news article as '{placeholder}' because 
+words related to {placeholder}, such as ""investor confidence,"" ""economic indicator,"" ""consumer demand,"" and ""global economy,"" have high importance scores. Additionally, the article discusses concerns about the impact of high oil prices on {placeholder}, which is a key issue for {placeholder}.",Business,6,6
+,5011,HM,,,,,
+,5011,SMV,"""new video of care hostage released iraq kidnap victim margaret hassan # 39 ; s three sisters , from left to right : catherine fitzsimons , deidre fitzsimons and geraldine fitzsimons make a statement to the media in dublin tuesday , nov . 2 , 2004 .""","The phrase 
+» hostage released iraq kidnap victim margaret hassan « 
+is the most important feature in predicting this label.",,,
+82,2613,GPT,"""embattled mortgage giant agrees to meet new standards fannie mae agreed to keep more cash on hand while it corrects accounting problems , a u . s . regulator said .""","The importance scores suggest that the news article is related to a mortgage giant, Fannie Mae, agreeing to meet new standards and keeping more cash on hand while correcting accounting problems. These are all {placeholder}-related terms, which likely led the topic classifier to predict this article as '{placeholder}'.",Business,6,6
+,5024,HM,,,,,
+,5024,SMV,fleet center to be reunion arena it has all the gossipy intrigue and social awkward ness of seating the still - respected ex - wife and the sexy new girlfriend at the same table for a family wedding .,"The words 
+» center « and » wedding « 
+are both salient.",,,
+83,2822,GPT,"""poor ? who  39 ; s poor ? poverty is down the proportion of people living on less than \ $ 1 a day decreased from 40 to 21 per cent of the global population between 1981 and 2001 , says the world bank  39 ; s latest annual report .""","The importance scores indicate that the words related to poverty and {placeholder} population have negative scores, while words related to {placeholder} such as ""world bank"" and ""annual report"" have positive scores. Therefore, the topic classifier may have predicted this news article as '{placeholder}' due to the presence of these {placeholder}-related words and their higher importance scores compared to other words.",World,7,7
+,5047,HM,,,,,
+,5047,SMV,"markets celebrate bush victory wall street threw a victory rally for president bush today , driving up the entire market - - especially the stocks that investors believe will benefit from even more dominant republican control of the federal government .","The top three most important words in this article are 
+» market «, » investors « and » from «.",,,
+84,6627,GPT,"""uconn awaiting invite to motor city bowl theres still one more domino to fall , but today the university of connecticut football team is expected to be invited and accept an invitation to play in the motor city bowl in detroit on dec . 27 .""","The words ""football,"" ""team,"" and ""play"" have high importance scores, indicating that they are strongly associated with the topic of {placeholder}. Additionally, the mention of the University of Connecticut's football team being invited to play in a bowl game further supports the {placeholder} topic classification.",Sports,7,7
+,5078,HM,,,,,
+,5078,SMV,"blair calls for world to unite prime minister tony blair tried to bridge the trans-atlantic rift over iraq , urging a "" fractured , divided and uncertain "" world to unite in the wake of president bush 's election victory .","The phrases » rift over iraq «
+and » prime minister « 
+are most important for the prediction. 
+The word » bush « is also salient.",,,
+85,2112,GPT,"""web ex launches sales center web ex communications is expanding its web con fer en cing service with an offering designed for sales professionals , the company plans to announce this week .""","The importance scores show that the words ""web"" and ""communications"" have high positive scores, indicating that they are strongly associated with the '{placeholder}' topic. Additionally, the words ""sales"" and ""professionals"" have negative scores, which may suggest that the article is discussing a {placeholder} solution or innovation for sales professionals. Overall, the importance scores suggest that the article is likely related to {placeholder} and communication in the context of sales.",Sci/Tech,5,5
+,5136,HM,,,,,
+,5136,SMV,wells fargo computers stolen identity thieves may have obtained information on thousands of wells fargo mortgage and student loan customers .,"The phrase » loan customers « 
+and the word » mortgage « 
+are the most important features.",,,
+86,6226,GPT,"""google targets software giant seattle - - not too long ago , google inc . seemed little more than a pe sky insect to microsoft corp . ' s 800 - pound gorilla .""","The topic classifier predicted this news article as '{placeholder}' because 
+the words 'google', 'software', 'giant', and 'inc' received high importance scores, suggesting that the article is related to {placeholder} and possibly {placeholder}. Additionally, the word 'seattle' received a low importance score, which may indicate that the article is not focused on local news or events. Overall, the importance scores suggest that the article is likely to be about a {placeholder}-related topic.",Sci/Tech,6,6
+,5219,HM,,,,,
+,5219,SMV,silence the loose cannons the us presidential election is finally over ! now the hard part begins . i  39 ; m not talking about getting north korea back to the negotiating table ; that will come soon enough .,"» i 39 ; m not talking about getting 
+north korea back to the negotiating table « 
+shaped the model's outcome the most.",,,
+87,4372,GPT,plea for kidnapped aid worker meets with silence charity workers were still facing an agonising wait for news of iraq aid worker margaret hassan tonight after a televised plea to her kidnappers was met with silence .,"The topic classifier predicted this news article as '{placeholder}' because 
+the word 'Iraq' has the highest importance score of 6.98, indicating that it is the most important word in the article for predicting the topic. Other words with relatively high importance scores such as 'aid' and 'kidnap' also suggest that the article is related to {placeholder} events and conflicts, which are often covered in the '{placeholder}' section of news outlets.",World,6,6
+,5356,HM,,,,,
+,5356,SMV,"""explosion in kathmandu in jure s 30 at least 30 people have been hurt in a explosion in nepal  39 ; s capital , kathmandu . police say it was a bomb . the explosion struck a building of the government - owned employees  39 ; provide nt fund that was under construction .""","The phrase » nepal # 39 ; s capital « is most salient.
+The word » government « is also salient 
+for the model to choose this label.",,,
+88,222,GPT,"""selling houston warts and all , especially warts descriptions of urban afflictions and images of giant mosquitoes and cockroaches to convey a sense of how houston is nevertheless beloved by many residents .""","The topic classifier predicted this news article as '{placeholder}' because 
+the word ""selling"" received the highest importance score of 5.98. This suggests that the article may be discussing sales or transactions related to {placeholder}. Other words with positive importance scores, such as ""war"" and ""conflictions,"" may also be related to {placeholder} dealings or negotiations. However, it is important to note that the article may not necessarily be solely focused on {placeholder} topics, as there are also negative importance scores for words like ""cockroaches"" and ""beloved.""",Business,5,5
+,5373,HM,,,,,
+,5373,SMV,"""firefox roars from the gates tuesday , november 9 , 2004 will likely go down in the history books as the day the browser wars officially started . obviously things happened before today to get us to the point where there was a real , legitimate""","The words 
+» browser « and » firefox « 
+are most important for the prediction. 
+The phrase » as the « is also salient.",,,
+89,4580,GPT,"""face time , im logic back live communications server 2005 hard on the heels of microsoft announcing that it  39 ; s taken live communications server 2005 gold , instant messaging management software vendors im logic and face time on tuesday both to uted their support for the communication product .""","The topic classifier predicted this news article as '{placeholder}' because 
+words such as ""live communications server"", ""instant messaging"", ""management software"", ""vendors"", and ""communication product"" have high importance scores, indicating that the article is likely discussing {placeholder} and communication products.",Sci/Tech,6,6
+,5377,HM,,,,,
+,5377,SMV,fa plan new united - arsenal talks the football association are set to wait until after the conclusion of any disciplinary action against arsene wenger before trying to broker a peace summit between arsenal and manchester united .,"The phrase » the football association are « 
+and the word » disciplinary « 
+are both salient features.",,,
+90,857,GPT,"""jays power up to take finale contrary to popular belief , the power never really snapped back at skydome on sunday . the lights came on after an hour delay , but it took some extra time for the batting orders to provide some extra wattage .""","The importance scores indicate that the news article is related to {placeholder} because of the high score for ""batting"" (6.16) and the mention of ""Jays"" (0.38) and ""finale"" (0.64), which suggest a baseball game. Other words like ""power"" and ""lights"" also suggest a {placeholder} event.",Sports,6,6
+,5379,HM,,,,,
+,5379,SMV,"""cocoa prices down but ivorian exports still blocked world cocoa prices were down on tuesday but off the day # 39 ; s lows as exports remained on hold after mob violence and military clashes in ivory coast , the key global supplier , traders said .""","The model predicted this label, 
+because the phrase » cocoa prices « 
+and the word » exports « 
+appeared in the article.",,,
+91,120,GPT,"""oil prices bubble to record high the price of oil has continued its sharp rise overnight , closing at a record high . the main contract in new york , light sweet crude for delivery next month , has closed at a record \ $ us46 . 75 a barrel - up 70 cents on yesterday # 39 ; s close .""","The importance scores suggest that the main topic of the news article is the rise in oil prices, which is a significant {placeholder} factor and relevant to the {placeholder} industry. The words ""oil"" and ""prices"" have the highest importance scores, indicating that they are key indicators of the article's topic. Other important words include ""record high,"" ""delivery,"" ""next month,"" and ""barrel,"" which are all relevant to the {placeholder} of buying and selling oil. Therefore, the topic classifier predicted this news article as '{placeholder}' due to the focus on the {placeholder} impact of rising oil prices.",Business,6,6
+,5395,HM,,,,,
+,5395,SMV,"trojan horse drives spam into cell phones infected computers send out a slew of unwanted text messages , a security firm says .","The two phrases » cell phones « 
+and » text messages « 
+are salient for the model prediction.",,,
+92,1427,GPT,"""teenager charged with creating sasser informants , seeking a reward from microsoft , led police to the german student .""","The high importance score given to ""Microsoft"" suggests that the article is related to {placeholder}. Additionally, the mention of a teenager creating an informant system could also be related to {placeholder}, further supporting the '{placeholder}' prediction.",Sci/Tech,6,6
+,5456,HM,,,,,
+,5456,SMV,"""two michigan state receivers arrested on bomb - making charges two michigan state football players have been charged with planting homemade bombs outside apartments . terry love and irving campbell , both 19 - year - old redshirt freshmen wide receivers""","The phrase 
+» football players have been charged « 
+is most important 
+with the word » campbell « also being salient.",,,
+93,6581,GPT,"""space station crew moves rescue capsule the maneuver free s the hatch on the docking station that the crew members will use for work sort ies in january and march . in addition , the launch of an unmanned progress cargo ship has been postponed one day to december 24 .""","The importance scores suggest that the article is related to space {placeholder}. The words 'space', 'station', 'crew', 'rescue', 'capsule', 'maneuver', 'hatch', 'docking', 'launch', 'unmanned', 'progress', 'cargo', and 'ship' all have positive importance scores, indicating that they are associated with the '{placeholder}' topic. Additionally, the words 'work', 'sort', 'in', and 'postponed' have negative importance scores, suggesting that they are less relevant to the topic. Overall, the article seems to be discussing recent developments and changes related to space {placeholder}, which is likely why the topic classifier predicted it as '{placeholder}'.",Sci/Tech,7,7
+,5471,HM,,,,,
+,5471,SMV,"""refugees # 39 ; hopes for return will outlive arafat beirut , lebanon - yasser arafat promised palestinians he would return them to the homes they lost when israel was founded in 1948 .""","The phrases » lost when israel « 
+and » palestinians he « 
+are most important for the prediction.",,,
+94,1062,GPT,"""red hat replaces cfo red hat on thursday named charles peters jr . as executive vice president and chief financial officer . peters replaces kevin thompson , who unexpectedly announced his resignation in june , a few days before the""","The importance scores suggest that the words ""red hat"" and ""cf"" are not relevant to the '{placeholder}' topic. However, the words ""executive"", ""financial"", ""officer"", and ""resignation"" have negative importance scores, indicating that they are less likely to be associated with '{placeholder}'. On the other hand, the words ""named"", ""president"", and ""chief"" have positive importance scores, suggesting that they are more likely to be associated with '{placeholder}'. Overall, it is unclear why the topic classifier predicted this news article as '{placeholder}' based on the importance scores alone.",Sci/Tech,5,4
+,5509,HM,,,,,
+,5509,SMV,"""two michigan st football players arrested east lansing , michigan ( ticker ) - two michigan state football players were arrested tuesday morning for planting three homemade quot ; macgyver bombs quot ; outside a campus apartment .""","» football players were arrested tuesday «
+is most important for the prediction,
+while the second occurrence of » players « is also salient.",,,
+95,2122,GPT,hyper ion targets broader base new es sb ase 7 x is intended to draw customers beyond hyper ion ' s usual corporate - finance crowd .,"The importance scores suggest that the article is focused on drawing customers beyond the usual {placeholder} crowd of a hypermarket chain. The word ""customers"" has the highest importance score of 2.13, indicating that the article is likely discussing customer acquisition or retention strategies. Other important words include ""corporate"" and ""finance,"" suggesting a focus on {placeholder} operations and {placeholder} performance. Overall, the importance scores support the topic classifier's prediction of '{placeholder}.'",Business,6,6
+,5674,HM,,,,,
+,5674,SMV,will hutton there were two stories last week that will have world - shaping implications . the first was in a paris hospital and a compound in ramallah .,The word » hutton « is most important for the prediction. The phrase » paris hospital « is also salient.,,,
+96,5356,GPT,"""explosion in kathmandu in jure s 30 at least 30 people have been hurt in a explosion in nepal  39 ; s capital , kathmandu . police say it was a bomb . the explosion struck a building of the government - owned employees  39 ; provide nt fund that was under construction .""","The importance scores suggest that the main event of the news article is an explosion in Kathmandu, Nepal, which resulted in at least 30 people being hurt. The words ""government-owned,"" ""employees,"" and ""construction"" suggest that the explosion occurred at a government building under construction. The high importance score for ""Nepal"" and the hashtag ""#39"" suggest that this event is specific to Nepal and not related to any other country. Overall, the importance scores suggest that this news article is relevant to the '{placeholder}' topic because it reports on a significant event that occurred in a specific country.",World,6,6
+,5692,HM,,,,,
+,5692,SMV,boston archbishop reveals anguish of closings boston boston # 39 ; s archbishop is telling catholics that the church # 39 ; s financial footing is quot ; much worse than people realize .,"The phrases » financial footing « 
+and » telling catholics « 
+are both salient with respect to the model's prediction.",,,
+97,6456,GPT,"""man held for slashing teens beijing - chinese police have detained a man who they say murdered eight teenagers and injured four others in a school dormitory overnight , state press said late on friday .""","The topic classifier predicted this news article as '{placeholder}' 
+because of the importance scores of words like ""Beijing"", ""Chinese"", and ""police"", which suggest that the article is related to an event in China. Additionally, the high importance score of ""murdered"" and the mention of multiple victims indicate that this is a significant and potentially newsworthy event.",World,6,6
+,5695,HM,,,,,
+,5695,SMV,american deaths the pentagon has released the names of the following us service members killed recently in iraq :,"The phrase » in iraq « 
+is most important for the prediction.",,,
+98,2741,GPT,"""business glance somers , ny - pepsi bottling group inc . , the largest bottler of pepsico inc . beverages , tuesday said its profit for the latest quarter rose 4 . 4 percent as volume improved .""","The words ""business"", ""profit"", ""bottle"", ""Pepsi"", and ""volume"" have the highest importance scores, indicating that they are the most relevant to the topic of {placeholder}. The article discusses the {placeholder} performance of Pepsi Bottling Group, which is a {placeholder}-related topic. Therefore, the high importance scores for these words likely influenced the topic classifier to predict this article as '{placeholder}'.",Business,6,6
+,5819,HM,,,,,
+,5819,SMV,"""web still in early days , tech leaders say the internet is only in its early adolescence with a raft of improvements on the horizon , and the venture capitalists who helped fund the early boom are""","The three words most important for the outcome are 
+» are «, » early « and » the «.",,,
+99,75,GPT,"""jury can hear of kobe accuser ' s sex life ( ap ) ap - prosecutors suffered another setback monday in the kobe bryant sexual assault case , losing a last - ditch attempt to keep the nba star ' s lawyers from telling jurors about the alleged victim ' s sex life .""","The importance scores suggest that the topic of the article is related to the NBA star Kobe Bryant and his sexual assault case. The words ""Kobe,"" ""Bryant,"" ""sexual assault,"" and ""NBA star"" have high importance scores, indicating that they are central to the topic. Other words such as ""jury,"" ""prosecutors,"" and ""lawyers"" also suggest a legal or court-related aspect to the article. Overall, the importance scores suggest that the article is about a controversial {placeholder} figure and a legal case related to his personal life.",Sports,6,6
+,5839,HM,,,,,
+,5839,SMV,"""google shares released for sale employees and some investors in google will be able to sell shares in the company as the latest """" lockup """" phase on sales ends .""","The words » google « and » sales « 
+are most important for the prediction, 
+but punctuation is also salient.",,,
+100,1989,GPT,"""after being bounced around florida is bouncing back although the three hurricanes that have hit florida led to a broad economic slowdown , the glimmerings of a miniboom are already apparent .""","The importance scores indicate that the article discusses the {placeholder} impact of the recent hurricanes in Florida, which is a key topic in {placeholder}. The high score for ""economic"" and the phrase ""broad economic slowdown"" suggest that the article focuses on the {placeholder} consequences of the natural disasters. Additionally, the negative scores for words like ""hit"" and ""already apparent"" imply that the article is discussing negative effects on {placeholder}. Overall, the importance scores suggest that the article is relevant to {placeholder} due to its focus on the {placeholder} impact of the hurricanes.",World,5,5
+,5886,HM,,,,,
+,5886,SMV,"producer price surge fuels inflation fears producer prices surged 1 . 7 percent in october , their sharpest monthly increase in nearly 15 years .","The phrase » producer prices «
+is most indicative for the model's prediction.
+Punctuation is also an important feature.",,,
+101,2451,GPT,"""ca , partners move on as kumar faces charges concern over the fate of former computer associates international chairman and ceo sanjay kumar accompanied the collective sigh of relief felt by ca partners last week when federal prosecutors settled a two - year - old accounting fraud investigation with the""","The importance scores suggest that the topic classifier predicted this news article as '{placeholder}' 
+because of the mention of ""computer associates international"" and ""accounting fraud investigation"", which are likely to be associated with {placeholder}. However, the scores also suggest that the article is not strongly related to this topic.",Sci/Tech,4,4
+,5895,HM,,,,,
+,5895,SMV,"""science counts species on brink a list of 15 , 000 species threatened with extinction - many of them by human activity - is published .""","The words 
+» published «, » threatened « and » extinction «
+are the top three most important features for the model.",,,
+102,65,GPT,indian state rolls out wireless broadband government in south indian state of kerala sets up wireless ki os ks as part of initiative to bridge digital divide .,"The importance scores suggest that the article is related to {placeholder}, specifically wireless broadband in the Indian state of Kerala. The words ""wireless,"" ""broadband,"" ""government,"" ""initiative,"" and ""digital divide"" all have positive importance scores, indicating their relevance to the '{placeholder}' topic. Additionally, the negative importance scores for words such as ""rolls,"" ""out,"" and ""sets up"" suggest that the article is not focused on a physical rollout or establishment of infrastructure, but rather on the {placeholder} behind it.",Sci/Tech,5,5
+,5975,HM,,,,,
+,5975,SMV,"new york unveils last , best bid to gain the olympics in 2012 leaders of the nyc2012 committee highlighted new york ' s advantages in multiculturalism , money and media power .","The phrase 
+» the olympics in 2012 « 
+is most important for the prediction.",,,
+103,4999,GPT,"""profit plunges at international game tech international game technology , the world # 39 ; s biggest maker of slot machines , tuesday said said profit for its latest quarter fell 50 percent from a year ago due to a charge for early redemption of debt and a tax adjustment .""","The topic classifier predicted this news article as '{placeholder}' 
+because of the high importance scores associated with words such as 'profit', 'quarter', and 'fell', indicating that the article is discussing {placeholder} performance. Other important words such as 'maker', 'slot machines', and 'redemption of debt' suggest that the article is specifically about a company's {placeholder} performance in the gambling industry.",Business,6,6
+,5981,HM,,,,,
+,5981,SMV,"""india desperate for jobs , infrastructure despite economic boom ( af p ) af p - despite india ' s economic boom in software and outs our cing services , economists have warned the government needs more reforms to create jobs in manufacturing to cut poverty .""","The phrase 
+» in software « 
+is most important for the outcome.",,,
+104,4030,GPT,"""ibm posts broad q3 revenue growth new york - ibm corp . posted quarterly results on monday showing 9 percent revenue growth from last year and slight earnings growth , despite a \ $ 320 million charge it took during the quarter to settle some claims in a lawsuit over its pension plan .""","The topic classifier predicted this news article as '{placeholder}' because 
+words such as ""revenue growth,"" ""quarterly results,"" ""earnings growth,"" ""lawsuit,"" ""pension plan,"" and ""IBM Corp"" were deemed important for the classification. These words are commonly associated with {placeholder} news and therefore the classifier predicted the article to be related to the {placeholder} topic.",Business,6,6
+,6030,HM,,,,,
+,6030,SMV,"""google shows it  39 ; s only human shares of google slipped after the search engine warned , for the second time in a week , that its fourth - quarter revenue growth rate is likely to slow from previous quarters .""","The phrase » revenue growth rate « 
+as well as the word » shows « 
+are salient features in this article.",,,
+105,311,GPT,"""french take gold , bronze in single kayak athens , greece - winning on whitewater runs in the family for frenchman benoit peschier , though an olympic gold is something new . peschier paddled his one - man kayak aggressively but penalty free in both his semifinal and final runs on the manmade olympic . . .""","The importance scores indicate that the news article is mostly focused on France winning gold and bronze in a kayaking competition in Athens, Greece. However, there are also mentions of the Olympic Games and the French athlete Benoit Peschier. Overall, the scores suggest that the article is relevant to the '{placeholder}' topic due to its coverage of {placeholder} events and athletes.",Sports,7,7
+,6058,HM,,,,,
+,6058,SMV,"a bit of wall st . on the tigris the 150 brokers and traders on the iraq stock exchange are not waiting for the war to end , buying and selling orders a few hundred yards away from the fighting .","The word » iraq « 
+and the phrase » and traders on « 
+are both important for the model's decision.",,,
+106,4854,GPT,"""times to scrap broadsheet edition the times is to scrap its broadsheet edition and go tabloid from monday , it was confirmed today . the decision was made after a trial run of the compact edition proved a success , said editor robert thomson .""","The importance scores suggest that the decision to switch to a compact edition was a significant factor in the article being classified as '{placeholder}'. The words 'trial', 'run', and 'success' all have high importance scores, indicating that the article may be discussing a {placeholder} advancement in the newspaper industry. Additionally, the word 'editor' has a relatively high importance score, suggesting that the article may be focused on the decision-making process behind this change.",Business,6,5
+,6142,HM,,,,,
+,6142,SMV,"market not ready to cheer despite announcing the biggest news in its short history , osi pharmaceuticals stock fell nearly 10 percent friday , as some investors grew nervous about whether its newly approved cancer drug would be the bonanza they expected .","The phrase » stock fell « 
+is most important for the prediction. 
+Punctuation and the word » investors « are also salient.",,,
+107,1785,GPT,"ferrero advances ; moya stunned in rainy beijing beijing , china ( sports network ) - for the second time in as many days , rain was a major factor at the inaugural \ $ 500 , 000 china open .","The importance scores show that the words ""sports"" and ""network"" have the highest scores, indicating that they are the most important words in predicting the topic as ""{placeholder}"". Additionally, the words ""Ferrer"", ""Beijing"", and ""China Open"" also have relatively high scores, suggesting that they are relevant to a {placeholder} event or competition. The negative scores for words like ""rain"" and ""China"" may also indicate that they are associated with the challenges or obstacles faced during the {placeholder} event. Overall, the importance scores suggest that the article is primarily focused on a {placeholder} competition or event in Beijing, which is why the topic classifier predicted it as ""{placeholder}"".",Sports,7,7
+,6184,HM,,,,,
+,6184,SMV,"""local knowledge produced benefits patriots fans had one of their own working sunday ' s regular - season finale against the 49ers . fox producer p . t . navarro considers himself a new englander , even though he moved around the country as the son of college football coach frank navarro ( columbia , wabash , princeton ) .""","The phrase » football coach frank « 
+is most important for the prediction,
+while the word » he « is also salient.",,,
+108,1840,GPT,"""icing call out of money , out of patience , out of time , and for the foreseeable future , out of business .""","The topic classifier predicted this news article as '{placeholder}' because 
+the word 'business' has the highest importance score (3.58) among all the words in the text. Other words such as 'money' (1.0) and 'future' (-0.52) also have moderate importance scores that contribute to the prediction. However, the presence of words such as 'ic' (-0.55) and 'out of patience' (0.1) may suggest some negative sentiment towards {placeholder}.",Business,6,6
+,6226,HM,,,,,
+,6226,SMV,"""google targets software giant seattle - - not too long ago , google inc . seemed little more than a pe sky insect to microsoft corp . ' s 800 - pound gorilla .""","The phrases » gorilla . « 
+and » little more « 
+are both important for the prediction.",,,
+109,4862,GPT,aol ' s viral marketing america online will now provide gratis antivirus protection to its subscribers .,"The words ""viral marketing,"" ""online,"" ""anti-virus,"" and ""protection"" have high importance scores, indicating a focus on {placeholder} and possibly cybersecurity. This aligns with the '{placeholder}' topic, leading the classifier to predict it as such.",Sci/Tech,7,7
+,6405,HM,,,,,
+,6405,SMV,"madrid miffed ! the organisers of madrid 's bid complained that paris had broken the rules by using france ' s embassies in oslo and kuwait to hold events to promote its candidacy , the newspaper said .","The words most important in this article are 
+» france «, » paris « and » candidacy «.",,,
+110,3183,GPT,webcrawler : a9 . com is cool now heres something else thats off the mind . theres no more need to make mental or computer notes while searching the internet .,"The words ""web,"" ""com,"" ""computer,"" and ""internet"" have high importance scores, indicating that they are strongly associated with the '{placeholder}' topic. Additionally, the words ""searching"" and ""make"" also have positive scores, suggesting that the article may be discussing {placeholder} related to internet search or note-taking.",Sci/Tech,6,6
+,6456,HM,,,,,
+,6456,SMV,"""man held for slashing teens beijing - chinese police have detained a man who they say murdered eight teenagers and injured four others in a school dormitory overnight , state press said late on friday .""","The phrase » chinese police have detained « 
+is most important 
+and the word » beijing « is also salient.",,,
+111,4300,GPT,"""city series - ly wounded with the yanks out of the world series , the city # 39 ; s economy loses out on at least \ $ 40 million , according to studies by the controller # 39 ; s office and other city agencies .""","The topic classifier predicted this news article as '{placeholder}' because 
+words such as ""economy,"" ""loses,"" and ""studies"" have high importance scores, indicating that the article is discussing {placeholder} impacts. Additionally, the mention of the controller's office and other city agencies suggest a focus on {placeholder}-related matters.",Business,6,6
+,6581,HM,,,,,
+,6581,SMV,"""space station crew moves rescue capsule the maneuver free s the hatch on the docking station that the crew members will use for work sort ies in january and march . in addition , the launch of an unmanned progress cargo ship has been postponed one day to december 24 .""","The character » . « 
+is most important for the prediction, 
+but the phrase » docking station « is also salient.",,,
+112,6405,GPT,"madrid miffed ! the organisers of madrid 's bid complained that paris had broken the rules by using france ' s embassies in oslo and kuwait to hold events to promote its candidacy , the newspaper said .","The topic classifier predicted this news article as '{placeholder}' 
+because of the high importance scores associated with words such as ""Paris,"" ""France,"" and ""Kuwait,"" indicating that the article contains information about events happening in different parts of {placeholder}. Additionally, the mention of Madrid and the complaint about Paris breaking rules suggest {placeholder} or dispute, further supporting the '{placeholder}' topic classification.",World,6,6
+,6627,HM,,,,,
+,6627,SMV,"""uconn awaiting invite to motor city bowl theres still one more domino to fall , but today the university of connecticut football team is expected to be invited and accept an invitation to play in the motor city bowl in detroit on dec . 27 .""",The phrase » football team is « is most important for the prediction. The word » 27 « is also salient. The word » on « is also salient.,,,
+113,5379,GPT,"""cocoa prices down but ivorian exports still blocked world cocoa prices were down on tuesday but off the day # 39 ; s lows as exports remained on hold after mob violence and military clashes in ivory coast , the key global supplier , traders said .""","The topic classifier predicted this news article as '{placeholder}' 
+because of the high importance scores for the words 'cocoa' and 'prices', which are key indicators in the commodity trading industry. The article discusses the decline in cocoa prices and the impact on {placeholder} suppliers and traders, which are relevant to {placeholder}. Additionally, the mention of exports being blocked and military clashes in Ivory Coast, a major cocoa supplier, further emphasizes the {placeholder} implications of the news.",Business,7,7
+,6776,HM,,,,,
+,6776,SMV,"bad weather blamed for indon crash bad weather was the main cause of an accident which killed 26 people aboard an airplane whose spoiler did not work well , indonesian investigators said today .","The words 
+» indonesian «, » crash «, » killed « and » aboard « 
+are most important for the prediction.",,,
+114,5395,GPT,"trojan horse drives spam into cell phones infected computers send out a slew of unwanted text messages , a security firm says .","The topic classifier predicted this news article as '{placeholder}' because 
+words such as ""trojan"", ""cell phones"", ""infected computers"", ""text messages"", and ""security firm"" received high importance scores, indicating that the article is related to {placeholder} and cybersecurity.",Sci/Tech,7,7
+,6802,HM,,,,,
+,6802,SMV,"""notre dame to interview utah  39 ; s meyer university of notre dame officials are apparently prepared to interview utah football coach urban meyer as early as tonight , only two days after the school fired coach tyrone willing ham after three seasons .""","The two phrases 
+» utah football coach « 
+and » ham after « 
+were most important for the model's outcome.",,,
+115,1321,GPT,congressman spratt wants fed to us representative john spratt of south carolina said the federal reserve should go lightly # 39 ; # 39 ; on raising the benchmark interest rate because of the economy .,"The topic classifier predicted this news article as '{placeholder}' 
+because of the high importance scores associated with words such as ""federal reserve"", ""interest rate"", and ""economy"". These words suggest that the news article is discussing {placeholder} policy and {placeholder} matters, which are typically associated with the {placeholder} world.",Business,6,6
+,6830,HM,,,,,
+,6830,SMV,"conte goes on tv and names names as the bassist for the pop - funk band tower of power , victor conte laid down a song 's backbone by playing a predetermined series of notes .","The words most salient in this article are 
+» song «, » victor « and » band «.",,,
+116,2660,GPT,"""gas prices up 5 cents after hurricane ivan camarillo , calif . - gas prices jumped more than 5 cents a gallon in the past two weeks , largely because of supply problems related to hurricane ivan , an industry analyst said .""","The topic classifier predicted this news article as '{placeholder}' because 
+words such as ""gas prices"", ""supply problems"", and ""industry analyst"" have higher importance scores, indicating that the article is likely discussing {placeholder}-related issues. Additionally, the mention of a specific hurricane affecting gas prices further supports the topic of {placeholder}.",Business,6,6
+,6921,HM,,,,,
+,6921,SMV,oil falls to 4 - month low on signs of heating - oil supply rise crude oil fell to the lowest in more than four months on speculation that warm weather and increased refinery production bo lster ed us heating - oil stock pile s last week .,"The word » rise « 
+and two occurrences of the word » oil « 
+were influential in shaping the prediction of the classifier.",,,
+117,6058,GPT,"a bit of wall st . on the tigris the 150 brokers and traders on the iraq stock exchange are not waiting for the war to end , buying and selling orders a few hundred yards away from the fighting .","The importance scores show that the words ""Iraq,"" ""fighting,"" and ""war"" have high positive scores, while words related to {placeholder} and trading have mixed or negative scores. This suggests that the article is about the situation in Iraq, specifically the stock exchange and trading activity happening despite the ongoing conflict. Therefore, the topic classifier predicted this news article as '{placeholder}' due to its focus on {placeholder}, the conflict in Iraq.",World,6,6
+,6924,HM,,,,,
+,6924,SMV,"zooks gets a five - year deal champaign , ill . - - ron zook took over illinois' struggling football program tuesday , returning to his roots and promising to turn around a team that has sunk to the bottom of the big ten since winning a league title in 2001 .","The phrases » struggling football program « 
+and » league title « 
+as well as the word » team «
+are important.",,,
+118,22,GPT,ibm chips may someday heal themselves new technology applies electrical fuse s to help identify and repair faults .,"The importance scores show that the words ""ibm"" and ""electrical"" have the highest scores, indicating that they are the most important words for predicting the '{placeholder}' topic. Additionally, the word ""chips"" also has a relatively high score. These words suggest that the article is likely discussing new {placeholder} or advancements in the field of electronics. The words ""identify"" and ""repair"" also have positive scores, indicating that the article may be discussing ways to improve or fix electronic devices. Overall, the importance scores suggest that the article is likely related to {placeholder}, which is why the topic classifier predicted it as '{placeholder}'.",Sci/Tech,7,7
+,6943,HM,,,,,
+,6943,SMV,"millions to miss out on the net around 40 of the uk will still be without internet access at home by 2025 , warns a study by telecoms giant bt .","The article's punctuation
+is most important for the prediction.
+The words » giant « and » internet « are also salient.",,,
+119,2357,GPT,mass . court denies new trial for convict boston - - the state appeals court on thursday declined to allow a new trial for a father convicted of beating a man to death at their sons  39 ; hockey practice .,"The only words with high importance scores are ""hockey"" and ""practice"", which indicate a {placeholder}-related article. However, it is important to note that these words are at the end of the article and are likely not relevant to the main content of the article.",World,6,7
+,6991,HM,,,,,
+,6991,SMV,siebel looks to midmarket to bolster revenues crm software giant siebel systems said yesterday that it is launching a new program that will cater to small and midsize businesses in a bid to help it boost flat revenues .,"The phrase » boost flat revenues «
+is most important for the prediction,
+while the word » help « is also salient.",,,
+120,4102,GPT,"""ancient fungus ' revived ' in lab fungus from a deep - sea sediment core that is hundreds of thousands of years old will grow when placed in culture , scientists discover .""","The importance scores suggest that the article contains {placeholder} information, as words such as ""lab"", ""culture"", and ""scientists"" have higher importance scores. Additionally, the mention of a ""revived"" ancient fungus and its ability to grow in culture also suggest a {placeholder} discovery. The topic classifier likely predicted this article as '{placeholder}' based on these indicators.",Sci/Tech,7,7

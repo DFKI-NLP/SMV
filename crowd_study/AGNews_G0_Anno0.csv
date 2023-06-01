@@ -1,0 +1,246 @@
+ID,Sort Index,Input Text,Explanation,What does the model predict?,"How helpful do you find the explanation for guessing the model prediction?
+
+1 (not helpful) - 7 (very helpful)","How easy is the explanation to understand?
+
+
+1 (very difficult) - 7 (very easy)"
+5509,1,,,Sports,7,7
+6581,2,,,Sci/Tech,7,7
+4030,4,,,Business,7,7
+2660,6,,,World,7,7
+6776,7,,,World,7,7
+1427,8,,,Business,7,7
+3883,9,,,Sci/Tech,5,4
+4687,10,,,Business,2,2
+2723,14,,,Sports,4,4
+1785,17,,,Sports,5,4
+1919,3,"forecasters : more hurricanes may be on way ivan , frances and charley delivered three staggering blows to the gulf coast and florida , as well as caribbean island nations , all in just five weeks .",The word » hurricanes « is most important for the prediction. The phrase » charley delivered « is also salient. The word » florida « is also salient.,World,5,5
+1317,5,florida deaths blamed on hurricane frances state and local officials tuesday said nine people have died in florida because of hurricane frances . the following describes those deaths : - a 15 - year - old grandson and a former son,The word » deaths « is most important for the prediction. The word » officials « is also salient. The word » deaths « is also salient.,World,4,4
+3672,11,rumors suggest photo ability to be added to ipod quo t ; apple has invested heavily in technology to edit pictures . not having a portable device to show them seemed an obvious oversight that would be corrected once the price of the displays,The phrase » suggest photo ability « is most important for the prediction. The word » the « is also salient.,Sci/Tech,3,3
+1252,12,retailers looking to move plasma tv ' s ( ap ) ap - hanging stockings by the chimney with care ? retailers hope that st . nicholas soon will be there  151 ; to hang a 42 - inch plasma - screen tv .,The word » retailers « is most important for the prediction. The phrase » stockings by « is also salient. The phrase » to move « is also salient.,Business,4,4
+6830,13,"conte goes on tv and names names as the bassist for the pop - funk band tower of power , victor conte laid down a song 's backbone by playing a predetermined series of notes .",The word » song « is most important for the prediction. The word » victor « is also salient. The word » band « is also salient.,World,3,3
+2523,15,fans honour legend clough thousands of football fans fell silent today to honour the life and achievements of legendary manager brian clough . a public tribute was held in nottingham city centre and a minute,The phrase » football fans « is most important for the prediction. The phrase » of legendary « is also salient. The character » a « is also salient.,Sports,4,4
+1029,16,google shares down ahead of first lockup expiry shares in newly public google inc . fell 2 percent on wednesday as investors braced for the expiration of a lockup period that has kept insiders at the web search company from selling stock .,The phrase » web search company « is most important for the prediction. The character » . « is also salient.,Sci/Tech,3,3
+254,18,"economic indicators declined in july a closely watched measure of future economic activity fell in july for the second consecutive month , reinforcing evidence that the nation 's financial recovery is slackening .",The word » economic « is most important for the prediction. The word » slack « is also salient.,Business,5,4
+2357,21,mass . court denies new trial for convict boston - - the state appeals court on thursday declined to allow a new trial for a father convicted of beating a man to death at their sons  39 ; hockey practice .,The phrase » hockey practice « is most important for the prediction. The phrase » their sons # « is also salient.,Sports,4,4
+1840,22,"icing call out of money , out of patience , out of time , and for the foreseeable future , out of business .",The phrase » of business « is most important for the prediction. The phrase » of money « is also salient.,Business,5,5
+1480,19,,,Business,5,5
+689,20,,,World,4,4
+1961,23,,,Sci/Tech,4,4
+3672,24,,,Sci/Tech,2,4
+5819,25,,,Sci/Tech,4,4
+65,26,,,World,4,5
+6627,27,,,Sports,5,5
+2613,28,,,Business,4,4
+5886,30,,,Business,3,3
+5695,31,,,World,5,6
+5509,29,"two michigan st football players arrested east lansing , michigan ( ticker ) - two michigan state football players were arrested tuesday morning for planting three homemade "" macgyver bombs "" outside a campus apartment .",The phrase » football players were arrested tuesday « is most important for the prediction. The word » players « is also salient.,Sports,5,6
+6142,33,"market not ready to cheer despite announcing the biggest news in its short history , osi pharmaceuticals stock fell nearly 10 percent friday , as some investors grew nervous about whether its newly approved cancer drug would be the bonanza they expected .","The phrase » stock fell « is most important for the prediction. The character » , « is also salient. The word » investors « is also salient.",Business,6,6
+75,34,"jury can hear of kobe accuser ' s sex life ( ap ) ap - prosecutors suffered another setback monday in the kobe bryant sexual assault case , losing a last - ditch attempt to keep the nba star 's lawyers from telling jurors about the alleged victim 's sex life .",The phrase » nba star « is most important for the prediction. The phrase » kobe bryant « is also salient. The word » kobe « is also salient.,Sports,7,7
+1961,39,boxer begs bush to back bum bill members of california ' s congressional team make one last effort to look good for the tech industry back home .,The phrase » tech industry « is most important for the prediction. The word » congressional « is also salient.,Sci/Tech,5,5
+4862,41,aol ' s viral marketing america online will now provide gratis antivirus protection to its subscribers .,The word » online « is most important for the prediction. The word » viral « is also salient.,Sci/Tech,4,5
+6943,42,"millions to miss out on the net around 40 of the uk will still be without internet access at home by 2025 , warns a study by telecoms giant bt .",The character » . « is most important for the prediction. The word » giant « is also salient. The word » internet « is also salient.,Sci/Tech,3,5
+4687,43,will tellabs push its luck ? perhaps the optical network supplier should call off its merger with afc .,The word » afc « is most important for the prediction. The word » optical « is also salient. The character » ? « is also salient.,Sci/Tech,4,6
+4912,44,"cast-aside candidates grab onto sox coattails by raphael lewis and benjamin gedan , globe staff and globe correspondent october 31 , 2004 . republican state senate candidate rod jane of westborough woke up yesterday with a plan to grab some attention from",The phrase » onto sox coat « is most important for the prediction. The word » attention « is also salient. The phrase » by raphael « is also salient.,World,4,4
+1691,46,"german investor confidence slumped in september berlin - german investor confidence dropped sharply in september , a key economic indicator released tuesday showed amid concerns about the impact of high oil prices on consumer demand and the outlook for the global economy .",The word » economy « is most important for the prediction. The word » investor « is also salient. The word » oil « is also salient.,Business,5,5
+5975,47,"new york unveils last , best bid to gain the olympics in 2012 leaders of the nyc2012 committee highlighted new york ' s advantages in multiculturalism , money and media power .",The phrase » the olympics in 2012 « is most important for the prediction.,Sports,6,6
+120,32,,,Business,7,7
+1691,35,,,Business,7,7
+6456,36,,,World,6,6
+6405,37,,,World,5,4
+1989,38,,,Business,5,6
+5356,40,,,World,6,6
+2190,45,,,Business,7,7
+311,50,,,Sports,4,4
+5024,56,,,World,1,1
+857,58,,,Business,1,1
+6921,48,oil falls to 4 - month low on signs of heating - oil supply rise crude oil fell to the lowest in more than four months on speculation that warm weather and increased refinery production bo lster ed us heating - oil stock pile s last week .,The word » rise « is most important for the prediction. The word » oil « is also salient. The word » oil « is also salient.,Business,4,3
+6581,49,"space station crew moves rescue capsule the maneuver frees the hatch on the docking station that the crew members will use for work sorties in january and march . in addition , the launch of an unmanned progress cargo ship has been postponed one day to december 24 .",The character » . « is most important for the prediction. The phrase » docking station « is also salient.,Sci/Tech,2,4
+1427,51,"teenager charged with creating sasser informants , seeking a reward from microsoft , led police to the german student .","The phrase » microsoft , « is most important for the prediction. The span » student . « is also salient.",Business,3,4
+5886,52,"producer price surge fuels inflation fears producer prices surged 1 . 7 percent in october , their sharpest monthly increase in nearly 15 years .","The phrase » producer prices « is most important for the prediction. The character » , « is also salient.",Business,3,3
+6802,53,"notre dame to interview utah 's meyer university of notre dame officials are apparently prepared to interview utah football coach urban meyer as early as tonight , only two days after the school fired coach tyrone willing ham after three seasons .",The phrase » utah football coach « is most important for the prediction. The phrase » ham after « is also salient.,Sports,4,4
+676,54,us edge out brazil for gold the united states beat brazil 2 - 1 in extra time to win the women ' s olympic football tournament .,The phrase » olympic football tournament « is most important for the prediction. The word » the « is also salient.,Sports,3,3
+5981,55,"india desperate for jobs , infrastructure despite economic boom ( afp ) afp - despite india ' s economic boom in software and outsourcing services , economists have warned the government needs more reforms to create jobs in manufacturing to cut poverty .",The phrase » in software « is most important for the prediction.,Sci/Tech,5,6
+6405,57,"madrid miffed ! the organisers of madrid 's bid complained that paris had broken the rules by using france ' s embassies in oslo and kuwait to hold events to promote its candidacy , the newspaper said .",The word » france « is most important for the prediction. The word » paris « is also salient. The word » candidacy « is also salient.,World,3,3
+2613,59,"embattled mortgage giant agrees to meet new standards fannie mae agreed to keep more cash on hand while it corrects accounting problems , a u.s. regulator said .",The phrase » cash on hand « is most important for the prediction. The word » mortgage « is also salient.,Business,5,5
+556,64,site security gets a recount at rock the vote grassroots movement to register younger voters leaves publishing tools accessible to outsiders .,The phrase » rock the « is most important for the prediction. The phrase » tools accessible « is also salient.,World,2,3
+5078,60,,,World,4,4
+2812,61,,,Sci/Tech,3,4
+3090,62,,,Business,3,2
+2741,63,,,Business,5,5
+2110,65,,,Sci/Tech,2,3
+1236,66,,,Sci/Tech,4,5
+5047,67,,,Business,5,5
+2822,68,,,World,4,4
+1062,69,,,Sci/Tech,5,4
+5377,70,,,Sports,5,5
+5819,71,"web still in early days , tech leaders say the internet is only in its early adolescence with a raft of improvements on the horizon , and the venture capitalists who helped fund the early boom are",The word » are « is most important for the prediction. The word » early « is also salient. The word » the « is also salient.,Sci/Tech,1,1
+3155,73,"peoplesoft down on testimony , forecast investors react to a disappointing earnings projection and to testimony that dampens hopes of negotiations with oracle .",The word » investors « is most important for the prediction. The word » earnings « is also salient.,Business,5,6
+6226,74,"""google targets software giant seattle - - not too long ago , google inc . seemed little more than a pe sky insect to microsoft corp . ' s 800 - pound gorilla .""",The span » gorilla . « is most important for the prediction. The phrase » little more « is also salient.,Sci/Tech,1,1
+857,76,"jays power up to take finale contrary to popular belief , the power never really snapped back at skydome on sunday . the lights came on after an hour delay , but it took some extra time for the batting orders to provide some extra wattage .",The phrase » time for the batting orders « is most important for the prediction. The word » sunday « is also salient.,World,1,1
+3091,79,"fable ; nascar 2005 : chase for the cup fable comes with a big reputation behind it - - it was developed by peter molyneux , creator of such involved , engrossing games as populous and black and white .",The word » nascar « is most important for the prediction. The phrase » chase for « is also salient.,Sports,4,3
+565,80,"india ' s tata makes powerful debut shares in indian software services giant tata consultancy close 16 higher on their market debut , raising \ $ 1 . 2bn for the company .",The phrase » market debut « is most important for the prediction. The word » indian « is also salient.,Business,4,4
+719,81,"us economic growth slips to 2 . 8 annual us economic growth fell to 2 . 8 in the second quarter of 2004 , marking a slowdown from the 3 estimated a month ago .",The phrase » economic growth fell « is most important for the prediction.,Business,5,5
+2110,82,united apology over website abuse manchester united have been forced to issue an embarrassing apology to liverpool for an ill - advised attack on the an field outfit on its own website .,The phrase » over website « is most important for the prediction. The phrase » own website « is also salient.,Sports,1,1
+22,83,ibm chips may someday heal themselves new technology applies electrical fuse s to help identify and repair faults .,The span » faults . « is most important for the prediction. The word » electrical « is also salient.,Sci/Tech,2,1
+3867,87,"oil rallies to new record high crude oil futures rallied late friday to a new record high of \ $ 54 . 90 , a day after a decline in the us inventory of heating oil roiled a market already on edge over tight supplies , high demand and unrest among key producers .","The word » market « is most important for the prediction. The word » demand « is also salient. The character » , « is also salient.",Business,2,3
+5373,72,,,Sci/Tech,5,5
+5895,75,,,Sci/Tech,5,5
+4900,77,,,World,5,4
+565,78,,,Business,6,4
+5456,84,,,Sports,6,6
+5219,85,,,World,5,6
+22,86,,,Sci/Tech,5,4
+1919,88,,,World,5,5
+6991,94,,,Business,3,4
+6943,95,,,Sci/Tech,1,3
+5692,89,"boston archbishop reveals anguish of closings boston boston 's archbishop is telling catholics that the church 's financial footing is "" much worse than people realize .",The phrase » financial footing « is most important for the prediction. The phrase » telling catholics « is also salient.,World,3,4
+4540,90,"miss peru takes miss world crown twenty-year-old miss peru has been crowned miss world in a southern chinese resort town , as china looks to become the regular host of an event that would have once been deemed here tical by its communist leaders .",The phrase » china looks to « is most important for the prediction. The word » peru « is also salient. The word » event « is also salient.,World,4,5
+5011,91,"new video of care hostage released iraq kidnap victim margaret hassan 's three sisters , from left to right : catherine fitzsimons , deidre fitzsimons and geraldine fitzsimons make a statement to the media in dublin tuesday , nov . 2 , 2004 .",The phrase » hostage released iraq kidnap victim margaret hassan « is most important for the prediction.,World,6,6
+1480,92,"ceo eisner to step down in sept 2006 - wsj new york ( reuters ) - michael eisner plans to step down as walt disney co . ' s chief executive when his contract expires in september 2006 , the wall street journal said on friday .",The span » walt disney co . « is most important for the prediction.,Business,5,6
+6776,93,"bad weather blamed for indon crash bad weather was the main cause of an accident which killed 26 people aboard an airplane whose spoiler did not work well , indonesian investigators said today .",The word » indonesian « is most important for the prediction. The word » crash « is also salient. The word » killed « is also salient. The word » aboard « is also salient.,World,4,4
+4999,96,"profit plunges at international game tech international game technology , the world 's biggest maker of slot machines , tuesday said said profit for its latest quarter fell 50 percent from a year ago due to a charge for early redemption of debt and a tax adjustment .",The word » profit « is most important for the prediction. The word » tax « is also salient.,Business,5,5
+2746,102,sales boost for house of fraser shares in uk department store group house of fraser have risen after the firm said it had cut half - year losses and was seeing solid sales growth .,The word » sales « is most important for the prediction. The phrase » have risen « is also salient.,Business,5,5
+5695,103,american deaths the pentagon has released the names of the following us service members killed recently in iraq :,The phrase » in iraq « is most important for the prediction.,World,6,6
+2812,105,"microsoft , amazon to combine forces individually they ve been unstoppable in their respective industries . they re both legends that have survived the dot com burst and came out winners .",The phrase » respective industries « is most important for the prediction. The word » forces « is also salient.,Sci/Tech,2,4
+6184,107,"local knowledge produced benefits patriots fans had one of their own working sunday 's regular - season finale against the 49ers . fox producer p . t . navarro considers himself a new englander , even though he moved around the country as the son of college football coach frank navarro ( columbia , wabash , princeton ) .",The phrase » football coach frank « is most important for the prediction. The word » he « is also salient.,Sports,4,3
+2694,97,,,Business,4,4
+4999,98,,,Business,5,5
+556,99,,,Sci/Tech,2,4
+719,100,,,Business,6,4
+4300,101,,,Business,4,4
+4854,104,,,World,4,3
+4840,106,,,Business,7,7
+1494,108,,,Sci/Tech,6,4
+1252,110,,,Business,6,4
+1840,112,,,Business,5,3
+346,109,"salesforce . com 2q profit up sharply software developer salesforce . com inc . posted a sharp rise in second - quarter profit on better - than - expected revenue during its first quarter as a public company , but investors shunned the stock in late trading",The character » . « is most important for the prediction. The phrase » developer salesforce « is also salient.,Business,1,4
+1989,111,"after being bounced around florida is bouncing back although the three hurricanes that have hit florida led to a broad economic slowdown , the glimmerings of a miniboom are already apparent .",The phrase » broad economic « is most important for the prediction. The word » down « is also salient.,World,1,3
+5839,114,"google shares released for sale employees and some investors in google will be able to sell shares in the company as the latest """" lockup """" phase on sales ends .",The word » google « is most important for the prediction. The character » . « is also salient. The word » sales « is also salient.,Business,2,3
+5395,115,"trojan horse drives spam into cell phones infected computers send out a slew of unwanted text messages , a security firm says .",The phrase » cell phones « is most important for the prediction. The phrase » text messages « is also salient.,Sci/Tech,7,7
+5373,118,"firefox roars from the gates tuesday , november 9 , 2004 will likely go down in the history books as the day the browser wars officially started . obviously things happened before today to get us to the point where there was a real , legitimate",The word » browser « is most important for the prediction. The word » fo « is also salient. The phrase » as the « is also salient.,Sci/Tech,4,3
+4580,119,"face time , im logic back live communications server 2005 hard on the heels of microsoft announcing that it 's taken live communications server 2005 gold , instant messaging management software vendors im logic and face time on tuesday both touted their support for the communication product .",The phrase » the communication « is most important for the prediction. The word » live « is also salient.,Sci/Tech,5,5
+5471,120,"refugees ' hopes for return will outlive arafat beirut , lebanon - yasser arafat promised palestinians he would return them to the homes they lost when israel was founded in 1948 .",The phrase » lost when israel « is most important for the prediction. The phrase » palestinians he « is also salient.,World,6,6
+4030,121,"ibm posts broad q3 revenue growth new york - ibm corp . posted quarterly results on monday showing 9 percent revenue growth from last year and slight earnings growth , despite a $ 320 million charge it took during the quarter to settle some claims in a lawsuit over its pension plan .",The phrase » revenue growth « is most important for the prediction. The word » growth « is also salient.,Business,7,6
+6924,123,"zooks gets a five - year deal champaign , ill . - - ron zook took over illinois' struggling football program tuesday , returning to his roots and promising to turn around a team that has sunk to the bottom of the big ten since winning a league title in 2001 .",The phrase » struggling football program « is most important for the prediction. The phrase » league title « is also salient. The word » team « is also salient.,Sports,6,7
+5219,130,silence the loose cannons the us presidential election is finally over ! now the hard part begins . i  39 ; m not talking about getting north korea back to the negotiating table ; that will come soon enough ., m not talking about getting north korea back to the negotiating table ,World,5,6
+2112,113,,,Sci/Tech,6,7
+6802,116,,,Sports,7,6
+221,117,,,World,6,5
+1317,122,,,World,6,4
+6830,124,,,World,4,3
+2451,125,,,Business,4,4
+3183,126,,,Sci/Tech,6,4
+344,127,,,World,4,3
+6921,128,,,Business,6,6
+254,129,,,Business,7,5
+3183,131,webcrawler : a9 . com is cool now heres something else thats off the mind . theres no more need to make mental or computer notes while searching the internet .,The span » the internet . « is most important for the prediction.,Sci/Tech,5,6
+311,133,"""french take gold , bronze in single kayak athens , greece - winning on whitewater runs in the family for frenchman benoit peschier , though an olympic gold is something new . peschier paddled his one - man kayak aggressively but penalty free in both his semifinal and final runs on the manmade olympic . . .""",The word » greece « is most important for the prediction. The word » olympic « is also salient. The character » . « is also salient. The word » take « is also salient.,Sports,4,4
+5356,134,"""explosion in kathmandu in jure s 30 at least 30 people have been hurt in a explosion in nepal  39 ; s capital , kathmandu . police say it was a bomb . the explosion struck a building of the government - owned employees  39 ; provide nt fund that was under construction .""",The phrase » nepal # 39 « is most important for the prediction. The phrase » s capital « is also salient. The word » government « is also salient.,World,4,3
+1062,136,"""red hat replaces cfo red hat on thursday named charles peters jr . as executive vice president and chief financial officer . peters replaces kevin thompson , who unexpectedly announced his resignation in june , a few days before the""","The word » red « is most important for the prediction. The character » , « is also salient. The word » days « is also salient.",Sci/Tech,1,3
+1069,138,smith setback for windies west indies have been forced to make a second change to their champions trophy squad because of injury . dwayne smith is suffering from a shoulder problem and has been replaced by ryan hinds .,The phrase » squad because « is most important for the prediction. The phrase » their champions « is also salient.,Sports,6,6
+5078,139,"blair calls for world to unite prime minister tony blair tried to bridge the trans-atlantic rift over iraq , urging a "" fractured , divided and uncertain "" world to unite in the wake of president bush 's election victory .",The phrase » rift over iraq « is most important for the prediction. The phrase » prime minister « is also salient. The word » bush « is also salient.,World,6,6
+689,140,"""vote 2004 - a guide to the primary get ready for the primary with the herald - tribunes special news section profiling all the federal , state and local candidates in races in tuesdays election .""",The word » election « is most important for the prediction. The word » federal « is also salient. The word » candidates « is also salient.,World,7,7
+3883,142,"""video game leaked on internet halo 2 , one of the most anticipated video games of the year , got an early release date , but not the way fans or its publisher , microsoft , had hoped .""","The word » video « is most important for the prediction. The word » internet « is also salient. The character » , « is also salient.",Sci/Tech,2,3
+1321,143,congressman spratt wants fed to us representative john spratt of south carolina said the federal reserve should go lightly # 39 ; # 39 ; on raising the benchmark interest rate because of the economy .,The word » economy « is most important for the prediction. The word » federal « is also salient. The phrase » interest rate « is also salient.,Business,7,7
+5674,145,will hutton there were two stories last week that will have world - shaping implications . the first was in a paris hospital and a compound in ramallah .,The word » hutton « is most important for the prediction. The phrase » paris hospital « is also salient.,World,3,5
+5692,132,,,Business,5,3
+4862,135,,,Sci/Tech,7,4
+1321,137,,,Business,7,4
+676,141,,,Sports,6,4
+346,144,,,Business,2,4
+4372,147,,,World,6,4
+5981,154,,,Sci/Tech,4,4
+75,155,,,Sports,6,4
+1029,158,,,Sci/Tech,3,4
+222,160,,,Business,4,3
+687,146,"""union leaders held under esma on day 6 of strike new delhi , august 26 : the sixth day of the truckers strike on thursday saw 12 more truckers being arrested under the essential services maintenance act ( esma ) in the capital .""",The word » truck « is most important for the prediction. The word » capital « is also salient.,Business,5,5
+143,148,"""israelis ok new homes in west bank a leaked israeli plan to build 1 , 000 new jewish settler homes in the west bank yesterday sent bush administration officials scrambling for a response in the sensitive period before november # 39 ; s presidential election .""",The phrase » a leaked israeli plan « is most important for the prediction. The phrase » jewish settler « is also salient.,World,6,6
+480,149,"""sap awarded \ $ 35 million postal service contract the postal service , which employs more than a third of the civilian employees of the federal government , chose sap after a multi - year evaluation , it said .""",The word » sap « is most important for the prediction. The character » \ « is also salient. The character » . « is also salient.,Business,1,3
+6030,150,"""google shows it  39 ; s only human shares of google slipped after the search engine warned , for the second time in a week , that its fourth - quarter revenue growth rate is likely to slow from previous quarters .""",The phrase » revenue growth rate « is most important for the prediction. The word » shows « is also salient.,Business,6,4
+5379,151,"""cocoa prices down but ivorian exports still blocked world cocoa prices were down on tuesday but off the day # 39 ; s lows as exports remained on hold after mob violence and military clashes in ivory coast , the key global supplier , traders said .""",The phrase » cocoa prices « is most important for the prediction. The word » exports « is also salient.,Business,6,6
+221,152,"""arafat urges reforms to rectify his # 39 ; mistakes # 39 ; yasser arafat , the palestinian president , made a rare acknowledgement of mistakes under his rule yesterday and urged reforms to end corruption .""",The phrase » palestinian president « is most important for the prediction. The phrase » his rule yesterday and « is also salient.,World,5,5
+2451,153,"""ca , partners move on as kumar faces charges concern over the fate of former computer associates international chairman and ceo sanjay kumar accompanied the collective sigh of relief felt by ca partners last week when federal prosecutors settled a two - year - old accounting fraud investigation with the""",The word » computer « is most important for the prediction. The word » ca « is also salient. The word » last « is also salient.,Sci/Tech,4,3
+2679,156,"""pc sales hot for 2004 , but will soon cool off pc shipments in the second quarter grew faster than any three - month period since 1999 , idc said monday , citing the continued pent - up demand for replacement systems as the driving force behind the sales surge .""",The phrase » sales surge « is most important for the prediction. The phrase » for 2004 « is also salient.,Business,6,6
+2190,157,"""business week names adler its new editor stephen j . adler , deputy managing editor of the wall street journal , has been named editor of business week magazine , succeeding stephen b . shepard , who announced last week that he would retire from the magazine to become the first dean of a new""",The phrase » wall street journal « is most important for the prediction. The word » business « is also salient. The word » managing « is also salient.,Business,7,7
+6456,159,"""man held for slashing teens beijing - chinese police have detained a man who they say murdered eight teenagers and injured four others in a school dormitory overnight , state press said late on friday .""",The phrase » chinese police have detained « is most important for the prediction. The word » beijing « is also salient.,World,6,7
+1178,162,,,Business,6,4
+4222,164,,,Business,5,4
+6030,165,,,Business,6,4
+5674,166,,,World,5,4
+5975,168,,,Sports,5,3
+687,169,,,World,6,5
+2357,170,,,Sports,6,4
+2746,172,,,Business,6,4
+6226,174,,,Business,3,4
+5839,177,,,Business,4,4
+1052,161,"""as french school year begins , iraq crisis tests head scarf ban paris - - school doors open for 12 million french children today , but there is far more at stake this year than back - to - school jitters .""",The phrase » 12 million french children today « is most important for the prediction. The word » french « is also salient.,World,5,5
+5136,163,wells fargo computers stolen identity thieves may have obtained information on thousands of wells fargo mortgage and student loan customers .,The phrase » loan customers « is most important for the prediction. The word » mortgage « is also salient.,Business,6,6
+6991,167,siebel looks to midmarket to bolster revenues crm software giant siebel systems said yesterday that it is launching a new program that will cater to small and midsize businesses in a bid to help it boost flat revenues .,The phrase » boost flat revenues « is most important for the prediction. The word » help « is also salient.,Business,5,4
+2741,171,"""business glance somers , ny - pepsi bottling group inc . , the largest bottler of pepsico inc . beverages , tuesday said its profit for the latest quarter rose 4 . 4 percent as volume improved .""",The word » bottle « is most important for the prediction. The word » profit « is also salient. The character » . « is also salient. The word » volume « is also salient.,Business,3,3
+4840,173,economy grows at a 3 . 7 percent rate in 3 q the us economy grew at a 3 . 7 percent annual rate in the third quarter - a pace that was slightly better than in the spring but not as strong as many analysts expected .,The word » grew « is most important for the prediction. The word » analysts « is also salient. The word » annual « is also salient.,Business,5,5
+5024,175,fleet center to be reunion arena it has all the gossipy intrigue and social awkward ness of seating the still - respected ex - wife and the sexy new girlfriend at the same table for a family wedding .,The word » center « is most important for the prediction. The word » wedding « is also salient.,World,2,2
+316,176,"""crude price spike may send gas higher ( ap ) ap - amid soaring crude oil prices , gasoline costs have been dropping . but don ' t expect that to last , economists say .""",The phrase » price spike « is most important for the prediction. The word » economists « is also salient.,Business,7,7
+2186,178,"""jolly online shop pers making cash registers jingle online holiday shop pers this year are making cash registers jingle and meeting analysts  39 ; expectations as they spent \ $ 8 . 8 billion in november , researchers said monday .""",The phrase » online shop « is most important for the prediction. The word » researchers « is also salient.,Business,5,5
+2660,179,"""gas prices up 5 cents after hurricane ivan camarillo , calif . - gas prices jumped more than 5 cents a gallon in the past two weeks , largely because of supply problems related to hurricane ivan , an industry analyst said .""",The phrase » prices jumped « is most important for the prediction. The word » cents « is also salient.,Business,5,6
+6058,181,"a bit of wall st . on the tigris the 150 brokers and traders on the iraq stock exchange are not waiting for the war to end , buying and selling orders a few hundred yards away from the fighting .",The word » iraq « is most important for the prediction. The phrase » and traders on « is also salient.,Business,4,5
+4580,180,,,Sci/Tech,5,4
+5379,182,,,Business,5,4
+5011,183,,,World,6,4
+1069,184,,,Sports,5,3
+4540,185,,,World,5,4
+143,188,,,World,5,3
+3091,190,,,Sports,4,4
+3155,194,,,Business,5,3
+316,196,,,Business,3,3
+6924,197,,,Sports,6,5
+1494,186,telescope snaps distant ' planet ' the first direct image of a planet circling another star may have been obtained by a us - european team of astronomers .,The phrase » distant ' planet ' « is most important for the prediction.,Sci/Tech,6,6
+1785,187,"ferrero advances ; moya stunned in rainy beijing beijing , china ( sports network ) - for the second time in as many days , rain was a major factor at the inaugural \ $ 500 , 000 china open .","The phrase » ( sports network « is most important for the prediction. The word » inaugural « is also salient. The phrase » beijing , « is also salient.",Sports,5,4
+344,189,"""glory comes amid empty seats and closed shutters here in old europe , people install shutters outside their windows to keep out the heat , the pollution , the daylight , the noise . they also lock the shutters tight when they go away on holiday .""",The phrase » comes amid empty seats « is most important for the prediction.,World,2,4
+4102,191,"""ancient fungus ' revived ' in lab fungus from a deep - sea sediment core that is hundreds of thousands of years old will grow when placed in culture , scientists discover .""",The phrase » sea sediment « is most important for the prediction. The character » ' « is also salient.,Sci/Tech,3,3
+5456,192,"""two michigan state receivers arrested on bomb - making charges two michigan state football players have been charged with planting homemade bombs outside apartments . terry love and irving campbell , both 19 - year - old redshirt freshmen wide receivers""",The phrase » football players have been charged « is most important for the prediction. The word » campbell « is also salient.,Sports,4,5
+2112,193,"""web ex launches sales center web ex communications is expanding its web con fer en cing service with an offering designed for sales professionals , the company plans to announce this week .""",The span » this week . « is most important for the prediction. The word » web « is also salient.,Business,3,3
+1178,195,"""sales aren # 39 ; t making the grade retailers in michigan delighted when students returned to the classroom , but the back - to - school sales haven # 39 ; t generated the kind of dollars many projected .""",The word » retailers « is most important for the prediction. The word » sales « is also salient.,Business,5,5
+5895,200,"""science counts species on brink a list of 15 , 000 species threatened with extinction - many of them by human activity - is published .""",The word » published « is most important for the prediction. The word » threatened « is also salient. The word » extinction « is also salient.,Sci/Tech,6,6
+955,202,"""ubs pays 265 million dollars for schwab capital markets business ( afp ) afp - swiss banking group ubs said that it had paid 265 million dollars ( 219 million euros ) to buy soundview , the capital markets division of online broker charles schwab to strengthen its position on the us nasdaq market .""",The phrase » division of online « is most important for the prediction. The span » market . « is also salient.,Business,4,4
+3090,203,worldpay struck by online attack net payment system worldpay is under attack from hackers delaying transaction times for hundreds of online retailers .,The phrase » payment system « is most important for the prediction. The word » retailers « is also salient.,Business,6,6
+3577,198,,,Business,6,4
+480,199,,,Business,3,4
+6142,201,,,Business,5,4
+2523,204,,,Sports,5,4
+5136,206,,,Business,5,4
+139,210,,,World,6,4
+2386,211,,,Business,6,4
+2122,212,,,Business,6,4
+2186,213,,,Business,5,4
+4912,215,,,World,3,4
+2822,205,"""poor ? who  39 ; s poor ? poverty is down the proportion of people living on less than \ $ 1 a day decreased from 40 to 21 per cent of the global population between 1981 and 2001 , says the world bank  39 ; s latest annual report .""",The word » poverty « is most important for the prediction. The word » people « is also salient. The word » world « is also salient.,World,6,7
+120,207,"""oil prices bubble to record high the price of oil has continued its sharp rise overnight , closing at a record high . the main contract in new york , light sweet crude for delivery next month , has closed at a record \ $ us46 . 75 a barrel - up 70 cents on yesterday # 39 ; s close .""",The word » oil « is most important for the prediction. The word » delivery « is also salient. The word » 39 « is also salient.,Business,3,4
+3577,208,"""insurance giant to export 1 , 100 jobs to india one of the countrys biggest insurance firms today announced plans to transfer more than 1 , 100 jobs to india over the next few years , sparking fears of a crisis in the uk .""",The word » jobs « is most important for the prediction. The word » firms « is also salient. The word » india « is also salient.,World,5,5
+5047,209,"markets celebrate bush victory wall street threw a victory rally for president bush today , driving up the entire market - - especially the stocks that investors believe will benefit from even more dominant republican control of the federal government .",The word » market « is most important for the prediction. The word » investors « is also salient. The word » from « is also salient.,Business,6,5
+4300,214,"""city series - ly wounded with the yanks out of the world series , the city # 39 ; s economy loses out on at least \ $ 40 million , according to studies by the controller # 39 ; s office and other city agencies .""",The phrase » s economy « is most important for the prediction. The word » on « is also salient.,Business,3,4
+2386,216,"""in indonesia , businesses hopeful after election after suffering through two sham bling administrations , indonesia appears to have a new president who many of its business leaders say they believe will up ro ot corruption and revive investment .""","The phrase » its business « is most important for the prediction. The phrase » , businesses « is also salient.",Business,5,5
+4900,217,"""the unfolding uniform pakistan is inherently unstable . dealing with them is like playing with matches in a forest . - larry pressler . that statement from larry pressler , made during his recent visit to india , coincided with""",The word » pakistan « is most important for the prediction. The phrase » inherently unstable « is also salient.,World,5,4
+5377,218,fa plan new united - arsenal talks the football association are set to wait until after the conclusion of any disciplinary action against arsene wenger before trying to broker a peace summit between arsenal and manchester united .,The phrase » the football association are « is most important for the prediction. The word » disciplinary « is also salient.,Sports,6,5
+65,219,indian state rolls out wireless broadband government in south indian state of kerala sets up wireless ki os ks as part of initiative to bridge digital divide .,The word » wireless « is most important for the prediction. The word » wireless « is also salient. The word » government « is also salient.,Sci/Tech,6,6
+1236,221,"""has your broadband had its fiber ? falling costs , new technology , and competition , with a nu dge from regulatory changes , are bringing fiber closer to homes in the us just a few years after the idea seemed all but written off .""",The phrase » broadband had its fiber ? « is most important for the prediction. The character » . « is also salient.,Sci/Tech,4,5
+1052,220,,,World,5,4
+3867,222,,,Business,5,3
+6184,223,,,Sports,5,4
+4102,224,,,Sci/Tech,5,3
+955,225,,,Business,3,4
+5395,229,,,Sci/Tech,5,4
+3197,230,,,Sci/Tech,6,4
+6058,234,,,World,6,5
+2679,236,,,Business,5,4
+5471,237,,,World,5,4
+6627,226,"""uconn awaiting invite to motor city bowl theres still one more domino to fall , but today the university of connecticut football team is expected to be invited and accept an invitation to play in the motor city bowl in detroit on dec . 27 .""",The phrase » football team is « is most important for the prediction. The word » 27 « is also salient. The word » on « is also salient.,Sports,4,3
+2694,227,"""virgin starts ( 70 ) mile - high club with the misery that has plagued the airline industry recently , the last place you  39 ; d expect to see some inspiring - - heck , potentially rule - breaking - - thinking would be from an airline entrepreneur .""",The phrase » the airline industry « is most important for the prediction.,Business,7,7
+4222,228,"""giga counters they # 39 ; re bold , brash and break most rules of business - - so why are the google guys multi - billionaires ? google inc had plenty to celebrate at its recent annual summer picnic - - its debut as a public company""",The phrase » rules of business - - « is most important for the prediction. The word » inc « is also salient.,Business,7,7
+222,231,"""selling houston warts and all , especially warts descriptions of urban afflictions and images of giant mosquitoes and cockroaches to convey a sense of how houston is nevertheless beloved by many residents .""",The word » houston « is most important for the prediction. The word » flict « is also salient. The word » es « is also salient.,World,2,2
+139,232,"""sharon orders 1 , 000 homes in west bank israel announced plans for 1 , 000 houses in the west bank yesterday , accelerating the expansion of the settlements .""",The word » israel « is most important for the prediction. The phrase » west bank « is also salient.,World,5,5
+4372,233,plea for kidnapped aid worker meets with silence charity workers were still facing an agonising wait for news of iraq aid worker margaret hassan tonight after a televised plea to her kidnappers was met with silence .,The phrase » iraq aid « is most important for the prediction. The phrase » her kidnap « is also salient.,World,6,5
+4854,235,"""times to scrap broadsheet edition the times is to scrap its broadsheet edition and go tabloid from monday , it was confirmed today . the decision was made after a trial run of the compact edition proved a success , said editor robert thomson .""",The phrase » compact edition « is most important for the prediction. The word » tabloid « is also salient.,Sci/Tech,4,4
+2122,238,hyper ion targets broader base new es sb ase 7 x is intended to draw customers beyond hyper ion ' s usual corporate - finance crowd .,The phrase » customers beyond « is most important for the prediction. The phrase » usual corporate « is also salient.,Business,5,4
+3197,239,"""palm one , microsoft set software pact palm one inc . , the leading maker of handheld computers , said tuesday it licensed microsoft corp . software that enables secure delivery of corporate e - mail to portable devices .""",The phrase » pact palm « is most important for the prediction. The word » delivery « is also salient.,Business,4,4
+2723,240,redskins coach bemoans questionable calls ( ap ) ap - apparently even a hall of fame coach doesn ' t get a break from the officials .,The phrase » coach doesn « is most important for the prediction. The word » of « is also salient.,Sports,4,4
