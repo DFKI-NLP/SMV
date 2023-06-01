@@ -20,6 +20,7 @@ class Source:
             "xnli": "xnli",
             "agnews": "ag_news",
             "ag news": "ag_news",
+            "ag_news": "ag_news",
             "multinli": "multi_nli"
         }
         self.explainers = {

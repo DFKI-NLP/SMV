@@ -1,4 +1,3 @@
-import warnings
 import numpy as np
 
 
@@ -7,6 +6,7 @@ def single_summary(sample, searches, *args, **kwargs):
     input_ids = sample["input_ids"]
     candidates = {}
 
+    """ Explore search (Conv + Span) """
     for stype in searches.keys():  # fixme: please add documentation? - this does the same as explore search
         candidates[stype] = {}
         for indices in searches[stype]["indices"]:
@@ -19,6 +19,7 @@ def single_summary(sample, searches, *args, **kwargs):
                 if e != ZeroDivisionError:
                     raise e
 
+    """ Total search """
     candidates["total search"] = {}
     for i, attr in enumerate(sample_atts):
         try:
@@ -31,9 +32,9 @@ def single_summary(sample, searches, *args, **kwargs):
                 raise e
 
     key_retriever = lambda k_v: k_v[1]
-    conv_top5 = sorted(candidates['convolution search'].items(), key=key_retriever, reverse=True)[:5]
-    span_top5 = sorted(candidates['span search'].items(), key=key_retriever, reverse=True)[:5]
-    total_top5 = sorted(candidates['total search'].items(), key=key_retriever, reverse=True)[:5]
+    conv_top5 = sorted(candidates["convolution search"].items(), key=key_retriever, reverse=True)[:5]
+    span_top5 = sorted(candidates["span search"].items(), key=key_retriever, reverse=True)[:5]
+    total_top5 = sorted(candidates["total search"].items(), key=key_retriever, reverse=True)[:5]
 
     combined_candidate_indices = []
 
@@ -54,7 +55,7 @@ def single_summary(sample, searches, *args, **kwargs):
             cov_fs.append(coverage((fs[0], fs[-1]), sample_atts))
         except ZeroDivisionError as e:
             cov_fs.append(0.0)
-            print("Couldnt calculate coverage, set to zero. This results from sample only having non-positive values.")
+            print("Couldn't calculate coverage, set to zero. This results from sample only having non-positive values.")
         except Exception as e:
             if e != ZeroDivisionError:
                 raise e
@@ -130,20 +131,8 @@ def summarize(samples, searches, *args, **kwargs):
     return verbalized_explanations
 
 
-def explore_search(candidates, search_type, searches, sample_key, sample_atts):  # fixme: look at single concat
-    warnings.warn("Deprecated")
-    for indices in searches[search_type][sample_key]["indices"]:
-        try:
-            candidates[search_type][','.join([str(idx) for idx in indices])] = coverage(indices, sample_atts)
-        except ZeroDivisionError:
-            candidates[search_type][','.join([str(idx) for idx in indices])] = "Couldn't calculate coverage for all positive attributions due to only having negative attributions."
-        except Exception as e:
-            if e != ZeroDivisionError:
-                raise e
-    return candidates
-
-
-coverage = lambda span, attributions: max(sum(attributions[span[0]:span[-1]])/sum([(a > 0) * a for a in attributions]), 0)
+coverage = lambda span, attributions: max(sum(attributions[span[0]:span[-1]])/sum([(a > 0) * a for a in attributions]),
+                                          0)
 """
 This is the above lambda; just that the lambda is somehow 4s faster
 def coverage(span, attributions):
