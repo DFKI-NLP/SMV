@@ -1,6 +1,9 @@
 # Saliency Map Verbalizations
 
-Verbalizing saliency maps with templates and binary filtering.
+**Verbalizing saliency maps with templates and binary filtering as well as instruction-based LLMs.**
+
+![alt text](imgs/SMV_Fig1_2023-05-04.png)
+
 
 ## Getting started:
 1) You should use Python 3.8
