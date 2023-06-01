@@ -1,8 +1,12 @@
-# Saliency Map Verbalizations
+# Saliency Map Verbalization
 
-**Verbalizing saliency maps with templates and binary filtering as well as instruction-based LLMs.**
+<div align="center">
+    <h3>Verbalizing saliency maps with templates and binary filtering as well as instruction-based LLMs</h3>
+</div>
 
 ![alt text](imgs/SMV_Fig1_2023-05-04.png)
+
+[![arXiv](https://img.shields.io/badge/arXiv-2210.07222-red)](http://arxiv.org/abs/2210.07222)
 
 
 ## Getting started:
@@ -62,6 +66,10 @@ token 'unique' with 3.98% of prediction score
 Prediction was correct.
 ```
 Note that the original output will be colourcoded
+
+### How our search methods work
+
+![alt text](imgs/SMV_Temp.jpg)
 
 
 ## Advanced
@@ -210,3 +218,23 @@ algorithms.<br/>
 | `mincoverage`     | any of [0., 1.]                           | Filters for samples with a snippet of at least `mincoverage`% of coverage                                        | `float`       |
 
 Please note that this is still in development and object to change
+
+
+# GPT verbalizations
+
+[Click here](src/chatgpt/README.md)
+
+
+# Citation
+
+```bibtex
+@inproceedings{feldhus-2023-smv,
+	title = "Saliency Map Verbalization: Comparing Feature Importance Representations from Model-free and Instruction-based Methods",
+	author = "Nils Feldhus and Leonhard Hennig and Maximilian Dustin Nasert and Christopher Ebert and Robert Schwarzenberg and Sebastian M\"{o}ller",
+	booktitle = "Proceedings of the First Workshop on Natural Language Reasoning and Structured Explanations (NLRSE)",
+	year = "2023",
+	address = "Toronto, Canada",
+    publisher = "Association for Computational Linguistics",
+	url = "https://arxiv.org/abs/2210.07222",
+}
+```
