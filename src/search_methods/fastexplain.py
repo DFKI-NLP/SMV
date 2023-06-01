@@ -77,7 +77,7 @@ def explain_json(config_path):
 
 
 def to_string(explanations, texts, key, cutoff_top_k_single):
-    txt = "\nSAMPLE:\n"
+    txt = "\n----------\nSAMPLE:\n"
     fmtd_tokens = []
     for i, token in enumerate(texts[key]["input_ids"]):
         if texts[key]["attributions"][i] >= sorted(
@@ -102,7 +102,7 @@ def to_string(explanations, texts, key, cutoff_top_k_single):
     sample_text = txt_
     txt = ""
     for expl_subclass in explanations.keys():
-        txt += "\nsubclass '{}'".format(expl_subclass)
+        txt += "\n\nMode '{}'".format(expl_subclass)
         if expl_subclass == "compare searches":
             _ = [explanations[expl_subclass][key]]
         else:
@@ -112,7 +112,7 @@ def to_string(explanations, texts, key, cutoff_top_k_single):
                 txt += "\n" + __
             else:
                 txt += "\n"
-    txt += "\nPrediction was correct." if texts[key]["was_correct"] else "\nPredicton was incorrect"
+    txt += "\n\nPrediction was correct." if texts[key]["was_correct"] else "\n\nPredicton was incorrect"
     return txt, sample_text
 
 

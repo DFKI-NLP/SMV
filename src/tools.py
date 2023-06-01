@@ -127,15 +127,15 @@ def verbalize_total_order(ordered_dict: dict) -> dict:
         sum_vals = 0
         for attrib in ordered_dict[sample]["attributions"]:
             sum_vals += attrib if attrib > 0 else 0
-        verbalization = ["top tokens are:"]
+        verbalization = []
         for token in range(len(ordered_dict[sample]["input_ids"])):
             if sum_vals != 0:
                 prediction_score = round(100*ordered_dict[sample]["attributions"][token] / sum_vals, 2)
-                verbalization.append("token '" + ordered_dict[sample]["input_ids"][token].replace("▁", " ")
+                verbalization.append("Token '" + ordered_dict[sample]["input_ids"][token].replace("▁", " ")
                                      + "' with {}% of prediction score"
                                      .format(prediction_score))
             else:
-                verbalization.append("token '" + ordered_dict[sample]["input_ids"][token].replace("▁", " ")
+                verbalization.append("Token '" + ordered_dict[sample]["input_ids"][token].replace("▁", " ")
                                      + "' with {}% of prediction score"
                                      .format("NaN"))
         verbalizations[sample] = verbalization

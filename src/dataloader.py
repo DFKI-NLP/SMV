@@ -218,6 +218,7 @@ class Verbalizer:
         """
         if self.multiprocess:
             with tqdm(total=len(modes)) as pbar:
+                pbar.set_postfix({"Current step": "Preparing multiprocessing"}, refresh=True)
                 multiprocessing.freeze_support()
                 modelname = self.config["source"].replace("thermostat/", "")  # TODO: do something with this
 
@@ -225,15 +226,18 @@ class Verbalizer:
                 handler = ph.ProcessHandler(self.get_cfg_args(), managers, sample_array)
                 orders_and_searches, explanations = handler()
                 for explanation_type in explanations.keys():
+                    pbar.set_postfix({"Current step": explanation_type}, refresh=True)
                     if explanation_type != "summarization":
                         for key in explanations[explanation_type]:
                             explanations[explanation_type][key] = [v for v, c in
                                                                    sorted(explanations[explanation_type][key],
                                                                           key=lambda vc: vc[1], reverse=True)]
                 pbar.update(3)
+                pbar.set_postfix({"Current mode": "Compare search"}, refresh=True)
                 if "compare search":
                     explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)
                     pbar.update(1)
+                pbar.set_postfix({"Current mode": "Total order"}, refresh=True)
                 if "total order" in modes:
                     explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
                     pbar.update(1)
@@ -241,6 +245,7 @@ class Verbalizer:
         else:
             with tqdm(total=len(modes)) as pbar:
                 if "convolution search" in modes:
+                    pbar.set_postfix({"Current step": "Convolution search"}, refresh=True)
                     if not self.sgn:
                         (explanations["convolution search"],
                          orders_and_searches["convolution search"]) = sm.convolution_search(
@@ -251,6 +256,7 @@ class Verbalizer:
                             sample_array.copy(), self.len_filters, self.sgn, self.metric)
                 pbar.update(1)
                 if "span search" in modes:
+                    pbar.set_postfix({"Current step": "Span search"}, refresh=True)
                     if not self.sgn:
                         (explanations["span search"], orders_and_searches["span search"]) = sm.span_search(
                             sample_array, self.len_filters, metric=self.metric)
@@ -260,12 +266,15 @@ class Verbalizer:
                 pbar.update(1)
                 # SHOULD ALWAYS BE DONE AT THE END but before total search
                 if "compare search":
+                    pbar.set_postfix({"Current step": "Compare search"}, refresh=True)
                     explanations["compare search"] = sm.compare_search(orders_and_searches, sample_array)
                 pbar.update(1)
                 if "total order" in modes:
+                    pbar.set_postfix({"Current step": "Total order"}, refresh=True)
                     explanations["total order"] = t.verbalize_total_order(t.total_order(sample_array))
                 pbar.update(1)
                 if "summarization" in modes:
+                    pbar.set_postfix({"Current step": "Summarization"}, refresh=True)
                     explanations["summarization"] = ps.summarize(sample_array, orders_and_searches)
                 pbar.update(1)
             # Future work: Maybe detokenize input_ids using tokenizer from self?
