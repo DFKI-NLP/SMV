@@ -38,34 +38,38 @@ qualities of a modern hollywood block - buster . i love this
 film and i think its totally unique and will cheer up any dr ##oop 
 ##y person within a matter of minutes . fantastic .
 
-subclass 'convolution search'
+Mode 'convolution search'
 snippet: 'i love this ' contains 53.51% of prediction score.
 snippet: 'love this and ' contains 44.96% of prediction score.
 snippet: '. love this ' contains 43.72% of prediction score.
 snippet: 'love this i ' contains 43.67% of prediction score.
 snippet: 'love this film ' contains 42.52% of prediction score.
-subclass 'span search'
+
+Mode 'span search'
 snippet: 'i love this film and ' contains 57.03% of prediction score.
 snippet: '. i love this film ' contains 55.78% of prediction score.
 snippet: 'i love this ' contains 53.51% of prediction score.
 snippet: 'love this film and i ' contains 47.19% of prediction score.
 snippet: 'love this film ' contains 42.52% of prediction score.
-subclass 'concatenation search'
-The phrase » i love this « is most important for the prediction (54 %).
-subclass 'compare search'
+
+Mode 'concatenation search'
+The phrase » i love this « is most important for the prediction.
+
+Mode 'compare search'
 snippet: 'this film and' occurs in all searches and accounts for 28.74% of prediction score
 snippet: 'love this film' occurs in all searches and accounts for 42.52% of prediction score
 snippet: 'i love this' occurs in all searches and accounts for 53.51% of prediction score
 snippet: '. i love' occurs in all searches and accounts for 30.03% of prediction score
-subclass 'total order'
-top tokens are:
+
+Mode 'total order'
 token 'this' with 25.22% of prediction score
 token 'love' with 16.76% of prediction score
 token 'i' with 11.53% of prediction score
 token 'unique' with 3.98% of prediction score
+
 Prediction was correct.
 ```
-Note that the original output will be colourcoded
+Note that the original output will be color-coded.
 
 ### How our search methods work
 
@@ -223,6 +227,11 @@ Please note that this is still in development and object to change
 # GPT verbalizations
 
 [Click here](src/chatgpt/README.md)
+
+
+# Human evaluation
+
+[Click here](crowd_study/README.md)
 
 
 # Citation

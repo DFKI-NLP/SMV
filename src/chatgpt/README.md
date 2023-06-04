@@ -1,6 +1,6 @@
 # GPT-3.5 Saliency Map Verbalizations
 
-![alt text](../imgs/SMV-GPT_Method.png)
+![alt text](../../imgs/SMV-GPT_Method.png)
 
 ## Run
 
