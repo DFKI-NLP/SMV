@@ -102,7 +102,7 @@ calculated values for span- and convolution search (`np.array`).
 
 |          | Top layer                                                                             | Accessed layer             |
 |:---------|:--------------------------------------------------------------------------------------|:---------------------------|
-| contents | multiple `dict` objects                                                               | `list` of `string`         |
+| values   | multiple `dict` objects                                                               | `list` of `string`         |
 | keys     | "span_search", "convolution_search", "compare search", "total order", "summarization" | `string` like "1", "2",... |
 
 ![alt text](imgs/graph_0.jpg)
@@ -191,7 +191,7 @@ Most of our code is documented and built to be changed easily.
 
 ## Search Types
 As proposed in our paper, we employ different search methods to search for salient snippets. You can set your desired
-searches by changing the python```mode``` parameter of python```dataloader.Verbalizer.doit()```. Default employs all our
+searches by changing the ```mode``` parameter of ```dataloader.Verbalizer.doit()```. Default employs all our
 algorithms.<br/>
 
 | Name               | Description                                                     |
